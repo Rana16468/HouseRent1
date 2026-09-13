@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Thikana OG</title>
+  <style>
+    @font-face {
+      font-family: "Cormorant Garamond";
+      src: url("fonts/cormorant-garamond_5.2.5_latin-400-normal.woff") format("woff");
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: "Cormorant Garamond";
+      src: url("fonts/cormorant-garamond_5.2.5_latin-400-italic.woff") format("woff");
+      font-weight: 400;
+      font-style: italic;
+    }
+    @font-face {
+      font-family: "Cormorant Garamond";
+      src: url("fonts/cormorant-garamond_5.2.5_latin-500-normal.woff") format("woff");
+      font-weight: 500;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: "Cormorant Garamond";
+      src: url("fonts/cormorant-garamond_5.2.5_latin-600-normal.woff") format("woff");
+      font-weight: 600;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: "Cormorant Garamond";
+      src: url("fonts/cormorant-garamond_5.2.5_latin-700-normal.woff") format("woff");
+      font-weight: 700;
+      font-style: normal;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 1200px;
+      height: 630px;
+      overflow: hidden;
+      background: #f3efe6;
+    }
+    .card {
+      position: relative;
+      width: 1200px;
+      height: 630px;
+      background:
+        radial-gradient(1200px 500px at 50% 0%, #fffcf7 0%, #f3efe6 62%, #ebe4d6 100%);
+      color: #1c1915;
+      font-family: "Cormorant Garamond", "Liberation Serif", serif;
+    }
+    .inset {
+      position: absolute;
+      inset: 36px;
+      border: 1.5px solid #1e3d32;
+    }
+    .inset-inner {
+      position: absolute;
+      inset: 7px;
+      border: 0.75px solid rgba(30, 61, 50, 0.45);
+    }
+    .lockup {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      padding: 72px 140px;
+    }
+    .mark {
+      width: 92px;
+      height: 78px;
+      margin-bottom: 28px;
+      color: #1e3d32;
+    }
+    h1 {
+      font-weight: 600;
+      font-size: 132px;
+      line-height: 0.9;
+      letter-spacing: 0.045em;
+      color: #1e3d32;
+      text-align: center;
+      font-kerning: normal;
+    }
+    .tag {
+      margin-top: 22px;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 28px;
+      letter-spacing: 0.08em;
+      color: #1c1915;
+    }
+    .rule {
+      width: 88px;
+      height: 1px;
+      background: #1e3d32;
+      margin: 22px 0 16px;
+      opacity: 0.85;
+    }
+    .place {
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 0.46em;
+      text-transform: uppercase;
+      color: #1e3d32;
+      padding-left: 0.46em;
+    }
+    .grain {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.09;
+      mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    .corner {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-color: #1e3d32;
+      border-style: solid;
+      opacity: 0.7;
+    }
+    .tl { top: 52px; left: 52px; border-width: 1.25px 0 0 1.25px; }
+    .tr { top: 52px; right: 52px; border-width: 1.25px 1.25px 0 0; }
+    .bl { bottom: 52px; left: 52px; border-width: 0 0 1.25px 1.25px; }
+    .br { bottom: 52px; right: 52px; border-width: 0 1.25px 1.25px 0; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="inset"><div class="inset-inner"></div></div>
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+    <div class="corner br"></div>
+    <div class="lockup">
+      <svg class="mark" viewBox="0 0 92 78" aria-hidden="true">
+        <!-- tropical bungalow + address plate -->
+        <polygon points="46,4 88,32 80,32 80,36 12,36 12,32 4,32" fill="currentColor"/>
+        <rect x="18" y="36" width="56" height="32" fill="currentColor"/>
+        <!-- chimney / rooftop tank -->
+        <rect x="62" y="16" width="10" height="16" fill="currentColor"/>
+        <rect x="60" y="13" width="14" height="5" fill="currentColor"/>
+        <!-- door -->
+        <rect x="40" y="48" width="12" height="20" fill="#fffcf7"/>
+        <!-- windows -->
+        <rect x="24" y="44" width="10" height="10" fill="#f3efe6"/>
+        <rect x="58" y="44" width="10" height="10" fill="#f3efe6"/>
+        <path d="M29 44 v10 M24 49 h10 M63 44 v10 M58 49 h10" stroke="#1e3d32" stroke-width="1.2"/>
+        <!-- ground / stoop -->
+        <rect x="36" y="68" width="20" height="3" fill="currentColor"/>
+        <!-- hanging address plate -->
+        <rect x="36" y="72" width="20" height="6" rx="0.6" fill="#fffcf7" stroke="currentColor" stroke-width="1.4"/>
+        <line x1="42" y1="74.8" x2="50" y2="74.8" stroke="currentColor" stroke-width="1.1"/>
+      </svg>
+      <h1>Thikana</h1>
+      <p class="tag">Homes to rent</p>
+      <div class="rule"></div>
+      <p class="place">Bangladesh</p>
+    </div>
+    <div class="grain"></div>
+  </div>
+</body>
+</html>

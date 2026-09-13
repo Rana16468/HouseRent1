@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Thikana",
+      "hasCanvas": false,
+      "bodyTextLen": 3216,
+      "bodyTextHash": "ee6fe809bcb0d107e4d494a4b0390fd9c4c269f80177a0d3a21035660dbfc7fd",
+      "bodyTextPrefix": "Thikana ঠিকানা Post listing Location Reset Bangladesh · cascadin",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Thikana",
+      "hasCanvas": false,
+      "bodyTextLen": 2728,
+      "bodyTextHash": "a67a081a64156e6c517f783808230a40927c43ef1545ca8c98360867cfa8cf55",
+      "bodyTextPrefix": "Thikana ঠিকানা Post BANGLADESH RENTALS Rooms, flats, and offices",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-preview.json"
+}

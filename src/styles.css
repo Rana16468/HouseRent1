@@ -1,0 +1,142 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+  --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --font-sans: "Manrope", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+
+  --color-bg: #f3efe6;
+  --color-background: #f3efe6;
+  --color-bg-elevated: #faf8f3;
+  --color-surface: #fffcf7;
+  --color-card: #fffcf7;
+  --color-fg: #1c1915;
+  --color-foreground: #1c1915;
+  --color-muted: #6b645c;
+  --color-muted-foreground: #6b645c;
+  --color-subtle: #8a837a;
+  --color-primary: #1e3d32;
+  --color-primary-foreground: #f3efe6;
+  --color-accent: #2a5244;
+  --color-secondary: #e7e1d6;
+  --color-secondary-foreground: #1c1915;
+  --color-border: #ddd6c8;
+  --color-input: #ddd6c8;
+  --color-ring: #1e3d32;
+  --color-destructive: #8f2d2d;
+  --color-destructive-foreground: #faf8f3;
+  --color-chip: #e7e1d6;
+  --color-overlay: rgb(28 25 21 / 0.48);
+
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+
+  --shadow-border:
+    0 0 0 1px rgb(28 25 21 / 0.06),
+    0 1px 2px -1px rgb(28 25 21 / 0.06),
+    0 2px 8px 0 rgb(28 25 21 / 0.04);
+  --shadow-border-hover:
+    0 0 0 1px rgb(28 25 21 / 0.1),
+    0 8px 24px -12px rgb(28 25 21 / 0.18);
+  --shadow-lift:
+    0 0 0 1px rgb(28 25 21 / 0.08),
+    0 18px 40px -24px rgb(28 25 21 / 0.28);
+
+  --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  img {
+    outline: 1px solid rgb(28 25 21 / 0.1);
+    outline-offset: -1px;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-primary) 18%, transparent);
+    color: var(--color-fg);
+  }
+}
+
+@layer components {
+  .field {
+    height: 2.75rem;
+    width: 100%;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    padding: 0 0.75rem;
+    font-size: 0.875rem;
+    color: var(--color-fg);
+    transition:
+      border-color 150ms var(--ease-out),
+      box-shadow 150ms var(--ease-out);
+  }
+
+  .field:focus-visible {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary) 18%, transparent);
+  }
+
+  .field:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  select.field {
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231c1915' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    padding-right: 2.25rem;
+  }
+
+  .paper-grid {
+    background-color: var(--color-bg);
+    background-image:
+      linear-gradient(180deg, rgb(243 239 230 / 0.15), rgb(243 239 230 / 0.9)),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'><path d='M0 72V0h72' fill='none' stroke='%231c1915' stroke-opacity='0.045' stroke-width='1'/></svg>");
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
