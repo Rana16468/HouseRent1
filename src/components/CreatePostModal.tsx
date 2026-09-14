@@ -335,7 +335,7 @@ export function CreatePostModal() {
     }
     if (key === "contact") {
       if (!form.phone.trim()) return "Add a phone number.";
-      if (!/^\d{4}$/.test(form.pin)) return "PIN must be exactly 4 digits.";
+     if (form.pin.length !== 6) return "PIN must be exactly 6 characters.";
       return null;
     }
     return null;

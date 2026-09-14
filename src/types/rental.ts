@@ -4,7 +4,7 @@ export type RentalCategory =
   | "mess"
   | "office";
 
-export type TenantType = "family" | "bachelor_male" | "bachelor_female";
+export type TenantType = "family" | "bachelor_male" | "bachelor_female" | "office";
 
 export type GasType = "line" | "lpg" | "included";
 export type ElectricityType = "prepaid" | "postpaid" | "included";
@@ -79,6 +79,8 @@ export const TENANT_LABEL: Record<TenantType, string> = {
   family: "Family",
   bachelor_male: "Bachelor (Male)",
   bachelor_female: "Bachelor (Female)",
+ office:   "office"
+
 };
 
 export const GAS_LABEL: Record<GasType, string> = {
