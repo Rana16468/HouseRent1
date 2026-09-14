@@ -8,6 +8,7 @@ import { selectActiveFilterCount } from "@/lib/redux/selectors";
 import { openCreatePost, openMobileFilters } from "@/lib/redux/uiSlice";
 
 export function Header() {
+  
   const dispatch = useAppDispatch();
   const searchTerm = useAppSelector((s) => s.filters.searchTerm);
   const activeFilters = useAppSelector(selectActiveFilterCount);
