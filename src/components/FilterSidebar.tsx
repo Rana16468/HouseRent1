@@ -40,6 +40,7 @@ const TENANTS: Array<TenantType | "all"> = [
   "family",
   "bachelor_male",
   "bachelor_female",
+  "office"
 ];
 
 export function FilterSidebar({ className }: { className?: string }) {
@@ -131,32 +132,31 @@ export function FilterSidebar({ className }: { className?: string }) {
           </NativeSelect>
         </FieldGroup>
       </section>
-
-      <section className="flex flex-col gap-3">
-        <h2 className="font-display text-lg font-medium tracking-tight">
-          Category
-        </h2>
-        <div className="flex flex-wrap gap-2">
-          {CATEGORIES.map((cat) => {
-            const active = filters.category === cat;
-            return (
-              <button
-                key={cat}
-                type="button"
-                onClick={() => dispatch(setCategory(cat))}
-                className={cn(
-                  "h-11 rounded-full px-3.5 text-xs font-medium transition-colors",
-                  active
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-                )}
-              >
-                {cat === "all" ? "All" : CATEGORY_LABEL[cat]}
-              </button>
-            );
-          })}
-        </div>
-      </section>
+<section className="flex flex-col gap-3.5">
+  <h2 className="font-display text-sm font-semibold tracking-wide text-muted-foreground uppercase">
+    Category
+  </h2>
+  <div className="flex flex-wrap gap-2">
+    {CATEGORIES.map((cat) => {
+      const active = filters.category === cat;
+      return (
+        <button
+          key={cat}
+          type="button"
+          onClick={() => dispatch(setCategory(cat))}
+          className={cn(
+            "inline-flex items-center justify-center h-9 rounded-full px-4 text-xs font-medium transition-all duration-200 ease-in-out select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+            active
+              ? "bg-primary text-primary-foreground shadow-sm shadow-primary/20 scale-[1.02]"
+              : "bg-secondary/60 text-secondary-foreground hover:bg-secondary hover:text-foreground active:scale-[0.98]"
+          )}
+        >
+          {cat === "all" ? "All" : CATEGORY_LABEL[cat]}
+        </button>
+      );
+    })}
+  </div>
+</section>
 
       <section className="flex flex-col gap-3">
         <h2 className="font-display text-lg font-medium tracking-tight">
