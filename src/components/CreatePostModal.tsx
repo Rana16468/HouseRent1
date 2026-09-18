@@ -53,6 +53,8 @@ import {
 } from "@/types/rental";
 import { formatBdt } from "@/lib/utils";
 import DeviceDetector from "device-detector-js";
+import { getDeviceVisitorId } from "@/utility/getDeviceVisitorId";
+import { useHouseListingMutation } from "@/lib/redux/features/postApi";
 
 /**
  * NOTE: `address`, `liveLocationUrl` and `parking` are not part of the
@@ -102,6 +104,8 @@ const EMPTY_UTILITIES: UtilityBreakdown = {
   serviceCharge: 500,
 };
 
+const MAX_IMAGES = 5;
+
 type FormState = {
   division: string;
   district: string;
@@ -116,7 +120,7 @@ type FormState = {
   tenantType: TenantType;
   parking: ParkingType;
   utilities: UtilityBreakdown;
-  images: string[];
+  images: File[]; // raw files, uploaded as multipart "photo" fields on submit
   phone: string;
   whatsapp: boolean;
   telegram: boolean;
@@ -164,6 +168,9 @@ const STEPS = [
 
 type StepKey = (typeof STEPS)[number]["key"];
 
+/** Minimum length required for the secret PIN. Any character type is allowed. */
+const MIN_PIN_LENGTH = 6;
+
 /** Metadata captured about the submitting device/network. */
 type SubmissionMeta = {
   os: string;
@@ -177,6 +184,16 @@ const UNKNOWN_META: SubmissionMeta = {
   browser: "Unknown",
   device: "Unknown",
   ipAddress: "0.0.0.0",
+};
+
+/** Shape returned by houseListingIntoDb on the backend. */
+type HouseListingResponse = {
+  status: boolean;
+  message: string;
+  data?: {
+    id: string;
+    createdAt: string;
+  };
 };
 
 export function CreatePostModal() {
@@ -200,12 +217,27 @@ export function CreatePostModal() {
     form.thana || null,
   );
 
+  const [houseListing] = useHouseListingMutation();
+
   const liveUtilities = useMemo(() => {
     const next = { ...form.utilities };
     if (next.gasType === "included") next.gas = 0;
     if (next.electricityType === "included") next.electricity = 0;
     return next;
   }, [form.utilities]);
+
+  // Object-URL previews for the picked image files. Recomputed whenever the
+  // files array changes, and always revoked on cleanup to avoid leaking
+  // blob URLs.
+  const imagePreviews = useMemo(
+    () => form.images.map((file) => URL.createObjectURL(file)),
+    [form.images],
+  );
+  useEffect(() => {
+    return () => {
+      imagePreviews.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [imagePreviews]);
 
   function patch(partial: Partial<FormState>) {
     setForm((prev) => ({ ...prev, ...partial }));
@@ -297,10 +329,12 @@ export function CreatePostModal() {
 
   async function onFiles(files: FileList | null) {
     if (!files) return;
-    const remaining = 5 - form.images.length;
-    const picked = Array.from(files).slice(0, remaining);
-    const encoded = await Promise.all(picked.map(readAsDataUrl));
-    patch({ images: [...form.images, ...encoded] });
+    const remaining = MAX_IMAGES - form.images.length;
+    if (remaining <= 0) return;
+    const picked = Array.from(files)
+      .filter((f) => f.type.startsWith("image/"))
+      .slice(0, remaining);
+    patch({ images: [...form.images, ...picked] });
   }
 
   function validateStep(key: StepKey): string | null {
@@ -335,7 +369,9 @@ export function CreatePostModal() {
     }
     if (key === "contact") {
       if (!form.phone.trim()) return "Add a phone number.";
-     if (form.pin.length !== 6) return "PIN must be exactly 6 characters.";
+      if (form.pin.length < MIN_PIN_LENGTH) {
+        return `PIN must be at least ${MIN_PIN_LENGTH} characters.`;
+      }
       return null;
     }
     return null;
@@ -363,6 +399,20 @@ export function CreatePostModal() {
       setError(null);
       setStepIndex(index);
     }
+  }
+
+  /**
+   * Runs only after a confirmed successful create response. Committing the
+   * new post, wiping the wizard's form state, and closing the dialog happen
+   * together here as one unit — there's no path where the form is cleared
+   * without the modal closing, or vice versa, and this is never reached on
+   * a failed/soft-failed submit.
+   */
+  function finalizeSuccessfulSubmit(newPost: Post, message: string) {
+    dispatch(addPost(newPost));
+    resetWizard();
+    close();
+    toast.success(message);
   }
 
   async function onSubmit(event: React.FormEvent) {
@@ -396,9 +446,12 @@ export function CreatePostModal() {
       // Collected via a single hardened helper so neither device parsing
       // nor the IP lookup can throw and block submission.
       const { os, browser, device, ipAddress } = await collectSubmissionMeta();
+      const deviceId = await getDeviceVisitorId();
 
-      const post: ExtendedPost & SubmissionMeta = {
-        id: `post-${crypto.randomUUID()}`,
+      // NOTE: images are intentionally NOT included here — they're sent as
+      // separate "photo" parts on the FormData below, and Cloudinary URLs
+      // are attached to the post server-side after upload.
+      const postPayload: Omit<ExtendedPost, "images"> & SubmissionMeta = {
         title: form.title.trim(),
         description: form.description.trim(),
         category: form.category,
@@ -415,28 +468,56 @@ export function CreatePostModal() {
           : undefined,
         parking: form.parking,
         utilities: liveUtilities,
-        images: form.images,
         contact,
         availableFrom: form.availableFrom,
-        createdAt: new Date().toISOString(),
         pin: form.pin,
         source: "user",
         os,
         browser,
         device,
         ipAddress,
-      };
+        deviceId,
+      } as Omit<ExtendedPost, "images"> & SubmissionMeta;
 
-      // Full payload, dumped right before submit.
-      console.log("New listing submitted:", post);
+      const formData = new FormData();
+      formData.append("data", JSON.stringify(postPayload));
+      form.images.forEach((file) => {
+        formData.append("photo", file, file.name);
+      });
 
-      dispatch(addPost(post as Post));
-      resetWizard();
-      close();
-      toast.success("Listing posted. It is live on the board.");
-    } catch (err) {
+      // Full payload, dumped right before submit (files aren't stringified
+      // by console.log, but their names/sizes will show up on the entries).
+      console.log("New listing submitted:", postPayload, form.images);
+
+      const response = (await houseListing(
+        formData,
+      ).unwrap()) as HouseListingResponse;
+
+      if (!response?.status) {
+        setError(response?.message || "Something went wrong while posting.");
+        return;
+      }
+
+      // Optimistically reflect the new post locally. We don't get uploaded
+      // image URLs back from this endpoint, so local previews are used
+      // until the listing is refetched from the server.
+      finalizeSuccessfulSubmit(
+        {
+          ...postPayload,
+          id: response.data?.id,
+          createdAt: response.data?.createdAt,
+          images: imagePreviews,
+        } as unknown as Post,
+        response.message || "Listing posted. It is live on the board.",
+      );
+    } catch (err: any) {
       console.error("Failed to submit listing:", err);
-      setError("Something went wrong while posting. Please try again.");
+      const message =
+        err?.data?.message ||
+        err?.error ||
+        err?.message ||
+        "Something went wrong while posting. Please try again.";
+      setError(message);
     } finally {
       setSubmitting(false);
     }
@@ -809,13 +890,23 @@ export function CreatePostModal() {
 
           {step === "photos" ? (
             <section className="flex flex-col gap-2.5">
-              <label className="flex h-20 cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-border bg-bg-elevated text-sm text-muted transition-colors hover:bg-secondary">
+              <label
+                className={
+                  "flex h-20 items-center justify-center gap-2 rounded-lg border border-dashed border-border bg-bg-elevated text-sm text-muted transition-colors " +
+                  (form.images.length >= MAX_IMAGES
+                    ? "cursor-not-allowed opacity-60"
+                    : "cursor-pointer hover:bg-secondary")
+                }
+              >
                 <ImagePlus className="size-4" />
-                Add photos
+                {form.images.length >= MAX_IMAGES
+                  ? `Maximum ${MAX_IMAGES} photos`
+                  : "Add photos"}
                 <input
                   type="file"
                   accept="image/*"
                   multiple
+                  disabled={form.images.length >= MAX_IMAGES}
                   className="sr-only"
                   onChange={(e) => {
                     void onFiles(e.target.files);
@@ -825,12 +916,16 @@ export function CreatePostModal() {
               </label>
               {form.images.length > 0 ? (
                 <div className="grid grid-cols-5 gap-2">
-                  {form.images.map((src, index) => (
+                  {form.images.map((file, index) => (
                     <div
-                      key={src.slice(0, 32) + index}
+                      key={`${file.name}-${file.lastModified}-${index}`}
                       className="relative aspect-square overflow-hidden rounded-md bg-secondary"
                     >
-                      <img src={src} alt="" className="size-full object-cover" />
+                      <img
+                        src={imagePreviews[index]}
+                        alt=""
+                        className="size-full object-cover"
+                      />
                       <button
                         type="button"
                         className="absolute top-1 right-1 inline-flex size-6 items-center justify-center rounded-full bg-fg/70 text-primary-foreground"
@@ -848,7 +943,7 @@ export function CreatePostModal() {
                 </div>
               ) : (
                 <p className="text-xs text-muted">
-                  Optional — you can skip this step.
+                  Optional — you can skip this step. Up to {MAX_IMAGES} photos.
                 </p>
               )}
             </section>
@@ -909,18 +1004,21 @@ export function CreatePostModal() {
                   />
                 </Field>
               ) : null}
-              <Field label="Secret 4-digit PIN">
+              <Field label={`Secret PIN (min ${MIN_PIN_LENGTH} characters)`}>
                 <Input
                   required
-                  inputMode="numeric"
-                  maxLength={4}
-                  pattern="\d{4}"
-                  placeholder="For later edits"
+                  type="password"
+                  minLength={MIN_PIN_LENGTH}
+                  autoComplete="new-password"
+                  placeholder="Letters, numbers, symbols — anything works"
                   value={form.pin}
-                  onChange={(e) =>
-                    patch({ pin: e.target.value.replace(/\D/g, "").slice(0, 4) })
-                  }
+                  onChange={(e) => patch({ pin: e.target.value })}
                 />
+                <p className="mt-1 text-[11px] text-muted">
+                  You'll need this PIN later to edit or remove this listing.
+                  Use at least {MIN_PIN_LENGTH} characters — any mix of
+                  letters, numbers, or symbols is fine.
+                </p>
               </Field>
             </section>
           ) : null}
@@ -1170,13 +1268,4 @@ function ToolbarBtn({
 
 function Divider() {
   return <span className="mx-1 h-5 w-px bg-border" />;
-}
-
-function readAsDataUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(file);
-  });
 }

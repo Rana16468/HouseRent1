@@ -2,67 +2,84 @@ import { MessageCircle, Phone, Send, Users, Video } from "lucide-react";
 import { digitsPhone, type ContactChannels } from "@/types/rental";
 import { Button } from "@/components/ui/button";
 
+interface ContactActionsProps {
+  contact: ContactChannels;
+  size?: "default" | "sm" | "lg" | "icon";
+  className?: string;
+}
+
 export function ContactActions({
   contact,
   size = "default",
-}: {
-  contact: ContactChannels;
-  size?: "default" | "sm";
-}) {
-  const digits = digitsPhone(contact.phone);
+  className,
+}: ContactActionsProps) {
+  // ফোন নম্বর ফরম্যাটিং
+  const digits = digitsPhone(contact.phone || "");
   const wa = digits.startsWith("880") ? digits : digits.replace(/^0/, "880");
   const tel = digits.startsWith("880") ? `+${digits}` : contact.phone;
+
+  // টেলিগ্রাম লিঙ্ক হ্যান্ডলিং
   const telegramHref = contact.telegramHandle
     ? `https://t.me/${contact.telegramHandle.replace(/^@/, "")}`
     : `https://t.me/+${wa}`;
 
+  // অ্যাকশন বাটন কনফিগারেশন
   const actions = [
     {
       key: "call",
       label: "Call",
       href: `tel:${tel}`,
       icon: Phone,
-      show: true,
+      show: Boolean(contact.phone),
+      external: false,
     },
     {
       key: "whatsapp",
       label: "WhatsApp",
       href: `https://wa.me/${wa}`,
       icon: MessageCircle,
-      show: contact.whatsapp,
+      show: Boolean(contact.whatsapp),
+      external: true,
     },
     {
       key: "telegram",
       label: "Telegram",
       href: telegramHref,
       icon: Send,
-      show: contact.telegram,
+      show: Boolean(contact.telegram),
+      external: true,
     },
     {
       key: "imo",
       label: "IMO",
       href: `tel:${tel}`,
       icon: Video,
-      show: contact.imo,
+      show: Boolean(contact.imo),
+      external: false,
     },
     {
       key: "teams",
       label: "Teams",
-      href: contact.teamsLink ?? "https://teams.microsoft.com/",
+      href: contact.teamsLink || "https://teams.microsoft.com/",
       icon: Users,
-      show: contact.teams,
+      show: Boolean(contact.teams),
+      external: true,
     },
   ].filter((a) => a.show);
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className={`flex flex-wrap gap-2 ${className ?? ""}`}>
       {actions.map((action) => {
         const Icon = action.icon;
         return (
           <Button key={action.key} size={size} variant="outline" asChild>
-            <a href={action.href} target={action.key === "call" || action.key === "imo" ? undefined : "_blank"} rel="noreferrer">
-              <Icon />
-              {action.label}
+            <a
+              href={action.href}
+              target={action.external ? "_blank" : undefined}
+              rel={action.external ? "noopener noreferrer" : undefined}
+            >
+              <Icon className="h-4 w-4 shrink-0" />
+              <span>{action.label}</span>
             </a>
           </Button>
         );
@@ -80,11 +97,11 @@ export function ChannelDots({ contact }: { contact: ContactChannels }) {
   ].filter(Boolean) as string[];
 
   if (channels.length === 0) {
-    return <span className="text-xs text-muted">Call only</span>;
+    return <span className="text-xs text-muted-foreground">Call only</span>;
   }
 
   return (
-    <span className="flex flex-wrap gap-1">
+    <div className="flex flex-wrap items-center gap-1">
       {channels.map((name) => (
         <span
           key={name}
@@ -93,6 +110,6 @@ export function ChannelDots({ contact }: { contact: ContactChannels }) {
           {name}
         </span>
       ))}
-    </span>
+    </div>
   );
 }

@@ -37,7 +37,7 @@ export interface Location {
 }
 
 export interface Post {
-  id: string;
+  id?: string
   title: string;
   description: string;
   category: RentalCategory;
@@ -47,10 +47,13 @@ export interface Post {
   images: string[];
   contact: ContactChannels;
   availableFrom: string;
-  createdAt: string;
   pin: string;
   source: "mock" | "user";
   featured?: boolean;
+  deviceId: string
+  address?: string
+
+  liveLocationUrl?: string
 }
 
 export interface ThanaNode {
@@ -79,7 +82,7 @@ export const TENANT_LABEL: Record<TenantType, string> = {
   family: "Family",
   bachelor_male: "Bachelor (Male)",
   bachelor_female: "Bachelor (Female)",
- office:   "office"
+  office: "office"
 
 };
 
