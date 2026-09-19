@@ -14,6 +14,7 @@ import { resetFilters } from "@/lib/redux/filterSlice";
 import { selectActiveFilterCount } from "@/lib/redux/selectors";
 import { useGetFindByAllHouseListQuery } from "@/lib/redux/features/postApi";
 import ErrorPage from "@/components/ErrorPage/ErrorPage";
+import { usePreferences } from "@/lib/preferences";
 
 export const Route = createFileRoute("/")({ component: Home });
 
@@ -83,6 +84,7 @@ function Home() {
   const dispatch = useAppDispatch();
   const active = useAppSelector(selectActiveFilterCount);
   const filters = useAppSelector((state) => state.filters);
+  const { t } = usePreferences();
 
   const queryParams = useMemo(() => {
     const raw: Record<string, unknown> = {
@@ -146,23 +148,22 @@ function Home() {
           <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-xs font-medium tracking-[0.18em] text-muted uppercase">
-                Bangladesh rentals
+                {t("listingsEyebrow")}
               </p>
               <h1 className="mt-1 font-display text-3xl font-medium tracking-tight sm:text-4xl">
-                Rooms, flats, and offices
+                {t("listingsTitle")}
               </h1>
               <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted">
-                Filter by division, thana, tenant type, and the real monthly total — rent plus gas,
-                power, water, and service charge.
+                {t("listingsDescription")}
               </p>
             </div>
             <p className="text-sm tabular-nums text-muted" aria-live="polite">
               {isLoading
-                ? "Loading listings…"
+                ? t("loading")
                 : total === 0
-                  ? "0 listings"
-                  : `${rangeStart}–${rangeEnd} of ${total} listings`}
-              {active > 0 ? ` · ${active} filters` : ""}
+                  ? t("noListings")
+                  : `${rangeStart}–${rangeEnd} of ${total} ${t("listings")}`}
+              {active > 0 ? ` · ${active} ${t("filters")}` : ""}
             </p>
           </div>
 
@@ -195,7 +196,7 @@ function Home() {
                 size="icon"
                 disabled={metaData.page <= 1 || isFetching}
                 onClick={() => goToPage(metaData.page - 1)}
-                aria-label="Previous page"
+                aria-label={t("previousPage")}
               >
                 <ChevronLeft />
               </Button>
@@ -229,7 +230,7 @@ function Home() {
                 size="icon"
                 disabled={metaData.page >= metaData.totalPage || isFetching}
                 onClick={() => goToPage(metaData.page + 1)}
-                aria-label="Next page"
+                aria-label={t("nextPage")}
               >
                 <ChevronRight />
               </Button>
@@ -239,8 +240,7 @@ function Home() {
       </div>
 
       <footer className="border-t border-border px-4 py-8 text-center text-xs text-muted">
-        Thikana is a frontend listing board for Bangladesh. Contact landlords directly — no booking
-        fees.
+        {t("footer")}
       </footer>
 
       <MobileFilters />
@@ -278,16 +278,12 @@ function ListingSkeletons({ count }: { count: number }) {
 }
 
 function EmptyState({ onReset }: { onReset: () => void }) {
+  const { t } = usePreferences();
   return (
     <div className="flex flex-col items-start gap-4 rounded-xl border border-dashed border-border bg-surface px-6 py-16">
-      <p className="font-display text-2xl font-medium tracking-tight">No listings in this slice</p>
-      <p className="max-w-md text-sm leading-relaxed text-muted">
-        Try a wider thana, raise the cost ceiling, or clear the move-in window. New posts appear at
-        the top of the board.
-      </p>
-      <Button variant="outline" onClick={onReset}>
-        Clear filters
-      </Button>
+      <p className="font-display text-2xl font-medium tracking-tight">{t("noResults")}</p>
+      <p className="max-w-md text-sm leading-relaxed text-muted">{t("noResultsHint")}</p>
+      <Button variant="outline" onClick={onReset}>{t("clearFilters")}</Button>
     </div>
   );
 }

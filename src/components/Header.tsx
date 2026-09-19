@@ -1,4 +1,4 @@
-import { Map, Plus, Search, SlidersHorizontal, Home } from "lucide-react";
+import { Map, Plus, Search, SlidersHorizontal, Home, Sun, Moon, Languages } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,11 +7,13 @@ import { setSearchTerm } from "@/lib/redux/filterSlice";
 import { selectActiveFilterCount } from "@/lib/redux/selectors";
 import { openCreatePost, openMobileFilters } from "@/lib/redux/uiSlice";
 import { Link } from "@tanstack/react-router";
+import { usePreferences } from "@/lib/preferences";
 
 export function Header() {
   const dispatch = useAppDispatch();
   const searchTerm = useAppSelector((s) => s.filters.searchTerm);
   const activeFilters = useAppSelector(selectActiveFilterCount);
+  const { locale, theme, t, toggleLocale, toggleTheme } = usePreferences();
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-bg-elevated/70 backdrop-blur-xl supports-[backdrop-filter]:bg-bg-elevated/60">
@@ -23,7 +25,7 @@ export function Header() {
           variant="ghost"
           size="icon"
           className="relative shrink-0 rounded-xl lg:hidden"
-          aria-label="Open filters"
+          aria-label={t("openFilters")}
           onClick={() => dispatch(openMobileFilters())}
         >
           <SlidersHorizontal />
@@ -49,7 +51,7 @@ export function Header() {
           <Input
             value={searchTerm}
             onChange={(e) => dispatch(setSearchTerm(e.target.value))}
-            placeholder="Search area, thana, or title"
+            placeholder={t("searchPlaceholder")}
             className="h-10 rounded-full border-border/70 bg-bg-elevated/60 pr-4 pl-10 shadow-sm transition-all focus-visible:border-primary/60 focus-visible:bg-bg-elevated focus-visible:shadow-md"
             aria-label="Search listings"
           />
@@ -104,12 +106,32 @@ export function Header() {
           </div>
 
           <Button
+            variant="outline"
+            size="sm"
+            className="hidden rounded-full border-border/70 px-3 lg:inline-flex"
+            onClick={toggleLocale}
+            aria-label={`Switch language to ${locale === "en" ? "Bangla" : "English"}`}
+          >
+            <Languages className="size-4" />
+            {t("language")}
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-xl"
+            onClick={toggleTheme}
+            aria-label={theme === "light" ? t("darkMode") : t("lightMode")}
+            title={theme === "light" ? t("darkMode") : t("lightMode")}
+          >
+            {theme === "light" ? <Moon /> : <Sun />}
+          </Button>
+          <Button
             className="rounded-full shadow-sm transition-shadow hover:shadow-md"
             onClick={() => dispatch(openCreatePost())}
           >
             <Plus />
-            <span className="hidden sm:inline">Post listing</span>
-            <span className="sm:hidden">Post</span>
+            <span className="hidden sm:inline">{t("postListing")}</span>
+            <span className="sm:hidden">{t("post")}</span>
           </Button>
         </nav>
       </div>
@@ -121,7 +143,7 @@ export function Header() {
           <Input
             value={searchTerm}
             onChange={(e) => dispatch(setSearchTerm(e.target.value))}
-            placeholder="Search area, thana, or title"
+            placeholder={t("searchPlaceholder")}
             className="h-10 rounded-full border-border/70 pr-4 pl-10 focus-visible:border-primary/60"
             aria-label="Search listings"
           />
