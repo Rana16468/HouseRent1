@@ -1,10 +1,10 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { h as require_react, m as require_jsx_runtime } from "../_libs/@radix-ui/react-checkbox+[...].mjs";
 import { f as createRouter, g as createRootRoute, h as createFileRoute, l as Scripts, m as lazyRouteComponent, p as Outlet, u as HeadContent, v as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
-import { o as TriangleAlert } from "../_libs/lucide-react.mjs";
+import { c as TriangleAlert } from "../_libs/lucide-react.mjs";
 import { a as union, i as string, n as number, r as object, t as literal } from "../_libs/zod.mjs";
 import { i as createSlice, n as fetchBaseQuery, o as Provider_default, r as configureStore, t as createApi } from "../_libs/@reduxjs/toolkit+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-B-y1O4jl.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-DvaOeulu.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var __defProp = Object.defineProperty;
@@ -958,9 +958,9 @@ function ReduxProvider({ children }) {
 		children
 	});
 }
-var styles_default = "/assets/styles-qMVSj_h4.css";
+var styles_default = "/assets/styles-cNX2IlXc.css";
 var APP_NAME = "Thikana";
-var Route$2 = createRootRoute({
+var Route$3 = createRootRoute({
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -1015,29 +1015,36 @@ var Route$2 = createRootRoute({
 		})]
 	})
 });
-var $$splitComponentImporter$1 = () => import("./routes-DpTb0xND.mjs");
-var Route$1 = createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
+var $$splitComponentImporter$2 = () => import("./routes-6ZSdYTV0.mjs");
+var Route$2 = createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter$2, "component") });
 /**
 * A filter "has a value" only when it is a real selection.
 * null, undefined, "", "all", "null" and "undefined" are all treated as unset.
 */
 /** Returns `value` after it has stopped changing for `delay` ms. */
 /** e.g. [1, "gap", 4, 5, 6, "gap", 20] — keeps the pager short on many pages. */
-var $$splitComponentImporter = () => import("./my-houses-BRtHMuks.mjs");
+var $$splitComponentImporter$1 = () => import("./live-house-listing-CRWCZcId.mjs");
+var Route$1 = createFileRoute("/live-house-listing")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
+var $$splitComponentImporter = () => import("./my-houses-B6sUQp52.mjs");
 var Route = createFileRoute("/my-houses")({ component: lazyRouteComponent($$splitComponentImporter, "component") });
 var rootRouteChildren = {
-	IndexRoute: Route$1.update({
+	IndexRoute: Route$2.update({
 		id: "/",
 		path: "/",
-		getParentRoute: () => Route$2
+		getParentRoute: () => Route$3
+	}),
+	LiveHouseListingRoute: Route$1.update({
+		id: "/live-house-listing",
+		path: "/live-house-listing",
+		getParentRoute: () => Route$3
 	}),
 	MyHousesRoute: Route.update({
 		id: "/my-houses",
 		path: "/my-houses",
-		getParentRoute: () => Route$2
+		getParentRoute: () => Route$3
 	})
 };
-var routeTree = Route$2._addFileChildren(rootRouteChildren)._addFileTypes();
+var routeTree = Route$3._addFileChildren(rootRouteChildren)._addFileTypes();
 var router_exports = /* @__PURE__ */ __exportAll({ getRouter: () => getRouter });
 function getRouter() {
 	return createRouter({

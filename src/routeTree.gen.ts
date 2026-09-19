@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LiveHouseListingRouteImport } from './routes/live-house-listing'
 import { Route as MyHousesRouteImport } from './routes/my-houses'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LiveHouseListingRoute = LiveHouseListingRouteImport.update({
+  id: '/live-house-listing',
+  path: '/live-house-listing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MyHousesRoute = MyHousesRouteImport.update({
@@ -25,27 +31,31 @@ const MyHousesRoute = MyHousesRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/live-house-listing': typeof LiveHouseListingRoute
   '/my-houses': typeof MyHousesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/live-house-listing': typeof LiveHouseListingRoute
   '/my-houses': typeof MyHousesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/live-house-listing': typeof LiveHouseListingRoute
   '/my-houses': typeof MyHousesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/my-houses'
+  fullPaths: '/' | '/live-house-listing' | '/my-houses'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/my-houses'
-  id: '__root__' | '/' | '/my-houses'
+  to: '/' | '/live-house-listing' | '/my-houses'
+  id: '__root__' | '/' | '/live-house-listing' | '/my-houses'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LiveHouseListingRoute: typeof LiveHouseListingRoute
   MyHousesRoute: typeof MyHousesRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/live-house-listing': {
+      id: '/live-house-listing'
+      path: '/live-house-listing'
+      fullPath: '/live-house-listing'
+      preLoaderRoute: typeof LiveHouseListingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/my-houses': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LiveHouseListingRoute: LiveHouseListingRoute,
   MyHousesRoute: MyHousesRoute,
 }
 export const routeTree = rootRouteImport

@@ -59,7 +59,17 @@ const AuthenticatorApi = baseApi.injectEndpoints({
                 }
             },
             invalidatesTags: ["post"]
+        }),
+        getLiveHouseListringTracking: builder.query({
+            query: () => {
+                return {
+                    url: "/house_list/live_reasigon_requiring_attention",
+                    method: "GET",
+                }
+            },
+            providesTags: ["post"]
         })
+
     }),
 
 
@@ -75,4 +85,6 @@ export const { useHouseListingMutation,
     useGetFindByAllHouseListQuery,
     useGetSpecificHouseListQuery,
     useDeleteHouseListingMutation,
-    useGetMyHouseListingQuery } = AuthenticatorApi;
+    useGetMyHouseListingQuery,
+    useGetLiveHouseListringTrackingQuery
+ } = AuthenticatorApi;
