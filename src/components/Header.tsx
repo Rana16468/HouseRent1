@@ -1,4 +1,4 @@
-import { Map, Plus, Search, SlidersHorizontal, Home } from "lucide-react";
+import { Map, Plus, Search, SlidersHorizontal, Home, Moon, Sun, Languages } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,11 +7,13 @@ import { setSearchTerm } from "@/lib/redux/filterSlice";
 import { selectActiveFilterCount } from "@/lib/redux/selectors";
 import { openCreatePost, openMobileFilters } from "@/lib/redux/uiSlice";
 import { Link } from "@tanstack/react-router";
+import { usePreferences } from "@/lib/i18n/preferences";
 
 export function Header() {
   const dispatch = useAppDispatch();
   const searchTerm = useAppSelector((s) => s.filters.searchTerm);
   const activeFilters = useAppSelector(selectActiveFilterCount);
+  const { locale, theme, toggleLocale, toggleTheme, t } = usePreferences();
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-bg-elevated/70 backdrop-blur-xl supports-[backdrop-filter]:bg-bg-elevated/60">
@@ -23,7 +25,7 @@ export function Header() {
           variant="ghost"
           size="icon"
           className="relative shrink-0 rounded-xl lg:hidden"
-          aria-label="Open filters"
+          aria-label={t("openFilters")}
           onClick={() => dispatch(openMobileFilters())}
         >
           <SlidersHorizontal />
@@ -49,9 +51,9 @@ export function Header() {
           <Input
             value={searchTerm}
             onChange={(e) => dispatch(setSearchTerm(e.target.value))}
-            placeholder="Search area, thana, or title"
+            placeholder={t("searchPlaceholder")}
             className="h-10 rounded-full border-border/70 bg-bg-elevated/60 pr-4 pl-10 shadow-sm transition-all focus-visible:border-primary/60 focus-visible:bg-bg-elevated focus-visible:shadow-md"
-            aria-label="Search listings"
+            aria-label={t("searchPlaceholder")}
           />
         </div>
 
@@ -69,7 +71,7 @@ export function Header() {
                 activeProps={{ className: "bg-primary/10 text-primary" }}
               >
                 <Map className="size-4" />
-                Map
+                {t("map")}
               </Link>
             </Button>
 
@@ -84,19 +86,19 @@ export function Header() {
                 activeProps={{ className: "bg-primary/10 text-primary" }}
               >
                 <Home className="size-4" />
-                My Houses
+                {t("myHouses")}
               </Link>
             </Button>
           </div>
 
           {/* মোবাইলে শুধু আইকন */}
           <div className="flex items-center gap-1 md:hidden">
-            <Button asChild variant="ghost" size="icon" className="rounded-xl" aria-label="Map">
+            <Button asChild variant="ghost" size="icon" className="rounded-xl" aria-label={t("map")}>
               <Link to="/live-house-listing">
                 <Map />
               </Link>
             </Button>
-            <Button asChild variant="ghost" size="icon" className="rounded-xl" aria-label="My houses">
+            <Button asChild variant="ghost" size="icon" className="rounded-xl" aria-label={t("myHouses")}>
               <Link to="/my-houses">
                 <Home />
               </Link>
@@ -104,12 +106,35 @@ export function Header() {
           </div>
 
           <Button
+            variant="outline"
+            size="sm"
+            className="inline-flex rounded-full px-3"
+            aria-label={t("languageLabel")}
+            title={t("languageLabel")}
+            onClick={toggleLocale}
+          >
+            <Languages />
+            <span className="hidden sm:inline">{locale === "en" ? t("switchToBangla") : t("switchToEnglish")}</span>
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-xl"
+            aria-label={theme === "light" ? t("switchToDark") : t("switchToLight")}
+            title={theme === "light" ? t("switchToDark") : t("switchToLight")}
+            onClick={toggleTheme}
+          >
+            {theme === "light" ? <Moon /> : <Sun />}
+          </Button>
+
+          <Button
             className="rounded-full shadow-sm transition-shadow hover:shadow-md"
             onClick={() => dispatch(openCreatePost())}
           >
             <Plus />
-            <span className="hidden sm:inline">Post listing</span>
-            <span className="sm:hidden">Post</span>
+            <span className="hidden sm:inline">{t("postListing")}</span>
+            <span className="sm:hidden">{t("post")}</span>
           </Button>
         </nav>
       </div>
@@ -121,9 +146,9 @@ export function Header() {
           <Input
             value={searchTerm}
             onChange={(e) => dispatch(setSearchTerm(e.target.value))}
-            placeholder="Search area, thana, or title"
+            placeholder={t("searchPlaceholder")}
             className="h-10 rounded-full border-border/70 pr-4 pl-10 focus-visible:border-primary/60"
-            aria-label="Search listings"
+            aria-label={t("searchPlaceholder")}
           />
         </div>
       </div>

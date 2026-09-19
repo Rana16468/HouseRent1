@@ -1,6 +1,4 @@
 import {
-  CATEGORY_LABEL,
-  TENANT_LABEL,
   type RentalCategory,
   type TenantType,
 } from "@/types/rental";
@@ -26,6 +24,7 @@ import {
 } from "@/lib/redux/filterSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { cn, formatBdt, formatDayOrdinal } from "@/lib/utils";
+import { usePreferences } from "@/lib/i18n/preferences";
 
 const CATEGORIES: Array<RentalCategory | "all"> = [
   "all",
@@ -46,6 +45,7 @@ const TENANTS: Array<TenantType | "all"> = [
 export function FilterSidebar({ className }: { className?: string }) {
   const dispatch = useAppDispatch();
   const filters = useAppSelector((s) => s.filters);
+  const { t } = usePreferences();
 
   const division = findDivision(filters.division);
   const district = findDistrict(filters.division, filters.district);
@@ -56,7 +56,7 @@ export function FilterSidebar({ className }: { className?: string }) {
       <section className="flex flex-col gap-3">
         <div className="flex items-end justify-between gap-2">
           <h2 className="font-display text-lg font-medium tracking-tight">
-            Location
+            {t("location")}
           </h2>
           <Button
             variant="link"
@@ -64,18 +64,18 @@ export function FilterSidebar({ className }: { className?: string }) {
             className="h-auto px-0"
             onClick={() => dispatch(resetFilters())}
           >
-            Reset
+            {t("reset")}
           </Button>
         </div>
-        <p className="text-xs text-muted">Bangladesh · cascading thana filter</p>
+        <p className="text-xs text-muted">{t("cascadingFilter")}</p>
 
-        <FieldGroup label="Division">
+        <FieldGroup label={t("division")}>
           <NativeSelect
             value={filters.division ?? ""}
             onChange={(e) => dispatch(setDivision(e.target.value || null))}
-            aria-label="Division"
+            aria-label={t("division")}
           >
-            <option value="">All divisions</option>
+            <option value="">{t("allDivisions")}</option>
             {DIVISIONS.map((d) => (
               <option key={d.name} value={d.name}>
                 {d.name}
@@ -84,14 +84,14 @@ export function FilterSidebar({ className }: { className?: string }) {
           </NativeSelect>
         </FieldGroup>
 
-        <FieldGroup label="District">
+        <FieldGroup label={t("district")}>
           <NativeSelect
             value={filters.district ?? ""}
             onChange={(e) => dispatch(setDistrict(e.target.value || null))}
             disabled={!division}
-            aria-label="District"
+            aria-label={t("district")}
           >
-            <option value="">All districts</option>
+            <option value="">{t("allDistricts")}</option>
             {division?.districts.map((d) => (
               <option key={d.name} value={d.name}>
                 {d.name}
@@ -100,14 +100,14 @@ export function FilterSidebar({ className }: { className?: string }) {
           </NativeSelect>
         </FieldGroup>
 
-        <FieldGroup label="Thana / Upazila">
+        <FieldGroup label={t("thana")}>
           <NativeSelect
             value={filters.thana ?? ""}
             onChange={(e) => dispatch(setThana(e.target.value || null))}
             disabled={!district}
-            aria-label="Thana"
+            aria-label={t("thana")}
           >
-            <option value="">All thanas</option>
+            <option value="">{t("allThanas")}</option>
             {district?.thanas.map((t) => (
               <option key={t.name} value={t.name}>
                 {t.name}
@@ -116,14 +116,14 @@ export function FilterSidebar({ className }: { className?: string }) {
           </NativeSelect>
         </FieldGroup>
 
-        <FieldGroup label="Area">
+        <FieldGroup label={t("area")}>
           <NativeSelect
             value={filters.area ?? ""}
             onChange={(e) => dispatch(setArea(e.target.value || null))}
             disabled={!thana}
-            aria-label="Area"
+            aria-label={t("area")}
           >
-            <option value="">All areas</option>
+            <option value="">{t("allAreas")}</option>
             {thana?.areas.map((a) => (
               <option key={a} value={a}>
                 {a}
@@ -134,7 +134,7 @@ export function FilterSidebar({ className }: { className?: string }) {
       </section>
 <section className="flex flex-col gap-3.5">
   <h2 className="font-display text-sm font-semibold tracking-wide text-muted-foreground uppercase">
-    Category
+    {t("category")}
   </h2>
   <div className="flex flex-wrap gap-2">
     {CATEGORIES.map((cat) => {
@@ -151,7 +151,7 @@ export function FilterSidebar({ className }: { className?: string }) {
               : "bg-secondary/60 text-secondary-foreground hover:bg-secondary hover:text-foreground active:scale-[0.98]"
           )}
         >
-          {cat === "all" ? "All" : CATEGORY_LABEL[cat]}
+          {cat === "all" ? t("all") : t(({ house_flat: "houseFlat", sublet_room: "subletRoom", mess: "mess", office: "office" } as const)[cat])}
         </button>
       );
     })}
@@ -160,16 +160,16 @@ export function FilterSidebar({ className }: { className?: string }) {
 
       <section className="flex flex-col gap-3">
         <h2 className="font-display text-lg font-medium tracking-tight">
-          Tenant
+          {t("tenant")}
         </h2>
         <div className="flex flex-wrap gap-2">
-          {TENANTS.map((t) => {
-            const active = filters.tenantType === t;
+          {TENANTS.map((tenant) => {
+            const active = filters.tenantType === tenant;
             return (
               <button
-                key={t}
+                key={tenant}
                 type="button"
-                onClick={() => dispatch(setTenantType(t))}
+                onClick={() => dispatch(setTenantType(tenant))}
                 className={cn(
                   "h-11 rounded-full px-3.5 text-xs font-medium transition-colors",
                   active
@@ -177,7 +177,7 @@ export function FilterSidebar({ className }: { className?: string }) {
                     : "bg-secondary text-secondary-foreground hover:bg-secondary/80",
                 )}
               >
-                {t === "all" ? "Any" : TENANT_LABEL[t]}
+                {tenant === "all" ? t("any") : t(({ family: "family", bachelor_male: "bachelorMale", bachelor_female: "bachelorFemale", office: "office" } as const)[tenant])}
               </button>
             );
           })}
@@ -187,13 +187,13 @@ export function FilterSidebar({ className }: { className?: string }) {
       <section className="flex flex-col gap-4">
         <div className="flex items-end justify-between gap-2">
           <h2 className="font-display text-lg font-medium tracking-tight">
-            Monthly total
+            {t("monthlyTotal")}
           </h2>
           <p className="text-xs tabular-nums text-muted">
             {formatBdt(filters.minCost)} – {formatBdt(filters.maxCost)}
           </p>
         </div>
-        <p className="text-xs text-muted">Base rent plus utilities</p>
+        <p className="text-xs text-muted">{t("baseRentUtilities")}</p>
         <Slider
           min={COST_MIN}
           max={COST_MAX}
@@ -209,7 +209,7 @@ export function FilterSidebar({ className }: { className?: string }) {
       <section className="flex flex-col gap-4">
         <div className="flex items-end justify-between gap-2">
           <h2 className="font-display text-lg font-medium tracking-tight">
-            Move-in window
+            {t("moveInWindow")}
           </h2>
           <p className="text-xs text-muted">
             {formatDayOrdinal(filters.availableDayStart)}–
@@ -217,7 +217,7 @@ export function FilterSidebar({ className }: { className?: string }) {
           </p>
         </div>
         <p className="text-xs text-muted">
-          Day of the month the listing becomes available
+          {t("availableDay")}
         </p>
         <Slider
           min={1}
@@ -235,9 +235,9 @@ export function FilterSidebar({ className }: { className?: string }) {
 
       <section className="flex flex-col gap-3">
         <h2 className="font-display text-lg font-medium tracking-tight">
-          Available dates
+          {t("availableDates")}
         </h2>
-        <FieldGroup label="From">
+        <FieldGroup label={t("from")}>
           <input
             type="date"
             className="field"
@@ -245,7 +245,7 @@ export function FilterSidebar({ className }: { className?: string }) {
             onChange={(e) => dispatch(setDateFrom(e.target.value || null))}
           />
         </FieldGroup>
-        <FieldGroup label="To">
+        <FieldGroup label={t("to")}>
           <input
             type="date"
             className="field"

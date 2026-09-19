@@ -1,11 +1,11 @@
 import { d as Slot, m as require_jsx_runtime } from "../_libs/@radix-ui/react-checkbox+[...].mjs";
 import { _ as Link } from "../_libs/@tanstack/react-router+[...].mjs";
-import { N as House, f as SlidersHorizontal, m as Search, w as Map, y as Plus } from "../_libs/lucide-react.mjs";
+import { E as Map, I as House, N as Languages, b as Plus, d as Sun, h as Search, p as SlidersHorizontal, w as Moon } from "../_libs/lucide-react.mjs";
 import { a as createSelector, c as useSelector, s as useDispatch } from "../_libs/@reduxjs/toolkit+[...].mjs";
-import { c as openMobileFilters, n as baseApi, o as openCreatePost, y as setSearchTerm } from "./router-DvaOeulu.mjs";
+import { b as setSearchTerm, l as openMobileFilters, n as usePreferences, r as baseApi, s as openCreatePost } from "./router-C6kdH8BV.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/Header-DGt8ZrEI.js
+//#region node_modules/.nitro/vite/services/ssr/assets/Header-D6vzvvj0.js
 var import_jsx_runtime = require_jsx_runtime();
 var CATEGORY_LABEL = {
 	house_flat: "House / Flat",
@@ -263,6 +263,7 @@ function Header() {
 	const dispatch = useAppDispatch();
 	const searchTerm = useAppSelector((s) => s.filters.searchTerm);
 	const activeFilters = useAppSelector(selectActiveFilterCount);
+	const { locale, theme, toggleLocale, toggleTheme, t } = usePreferences();
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
 		className: "sticky top-0 z-40 border-b border-border/70 bg-bg-elevated/70 backdrop-blur-xl supports-[backdrop-filter]:bg-bg-elevated/60",
 		children: [
@@ -274,7 +275,7 @@ function Header() {
 						variant: "ghost",
 						size: "icon",
 						className: "relative shrink-0 rounded-xl lg:hidden",
-						"aria-label": "Open filters",
+						"aria-label": t("openFilters"),
 						onClick: () => dispatch(openMobileFilters()),
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SlidersHorizontal, {}), activeFilters > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 							className: "absolute top-1.5 right-1.5 flex size-2",
@@ -292,9 +293,9 @@ function Header() {
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-subtle transition-colors group-focus-within:text-primary" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
 							value: searchTerm,
 							onChange: (e) => dispatch(setSearchTerm(e.target.value)),
-							placeholder: "Search area, thana, or title",
+							placeholder: t("searchPlaceholder"),
 							className: "h-10 rounded-full border-border/70 bg-bg-elevated/60 pr-4 pl-10 shadow-sm transition-all focus-visible:border-primary/60 focus-visible:bg-bg-elevated focus-visible:shadow-md",
-							"aria-label": "Search listings"
+							"aria-label": t("searchPlaceholder")
 						})]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
@@ -310,7 +311,7 @@ function Header() {
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 										to: "/live-house-listing",
 										activeProps: { className: "bg-primary/10 text-primary" },
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Map, { className: "size-4" }), "Map"]
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Map, { className: "size-4" }), t("map")]
 									})
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 									asChild: true,
@@ -320,7 +321,7 @@ function Header() {
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 										to: "/my-houses",
 										activeProps: { className: "bg-primary/10 text-primary" },
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(House, { className: "size-4" }), "My Houses"]
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(House, { className: "size-4" }), t("myHouses")]
 									})
 								})]
 							}),
@@ -331,7 +332,7 @@ function Header() {
 									variant: "ghost",
 									size: "icon",
 									className: "rounded-xl",
-									"aria-label": "Map",
+									"aria-label": t("map"),
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 										to: "/live-house-listing",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Map, {})
@@ -341,12 +342,33 @@ function Header() {
 									variant: "ghost",
 									size: "icon",
 									className: "rounded-xl",
-									"aria-label": "My houses",
+									"aria-label": t("myHouses"),
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 										to: "/my-houses",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(House, {})
 									})
 								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+								variant: "outline",
+								size: "sm",
+								className: "inline-flex rounded-full px-3",
+								"aria-label": t("languageLabel"),
+								title: t("languageLabel"),
+								onClick: toggleLocale,
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Languages, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "hidden sm:inline",
+									children: locale === "en" ? t("switchToBangla") : t("switchToEnglish")
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+								variant: "ghost",
+								size: "icon",
+								className: "rounded-xl",
+								"aria-label": theme === "light" ? t("switchToDark") : t("switchToLight"),
+								title: theme === "light" ? t("switchToDark") : t("switchToLight"),
+								onClick: toggleTheme,
+								children: theme === "light" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Moon, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sun, {})
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
 								className: "rounded-full shadow-sm transition-shadow hover:shadow-md",
@@ -355,11 +377,11 @@ function Header() {
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, {}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 										className: "hidden sm:inline",
-										children: "Post listing"
+										children: t("postListing")
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 										className: "sm:hidden",
-										children: "Post"
+										children: t("post")
 									})
 								]
 							})
@@ -374,9 +396,9 @@ function Header() {
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-subtle transition-colors group-focus-within:text-primary" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
 						value: searchTerm,
 						onChange: (e) => dispatch(setSearchTerm(e.target.value)),
-						placeholder: "Search area, thana, or title",
+						placeholder: t("searchPlaceholder"),
 						className: "h-10 rounded-full border-border/70 pr-4 pl-10 focus-visible:border-primary/60",
-						"aria-label": "Search listings"
+						"aria-label": t("searchPlaceholder")
 					})]
 				})
 			})

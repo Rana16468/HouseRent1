@@ -4,7 +4,7 @@ import { f as createRouter, g as createRootRoute, h as createFileRoute, l as Scr
 import { c as TriangleAlert } from "../_libs/lucide-react.mjs";
 import { a as union, i as string, n as number, r as object, t as literal } from "../_libs/zod.mjs";
 import { i as createSlice, n as fetchBaseQuery, o as Provider_default, r as configureStore, t as createApi } from "../_libs/@reduxjs/toolkit+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-DvaOeulu.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-C6kdH8BV.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var __defProp = Object.defineProperty;
@@ -958,7 +958,166 @@ function ReduxProvider({ children }) {
 		children
 	});
 }
-var styles_default = "/assets/styles-cNX2IlXc.css";
+var translations = {
+	en: {
+		searchPlaceholder: "Search area, thana, or title",
+		openFilters: "Open filters",
+		map: "Map",
+		myHouses: "My Houses",
+		postListing: "Post listing",
+		post: "Post",
+		languageLabel: "Language",
+		themeLabel: "Theme",
+		switchToBangla: "বাংলা",
+		switchToEnglish: "English",
+		switchToDark: "Dark mode",
+		switchToLight: "Light mode",
+		location: "Location",
+		reset: "Reset",
+		cascadingFilter: "Bangladesh · cascading thana filter",
+		allDivisions: "All divisions",
+		allDistricts: "All districts",
+		allThanas: "All thanas",
+		allAreas: "All areas",
+		division: "Division",
+		district: "District",
+		thana: "Thana / Upazila",
+		area: "Area",
+		category: "Category",
+		all: "All",
+		tenant: "Tenant",
+		any: "Any",
+		monthlyTotal: "Monthly total",
+		baseRentUtilities: "Base rent plus utilities",
+		moveInWindow: "Move-in window",
+		availableDay: "Day of the month the listing becomes available",
+		availableDates: "Available dates",
+		from: "From",
+		to: "To",
+		bangladeshRentals: "Bangladesh rentals",
+		roomsFlatsOffices: "Rooms, flats, and offices",
+		homeDescription: "Filter by division, thana, tenant type, and the real monthly total — rent plus gas, power, water, and service charge.",
+		loadingListings: "Loading listings…",
+		listings: "listings",
+		filters: "filters",
+		details: "Details",
+		address: "Address:",
+		liveLocation: "Live Location",
+		month: "/ month",
+		availableFrom: "From",
+		footerDescription: "Thikana is a frontend listing board for Bangladesh. Contact landlords directly — no booking fees.",
+		noListings: "No listings found",
+		clearFilters: "Clear filters",
+		houseFlat: "House / Flat",
+		subletRoom: "Sublet / Single room",
+		mess: "Mess",
+		office: "Office / Commercial",
+		family: "Family",
+		bachelorMale: "Bachelor (Male)",
+		bachelorFemale: "Bachelor (Female)"
+	},
+	bn: {
+		searchPlaceholder: "এলাকা, থানা বা শিরোনাম খুঁজুন",
+		openFilters: "ফিল্টার খুলুন",
+		map: "মানচিত্র",
+		myHouses: "আমার বাড়ি",
+		postListing: "লিস্টিং পোস্ট করুন",
+		post: "পোস্ট",
+		languageLabel: "ভাষা",
+		themeLabel: "থিম",
+		switchToBangla: "বাংলা",
+		switchToEnglish: "English",
+		switchToDark: "ডার্ক মোড",
+		switchToLight: "লাইট মোড",
+		location: "অবস্থান",
+		reset: "রিসেট",
+		cascadingFilter: "বাংলাদেশ · ধাপে ধাপে থানা ফিল্টার",
+		allDivisions: "সব বিভাগ",
+		allDistricts: "সব জেলা",
+		allThanas: "সব থানা",
+		allAreas: "সব এলাকা",
+		division: "বিভাগ",
+		district: "জেলা",
+		thana: "থানা / উপজেলা",
+		area: "এলাকা",
+		category: "ক্যাটাগরি",
+		all: "সব",
+		tenant: "ভাড়াটিয়ার ধরন",
+		any: "যেকোনো",
+		monthlyTotal: "মাসিক মোট",
+		baseRentUtilities: "মূল ভাড়া ও ইউটিলিটি",
+		moveInWindow: "উঠে যাওয়ার সময়",
+		availableDay: "লিস্টিংটি মাসের যে দিনে পাওয়া যাবে",
+		availableDates: "পাওয়ার তারিখ",
+		from: "শুরু",
+		to: "শেষ",
+		bangladeshRentals: "বাংলাদেশের ভাড়া",
+		roomsFlatsOffices: "রুম, ফ্ল্যাট ও অফিস",
+		homeDescription: "বিভাগ, থানা, ভাড়াটিয়ার ধরন এবং গ্যাস, বিদ্যুৎ, পানি ও সার্ভিস চার্জসহ প্রকৃত মাসিক মোট দিয়ে ফিল্টার করুন।",
+		loadingListings: "লিস্টিং লোড হচ্ছে…",
+		listings: "টি লিস্টিং",
+		filters: "টি ফিল্টার",
+		details: "বিস্তারিত",
+		address: "ঠিকানা:",
+		liveLocation: "লাইভ লোকেশন",
+		month: "/ মাস",
+		availableFrom: "শুরু",
+		footerDescription: "ঠিকানা বাংলাদেশের একটি বাড়ি ভাড়ার লিস্টিং বোর্ড। কোনো বুকিং ফি ছাড়াই সরাসরি বাড়ির মালিকের সঙ্গে যোগাযোগ করুন।",
+		noListings: "কোনো লিস্টিং পাওয়া যায়নি",
+		clearFilters: "ফিল্টার মুছুন",
+		houseFlat: "বাড়ি / ফ্ল্যাট",
+		subletRoom: "সাবলেট / সিঙ্গেল রুম",
+		mess: "মেস",
+		office: "অফিস / বাণিজ্যিক",
+		family: "পরিবার",
+		bachelorMale: "ব্যাচেলর (পুরুষ)",
+		bachelorFemale: "ব্যাচেলর (নারী)"
+	}
+};
+var PreferencesContext = (0, import_react.createContext)(null);
+function readStored(key, fallback) {
+	if (typeof window === "undefined") return fallback;
+	const stored = window.localStorage.getItem(key);
+	return stored === "en" || stored === "bn" || stored === "light" || stored === "dark" ? stored : fallback;
+}
+function PreferencesProvider({ children }) {
+	const [locale, setLocaleState] = (0, import_react.useState)(() => readStored("thikana.locale", "en"));
+	const [theme, setTheme] = (0, import_react.useState)(() => {
+		const stored = readStored("thikana.theme", "light");
+		if (typeof window !== "undefined" && !window.localStorage.getItem("thikana.theme")) return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+		return stored;
+	});
+	(0, import_react.useEffect)(() => {
+		document.documentElement.lang = locale;
+		document.documentElement.dataset.locale = locale;
+		window.localStorage.setItem("thikana.locale", locale);
+	}, [locale]);
+	(0, import_react.useEffect)(() => {
+		document.documentElement.dataset.theme = theme;
+		document.documentElement.style.colorScheme = theme;
+		window.localStorage.setItem("thikana.theme", theme);
+	}, [theme]);
+	const setLocale = (nextLocale) => setLocaleState(nextLocale);
+	const toggleLocale = () => setLocaleState((current) => current === "en" ? "bn" : "en");
+	const toggleTheme = () => setTheme((current) => current === "light" ? "dark" : "light");
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PreferencesContext.Provider, {
+		value: {
+			locale,
+			theme,
+			setLocale,
+			toggleLocale,
+			toggleTheme,
+			t: (key) => translations[locale][key]
+		},
+		children
+	});
+}
+function usePreferences() {
+	const context = (0, import_react.useContext)(PreferencesContext);
+	if (!context) throw new Error("usePreferences must be used inside PreferencesProvider");
+	return context;
+}
+var styles_default = "/assets/styles-BaolMXms.css";
 var APP_NAME = "Thikana";
 var Route$3 = createRootRoute({
 	head: () => ({
@@ -1009,13 +1168,13 @@ var Route$3 = createRootRoute({
 			className: "antialiased",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PreviewHostBridge, {}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AuthProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ReduxProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {}) }) }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PreferencesProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AuthProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ReduxProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {}) }) }) }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Scripts, {})
 			]
 		})]
 	})
 });
-var $$splitComponentImporter$2 = () => import("./routes-6ZSdYTV0.mjs");
+var $$splitComponentImporter$2 = () => import("./routes-B5dq6rDC.mjs");
 var Route$2 = createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter$2, "component") });
 /**
 * A filter "has a value" only when it is a real selection.
@@ -1023,9 +1182,9 @@ var Route$2 = createFileRoute("/")({ component: lazyRouteComponent($$splitCompon
 */
 /** Returns `value` after it has stopped changing for `delay` ms. */
 /** e.g. [1, "gap", 4, 5, 6, "gap", 20] — keeps the pager short on many pages. */
-var $$splitComponentImporter$1 = () => import("./live-house-listing-CRWCZcId.mjs");
+var $$splitComponentImporter$1 = () => import("./live-house-listing-Dg_kn1_8.mjs");
 var Route$1 = createFileRoute("/live-house-listing")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
-var $$splitComponentImporter = () => import("./my-houses-B6sUQp52.mjs");
+var $$splitComponentImporter = () => import("./my-houses-Dlc7qjqU.mjs");
 var Route = createFileRoute("/my-houses")({ component: lazyRouteComponent($$splitComponentImporter, "component") });
 var rootRouteChildren = {
 	IndexRoute: Route$2.update({
@@ -1053,4 +1212,4 @@ function getRouter() {
 	});
 }
 //#endregion
-export { selectPost as C, addPost as S, setDistrict as _, closeMobileFilters as a, setTenantType as b, openMobileFilters as c, setArea as d, setAvailableDayRange as f, setDateTo as g, setDateFrom as h, closeDetails as i, COST_MAX as l, setCostRange as m, baseApi as n, openCreatePost as o, setCategory as p, closeCreatePost as r, openDetails as s, router_exports as t, resetFilters as u, setDivision as v, setThana as x, setSearchTerm as y };
+export { addPost as C, setThana as S, setDateTo as _, closeDetails as a, setSearchTerm as b, openDetails as c, resetFilters as d, setArea as f, setDateFrom as g, setCostRange as h, closeCreatePost as i, openMobileFilters as l, setCategory as m, usePreferences as n, closeMobileFilters as o, setAvailableDayRange as p, baseApi as r, openCreatePost as s, router_exports as t, COST_MAX as u, setDistrict as v, selectPost as w, setTenantType as x, setDivision as y };

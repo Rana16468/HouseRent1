@@ -49,8 +49,9 @@ export interface Post {
   availableFrom: string;
   pin: string;
   source: "mock" | "user";
+  createdAt?: string;
   featured?: boolean;
-  deviceId: string
+  deviceId?: string
   address?: string
 
   liveLocationUrl?: string

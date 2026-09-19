@@ -1,17 +1,17 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { h as require_react, m as require_jsx_runtime, n as CheckboxIndicator, t as Checkbox$1 } from "../_libs/@radix-ui/react-checkbox+[...].mjs";
-import { $ as Bold, C as MessageCircle, D as List, F as Heading1, I as Eye, K as ChevronRight, L as EyeOff, M as ImagePlus, N as House, O as ListOrdered, P as Heading2, R as ExternalLink, S as Navigation, T as MapPin, V as Clock, X as Car, Y as Check, Z as CalendarDays, _ as Redo2, d as Strikethrough, et as ArrowRight, i as Video, j as Italic, k as Link2, o as Undo2, p as Send, q as ChevronLeft, r as X, s as Underline, tt as ArrowLeft, v as Quote, x as PenLine, z as Eraser } from "../_libs/lucide-react.mjs";
-import { C as selectPost, S as addPost, _ as setDistrict, a as closeMobileFilters, b as setTenantType, d as setArea, f as setAvailableDayRange, g as setDateTo, h as setDateFrom, i as closeDetails, l as COST_MAX, m as setCostRange, p as setCategory, r as closeCreatePost, s as openDetails, u as resetFilters, v as setDivision, x as setThana } from "./router-DvaOeulu.mjs";
-import { C as useGetSpecificHouseListQuery, _ as useAppDispatch, a as Header, b as useGetFindByAllHouseListQuery, c as TENANT_LABEL, d as digitsPhone, f as formatBdt, g as totalMonthlyCost, h as selectActiveFilterCount, l as Textarea, m as formatLongDate, n as CATEGORY_LABEL, o as Input, p as formatDayOrdinal, s as NativeSelect, t as Button, u as cn, v as useAppSelector, w as useHouseListingMutation } from "./Header-DGt8ZrEI.mjs";
+import { $ as Car, A as ListOrdered, B as EyeOff, C as Navigation, D as MapPin, F as ImagePlus, H as Eraser, I as House, L as Heading2, P as Italic, Q as Check, R as Heading1, S as PenLine, T as MessageCircle, V as ExternalLink, W as Clock, X as ChevronLeft, Y as ChevronRight, et as CalendarDays, f as Strikethrough, i as Video, it as ArrowLeft, j as Link2, k as List, m as Send, nt as Bold, o as Undo2, r as X, rt as ArrowRight, s as Underline, v as Redo2, y as Quote, z as Eye } from "../_libs/lucide-react.mjs";
+import { C as addPost, S as setThana, _ as setDateTo, a as closeDetails, c as openDetails, d as resetFilters, f as setArea, g as setDateFrom, h as setCostRange, i as closeCreatePost, m as setCategory, n as usePreferences, o as closeMobileFilters, p as setAvailableDayRange, u as COST_MAX, v as setDistrict, w as selectPost, x as setTenantType, y as setDivision } from "./router-C6kdH8BV.mjs";
+import { C as useGetSpecificHouseListQuery, _ as useAppDispatch, a as Header, b as useGetFindByAllHouseListQuery, c as TENANT_LABEL, d as digitsPhone, f as formatBdt, g as totalMonthlyCost, h as selectActiveFilterCount, l as Textarea, m as formatLongDate, n as CATEGORY_LABEL, o as Input, p as formatDayOrdinal, s as NativeSelect, t as Button, u as cn, v as useAppSelector, w as useHouseListingMutation } from "./Header-D6vzvvj0.mjs";
 import { t as ErrorPage } from "./ErrorPage-BTML1tIj.mjs";
-import { a as DIVISIONS, c as findThana, i as CostBreakdown, l as getDeviceVisitorId, n as ChannelDots, o as findDistrict, r as ContactActions, s as findDivision, t as Badge, u as locationLabel } from "./badge-DTqt6h9-.mjs";
+import { a as DIVISIONS, c as findThana, i as CostBreakdown, l as getDeviceVisitorId, n as ChannelDots, o as findDistrict, r as ContactActions, s as findDivision, t as Badge, u as locationLabel } from "./badge-BdiAyqMW.mjs";
 import { n as toast, t as Toaster } from "../_libs/sonner.mjs";
 import { a as DialogOverlay$1, i as DialogDescription$1, n as DialogClose, o as DialogPortal$1, r as DialogContent$1, s as DialogTitle$1, t as Dialog$1 } from "../_libs/@radix-ui/react-dialog+[...].mjs";
 import { t as Root } from "../_libs/radix-ui__react-label.mjs";
 import { t as require_dist } from "../_libs/device-detector-js.mjs";
 import { i as SliderTrack, n as SliderRange, r as SliderThumb, t as Slider$1 } from "../_libs/@radix-ui/react-slider+[...].mjs";
 import { i as Viewport, n as Scrollbar, r as Thumb, t as Root$1 } from "../_libs/radix-ui__react-scroll-area.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-6ZSdYTV0.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-B5dq6rDC.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_dist = /* @__PURE__ */ __toESM(require_dist());
@@ -1102,6 +1102,7 @@ var TENANTS = [
 function FilterSidebar({ className }) {
 	const dispatch = useAppDispatch();
 	const filters = useAppSelector((s) => s.filters);
+	const { t } = usePreferences();
 	const division = findDivision(filters.division);
 	const district = findDistrict(filters.division, filters.district);
 	const thana = findThana(filters.division, filters.district, filters.thana);
@@ -1115,28 +1116,28 @@ function FilterSidebar({ className }) {
 						className: "flex items-end justify-between gap-2",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 							className: "font-display text-lg font-medium tracking-tight",
-							children: "Location"
+							children: t("location")
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 							variant: "link",
 							size: "sm",
 							className: "h-auto px-0",
 							onClick: () => dispatch(resetFilters()),
-							children: "Reset"
+							children: t("reset")
 						})]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 						className: "text-xs text-muted",
-						children: "Bangladesh · cascading thana filter"
+						children: t("cascadingFilter")
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FieldGroup, {
-						label: "Division",
+						label: t("division"),
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(NativeSelect, {
 							value: filters.division ?? "",
 							onChange: (e) => dispatch(setDivision(e.target.value || null)),
-							"aria-label": "Division",
+							"aria-label": t("division"),
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
 								value: "",
-								children: "All divisions"
+								children: t("allDivisions")
 							}), DIVISIONS.map((d) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
 								value: d.name,
 								children: d.name
@@ -1144,15 +1145,15 @@ function FilterSidebar({ className }) {
 						})
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FieldGroup, {
-						label: "District",
+						label: t("district"),
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(NativeSelect, {
 							value: filters.district ?? "",
 							onChange: (e) => dispatch(setDistrict(e.target.value || null)),
 							disabled: !division,
-							"aria-label": "District",
+							"aria-label": t("district"),
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
 								value: "",
-								children: "All districts"
+								children: t("allDistricts")
 							}), division?.districts.map((d) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
 								value: d.name,
 								children: d.name
@@ -1160,15 +1161,15 @@ function FilterSidebar({ className }) {
 						})
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FieldGroup, {
-						label: "Thana / Upazila",
+						label: t("thana"),
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(NativeSelect, {
 							value: filters.thana ?? "",
 							onChange: (e) => dispatch(setThana(e.target.value || null)),
 							disabled: !district,
-							"aria-label": "Thana",
+							"aria-label": t("thana"),
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
 								value: "",
-								children: "All thanas"
+								children: t("allThanas")
 							}), district?.thanas.map((t) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
 								value: t.name,
 								children: t.name
@@ -1176,15 +1177,15 @@ function FilterSidebar({ className }) {
 						})
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FieldGroup, {
-						label: "Area",
+						label: t("area"),
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(NativeSelect, {
 							value: filters.area ?? "",
 							onChange: (e) => dispatch(setArea(e.target.value || null)),
 							disabled: !thana,
-							"aria-label": "Area",
+							"aria-label": t("area"),
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
 								value: "",
-								children: "All areas"
+								children: t("allAreas")
 							}), thana?.areas.map((a) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
 								value: a,
 								children: a
@@ -1197,7 +1198,7 @@ function FilterSidebar({ className }) {
 				className: "flex flex-col gap-3.5",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 					className: "font-display text-sm font-semibold tracking-wide text-muted-foreground uppercase",
-					children: "Category"
+					children: t("category")
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "flex flex-wrap gap-2",
 					children: CATEGORIES.map((cat) => {
@@ -1206,7 +1207,12 @@ function FilterSidebar({ className }) {
 							type: "button",
 							onClick: () => dispatch(setCategory(cat)),
 							className: cn("inline-flex items-center justify-center h-9 rounded-full px-4 text-xs font-medium transition-all duration-200 ease-in-out select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50", active ? "bg-primary text-primary-foreground shadow-sm shadow-primary/20 scale-[1.02]" : "bg-secondary/60 text-secondary-foreground hover:bg-secondary hover:text-foreground active:scale-[0.98]"),
-							children: cat === "all" ? "All" : CATEGORY_LABEL[cat]
+							children: cat === "all" ? t("all") : t({
+								house_flat: "houseFlat",
+								sublet_room: "subletRoom",
+								mess: "mess",
+								office: "office"
+							}[cat])
 						}, cat);
 					})
 				})]
@@ -1215,17 +1221,22 @@ function FilterSidebar({ className }) {
 				className: "flex flex-col gap-3",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 					className: "font-display text-lg font-medium tracking-tight",
-					children: "Tenant"
+					children: t("tenant")
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "flex flex-wrap gap-2",
-					children: TENANTS.map((t) => {
-						const active = filters.tenantType === t;
+					children: TENANTS.map((tenant) => {
+						const active = filters.tenantType === tenant;
 						return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 							type: "button",
-							onClick: () => dispatch(setTenantType(t)),
+							onClick: () => dispatch(setTenantType(tenant)),
 							className: cn("h-11 rounded-full px-3.5 text-xs font-medium transition-colors", active ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground hover:bg-secondary/80"),
-							children: t === "all" ? "Any" : TENANT_LABEL[t]
-						}, t);
+							children: tenant === "all" ? t("any") : t({
+								family: "family",
+								bachelor_male: "bachelorMale",
+								bachelor_female: "bachelorFemale",
+								office: "office"
+							}[tenant])
+						}, tenant);
 					})
 				})]
 			}),
@@ -1236,7 +1247,7 @@ function FilterSidebar({ className }) {
 						className: "flex items-end justify-between gap-2",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 							className: "font-display text-lg font-medium tracking-tight",
-							children: "Monthly total"
+							children: t("monthlyTotal")
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 							className: "text-xs tabular-nums text-muted",
 							children: [
@@ -1248,7 +1259,7 @@ function FilterSidebar({ className }) {
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 						className: "text-xs text-muted",
-						children: "Base rent plus utilities"
+						children: t("baseRentUtilities")
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Slider, {
 						min: 0,
@@ -1270,7 +1281,7 @@ function FilterSidebar({ className }) {
 						className: "flex items-end justify-between gap-2",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 							className: "font-display text-lg font-medium tracking-tight",
-							children: "Move-in window"
+							children: t("moveInWindow")
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 							className: "text-xs text-muted",
 							children: [
@@ -1282,7 +1293,7 @@ function FilterSidebar({ className }) {
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 						className: "text-xs text-muted",
-						children: "Day of the month the listing becomes available"
+						children: t("availableDay")
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Slider, {
 						min: 1,
@@ -1302,10 +1313,10 @@ function FilterSidebar({ className }) {
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 						className: "font-display text-lg font-medium tracking-tight",
-						children: "Available dates"
+						children: t("availableDates")
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FieldGroup, {
-						label: "From",
+						label: t("from"),
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 							type: "date",
 							className: "field",
@@ -1314,7 +1325,7 @@ function FilterSidebar({ className }) {
 						})
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FieldGroup, {
-						label: "To",
+						label: t("to"),
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 							type: "date",
 							className: "field",
@@ -1391,6 +1402,7 @@ function PostCard({ post }) {
 	const dispatch = useAppDispatch();
 	const cover = post.images[0];
 	const total = totalMonthlyCost(post.utilities);
+	const { t } = usePreferences();
 	const digits = digitsPhone(post.contact.phone || "");
 	digits.startsWith("880") ? `${digits}` : post.contact.phone;
 	function open() {
@@ -1460,7 +1472,7 @@ function PostCard({ post }) {
 							children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "font-medium text-fg/70",
-									children: "Address:"
+									children: t("address")
 								}),
 								" ",
 								post.address
@@ -1472,7 +1484,7 @@ function PostCard({ post }) {
 							rel: "noopener noreferrer",
 							onClick: (e) => e.stopPropagation(),
 							className: "inline-flex w-fit items-center gap-1 text-xs font-medium text-primary underline-offset-2 hover:underline",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, { className: "size-3.5" }), "Live Location"]
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, { className: "size-3.5" }), t("liveLocation")]
 						}) : null
 					]
 				}),
@@ -1482,7 +1494,7 @@ function PostCard({ post }) {
 						className: "font-display text-2xl font-semibold tracking-tight tabular-nums text-primary",
 						children: [formatBdt(total), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 							className: "ml-1 font-sans text-xs font-medium text-muted",
-							children: "/ month"
+							children: t("month")
 						})]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CostBreakdown, {
 						utilities: post.utilities,
@@ -1495,7 +1507,11 @@ function PostCard({ post }) {
 						className: "inline-flex items-center gap-1.5 rounded-full bg-secondary/60 px-2.5 py-1",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CalendarDays, { className: "size-3.5 text-primary" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("b", {
 							className: "font-medium text-fg",
-							children: ["From ", formatLongDate(post.availableFrom)]
+							children: [
+								t("availableFrom"),
+								" ",
+								formatLongDate(post.availableFrom)
+							]
 						})]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChannelDots, { contact: post.contact })]
 				}),
@@ -1505,7 +1521,7 @@ function PostCard({ post }) {
 						variant: "outline",
 						onClick: open,
 						className: "w-full",
-						children: "Details"
+						children: t("details")
 					})
 				})
 			]
@@ -1922,6 +1938,7 @@ function Home() {
 	const dispatch = useAppDispatch();
 	const active = useAppSelector(selectActiveFilterCount);
 	const filters = useAppSelector((state) => state.filters);
+	const { t } = usePreferences();
 	const debouncedParams = useDebouncedValue((0, import_react.useMemo)(() => {
 		const raw = {
 			searchTerm: typeof filters.searchTerm === "string" ? filters.searchTerm.trim() : void 0,
@@ -1982,20 +1999,20 @@ function Home() {
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 									className: "text-xs font-medium tracking-[0.18em] text-muted uppercase",
-									children: "Bangladesh rentals"
+									children: t("bangladeshRentals")
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
 									className: "mt-1 font-display text-3xl font-medium tracking-tight sm:text-4xl",
-									children: "Rooms, flats, and offices"
+									children: t("roomsFlatsOffices")
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 									className: "mt-2 max-w-xl text-sm leading-relaxed text-muted",
-									children: "Filter by division, thana, tenant type, and the real monthly total — rent plus gas, power, water, and service charge."
+									children: t("homeDescription")
 								})
 							] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 								className: "text-sm tabular-nums text-muted",
 								"aria-live": "polite",
-								children: [isLoading ? "Loading listings…" : total === 0 ? "0 listings" : `${rangeStart}–${rangeEnd} of ${total} listings`, active > 0 ? ` · ${active} filters` : ""]
+								children: [isLoading ? t("loadingListings") : total === 0 ? `0 ${t("listings")}` : `${rangeStart}–${rangeEnd} of ${total} ${t("listings")}`, active > 0 ? ` · ${active} ${t("filters")}` : ""]
 							})]
 						}),
 						isLoading && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ListingSkeletons, { count: 6 }),
@@ -2044,7 +2061,7 @@ function Home() {
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("footer", {
 				className: "border-t border-border px-4 py-8 text-center text-xs text-muted",
-				children: "Thikana is a frontend listing board for Bangladesh. Contact landlords directly — no booking fees."
+				children: t("footerDescription")
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MobileFilters, {}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreatePostModal, {}),
@@ -2065,21 +2082,22 @@ function ListingSkeletons({ count }) {
 	});
 }
 function EmptyState({ onReset }) {
+	const { t } = usePreferences();
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "flex flex-col items-start gap-4 rounded-xl border border-dashed border-border bg-surface px-6 py-16",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "font-display text-2xl font-medium tracking-tight",
-				children: "No listings in this slice"
+				children: t("noListings")
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "max-w-md text-sm leading-relaxed text-muted",
-				children: "Try a wider thana, raise the cost ceiling, or clear the move-in window. New posts appear at the top of the board."
+				children: t("homeDescription")
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 				variant: "outline",
 				onClick: onReset,
-				children: "Clear filters"
+				children: t("clearFilters")
 			})
 		]
 	});

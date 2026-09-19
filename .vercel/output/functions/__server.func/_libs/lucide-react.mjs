@@ -583,6 +583,38 @@ var Italic = createLucideIcon("italic", [
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var Languages = createLucideIcon("languages", [
+	["path", {
+		d: "m5 8 6 6",
+		key: "1wu5hv"
+	}],
+	["path", {
+		d: "m4 14 6-6 2-3",
+		key: "1k1g8d"
+	}],
+	["path", {
+		d: "M2 5h12",
+		key: "or177f"
+	}],
+	["path", {
+		d: "M7 2h1",
+		key: "1t2jsx"
+	}],
+	["path", {
+		d: "m22 22-5-10-5 10",
+		key: "don7ne"
+	}],
+	["path", {
+		d: "M14 18h6",
+		key: "1m8k6r"
+	}]
+]);
+/**
+* @license lucide-react v0.510.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var Layers = createLucideIcon("layers", [
 	["path", {
 		d: "M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z",
@@ -738,6 +770,16 @@ var Map = createLucideIcon("map", [
 var MessageCircle = createLucideIcon("message-circle", [["path", {
 	d: "M7.9 20A9 9 0 1 0 4 16.1L2 22Z",
 	key: "vv11sd"
+}]]);
+/**
+* @license lucide-react v0.510.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var Moon = createLucideIcon("moon", [["path", {
+	d: "M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z",
+	key: "a7tn18"
 }]]);
 /**
 * @license lucide-react v0.510.0 - ISC
@@ -976,6 +1018,52 @@ var Strikethrough = createLucideIcon("strikethrough", [
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var Sun = createLucideIcon("sun", [
+	["circle", {
+		cx: "12",
+		cy: "12",
+		r: "4",
+		key: "4exip2"
+	}],
+	["path", {
+		d: "M12 2v2",
+		key: "tus03m"
+	}],
+	["path", {
+		d: "M12 20v2",
+		key: "1lh1kg"
+	}],
+	["path", {
+		d: "m4.93 4.93 1.41 1.41",
+		key: "149t6j"
+	}],
+	["path", {
+		d: "m17.66 17.66 1.41 1.41",
+		key: "ptbguv"
+	}],
+	["path", {
+		d: "M2 12h2",
+		key: "1t8f8n"
+	}],
+	["path", {
+		d: "M20 12h2",
+		key: "1q8mjw"
+	}],
+	["path", {
+		d: "m6.34 17.66-1.41 1.41",
+		key: "1m8zz5"
+	}],
+	["path", {
+		d: "m19.07 4.93-1.41 1.41",
+		key: "1shlcs"
+	}]
+]);
+/**
+* @license lucide-react v0.510.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var Trash2 = createLucideIcon("trash-2", [
 	["path", {
 		d: "M3 6h18",
@@ -1186,4 +1274,4 @@ var ZoomIn = createLucideIcon("zoom-in", [
 	}]
 ]);
 //#endregion
-export { Bold as $, Layers as A, Earth as B, MessageCircle as C, List as D, LoaderCircle as E, Heading1 as F, ChevronsLeft as G, CircleCheck as H, Eye as I, ChevronDown as J, ChevronRight as K, EyeOff as L, ImagePlus as M, House as N, ListOrdered as O, Heading2 as P, Building2 as Q, ExternalLink as R, Navigation as S, MapPin as T, CircleAlert as U, Clock as V, ChevronsRight as W, Car as X, Check as Y, CalendarDays as Z, Redo2 as _, Users as a, Phone as b, TriangleAlert as c, Strikethrough as d, ArrowRight as et, SlidersHorizontal as f, RefreshCw as g, RotateCcw as h, Video as i, Italic as j, Link2 as k, TrendingUp as l, Search as m, ZoomOut as n, Undo2 as o, Send as p, ChevronLeft as q, X as r, Underline as s, ZoomIn as t, ArrowLeft as tt, Trash2 as u, Quote as v, Map as w, PenLine as x, Plus as y, Eraser as z };
+export { Car as $, ListOrdered as A, EyeOff as B, Navigation as C, MapPin as D, Map as E, ImagePlus as F, CircleCheck as G, Eraser as H, House as I, ChevronsLeft as J, CircleAlert as K, Heading2 as L, Layers as M, Languages as N, LoaderCircle as O, Italic as P, Check as Q, Heading1 as R, PenLine as S, MessageCircle as T, Earth as U, ExternalLink as V, Clock as W, ChevronLeft as X, ChevronRight as Y, ChevronDown as Z, RefreshCw as _, Users as a, Plus as b, TriangleAlert as c, Sun as d, CalendarDays as et, Strikethrough as f, RotateCcw as g, Search as h, Video as i, ArrowLeft as it, Link2 as j, List as k, TrendingUp as l, Send as m, ZoomOut as n, Bold as nt, Undo2 as o, SlidersHorizontal as p, ChevronsRight as q, X as r, ArrowRight as rt, Underline as s, ZoomIn as t, Building2 as tt, Trash2 as u, Redo2 as v, Moon as w, Phone as x, Quote as y, Eye as z };

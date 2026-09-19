@@ -16,11 +16,13 @@ import {
   type Post,
 } from "@/types/rental";
 import { formatBdt, formatLongDate } from "@/lib/utils";
+import { usePreferences } from "@/lib/i18n/preferences";
 
 export function PostCard({ post }: { post: Post }) {
   const dispatch = useAppDispatch();
   const cover = post.images[0];
   const total = totalMonthlyCost(post.utilities);
+  const { t } = usePreferences();
 
   const digits = digitsPhone(post.contact.phone || "");
   const tel = digits.startsWith("880") ? `+${digits}` : post.contact.phone;
@@ -91,7 +93,7 @@ export function PostCard({ post }: { post: Post }) {
           </h3>
           {post.address ? (
             <p className="truncate text-xs text-muted">
-              <span className="font-medium text-fg/70">Address:</span> {post.address}
+              <span className="font-medium text-fg/70">{t("address")}</span> {post.address}
             </p>
           ) : null}
           {post?.liveLocationUrl ? (
@@ -103,7 +105,7 @@ export function PostCard({ post }: { post: Post }) {
               className="inline-flex w-fit items-center gap-1 text-xs font-medium text-primary underline-offset-2 hover:underline"
             >
               <MapPin className="size-3.5" />
-              Live Location
+              {t("liveLocation")}
             </a>
           ) : null}
         </div>
@@ -112,7 +114,7 @@ export function PostCard({ post }: { post: Post }) {
           <p className="font-display text-2xl font-semibold tracking-tight tabular-nums text-primary">
             {formatBdt(total)}
             <span className="ml-1 font-sans text-xs font-medium text-muted">
-              / month
+              {t("month")}
             </span>
           </p>
           <CostBreakdown utilities={post.utilities} compact />
@@ -121,14 +123,14 @@ export function PostCard({ post }: { post: Post }) {
         <div className="mt-auto flex items-center justify-between gap-2 pt-1 text-xs text-muted">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/60 px-2.5 py-1">
             <CalendarDays className="size-3.5 text-primary" />
-            <b className="font-medium text-fg">From {formatLongDate(post.availableFrom)}</b>
+            <b className="font-medium text-fg">{t("availableFrom")} {formatLongDate(post.availableFrom)}</b>
           </span>
           <ChannelDots contact={post.contact} />
         </div>
 
         <div className="grid grid-cols-1 bg-green-500 gap-2 pt-1">
           <Button variant="outline" onClick={open} className="w-full">
-            Details
+            {t("details")}
           </Button>
          
         </div>
