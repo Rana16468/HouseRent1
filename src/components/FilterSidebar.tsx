@@ -26,6 +26,7 @@ import {
 } from "@/lib/redux/filterSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { cn, formatBdt, formatDayOrdinal } from "@/lib/utils";
+import { usePreferences } from "@/lib/preferences";
 
 const CATEGORIES: Array<RentalCategory | "all"> = [
   "all",
@@ -46,6 +47,7 @@ const TENANTS: Array<TenantType | "all"> = [
 export function FilterSidebar({ className }: { className?: string }) {
   const dispatch = useAppDispatch();
   const filters = useAppSelector((s) => s.filters);
+  const { t } = usePreferences();
 
   const division = findDivision(filters.division);
   const district = findDistrict(filters.division, filters.district);
@@ -56,7 +58,7 @@ export function FilterSidebar({ className }: { className?: string }) {
       <section className="flex flex-col gap-3">
         <div className="flex items-end justify-between gap-2">
           <h2 className="font-display text-lg font-medium tracking-tight">
-            Location
+            {t("location")}
           </h2>
           <Button
             variant="link"
@@ -64,10 +66,10 @@ export function FilterSidebar({ className }: { className?: string }) {
             className="h-auto px-0"
             onClick={() => dispatch(resetFilters())}
           >
-            Reset
+            {t("reset")}
           </Button>
         </div>
-        <p className="text-xs text-muted">Bangladesh · cascading thana filter</p>
+        <p className="text-xs text-muted">{t("filterHint")}</p>
 
         <FieldGroup label="Division">
           <NativeSelect
@@ -134,7 +136,7 @@ export function FilterSidebar({ className }: { className?: string }) {
       </section>
 <section className="flex flex-col gap-3.5">
   <h2 className="font-display text-sm font-semibold tracking-wide text-muted-foreground uppercase">
-    Category
+    {t("category")}
   </h2>
   <div className="flex flex-wrap gap-2">
     {CATEGORIES.map((cat) => {
@@ -160,7 +162,7 @@ export function FilterSidebar({ className }: { className?: string }) {
 
       <section className="flex flex-col gap-3">
         <h2 className="font-display text-lg font-medium tracking-tight">
-          Tenant
+          {t("tenant")}
         </h2>
         <div className="flex flex-wrap gap-2">
           {TENANTS.map((t) => {
