@@ -29,14 +29,36 @@ const AuthenticatorApi = baseApi.injectEndpoints({
             providesTags: ["post"],
         }),
         getSpecificHouseList: builder.query({
-            query:(id)=>{
+            query: (id) => {
 
                 return {
-                    url:`/house_list/${id}`,
+                    url: `/house_list/${id}`,
                     method: "GET",
                 }
             },
             providesTags: ["post"]
+        }),
+        getMyHouseListing: builder.query({
+            query: ({ deviceId, page, limit }) => {
+                return {
+                    url: `/house_list/my_house_listing/${deviceId}`,
+                    method: "GET",
+                    params: {
+                        page, limit
+                    }
+                }
+            },
+            providesTags: ["post"]
+        }),
+        deleteHouseListing: builder.mutation({
+            query: ({ id, deviceId }) => {
+
+                return {
+                    url: `/house_list/delete_my_house_listing/${id}/${deviceId}`,
+                    method: "DELETE",
+                }
+            },
+            invalidatesTags: ["post"]
         })
     }),
 
@@ -50,5 +72,7 @@ const AuthenticatorApi = baseApi.injectEndpoints({
 
 });
 export const { useHouseListingMutation,
-     useGetFindByAllHouseListQuery ,
-    useGetSpecificHouseListQuery} = AuthenticatorApi;
+    useGetFindByAllHouseListQuery,
+    useGetSpecificHouseListQuery,
+    useDeleteHouseListingMutation,
+    useGetMyHouseListingQuery } = AuthenticatorApi;

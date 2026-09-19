@@ -1,5 +1,5 @@
 import { o as __toESM } from "../_runtime.mjs";
-import { h as require_react, p as require_react_dom } from "./@radix-ui/react-checkbox+[...].mjs";
+import { h as require_react, u as require_react_dom } from "./@radix-ui/react-checkbox+[...].mjs";
 //#region node_modules/sonner/dist/index.mjs
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 var import_react_dom = /* @__PURE__ */ __toESM(require_react_dom(), 1);

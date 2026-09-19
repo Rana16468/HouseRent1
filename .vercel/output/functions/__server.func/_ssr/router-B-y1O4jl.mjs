@@ -1,11 +1,10 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { h as require_react, m as require_jsx_runtime } from "../_libs/@radix-ui/react-checkbox+[...].mjs";
-import { _ as useRouter, f as createRouter, g as createRootRoute, h as createFileRoute, l as Scripts, m as lazyRouteComponent, p as Outlet, u as HeadContent } from "../_libs/@tanstack/react-router+[...].mjs";
+import { f as createRouter, g as createRootRoute, h as createFileRoute, l as Scripts, m as lazyRouteComponent, p as Outlet, u as HeadContent, v as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { o as TriangleAlert } from "../_libs/lucide-react.mjs";
 import { a as union, i as string, n as number, r as object, t as literal } from "../_libs/zod.mjs";
-import { t as Provider_default } from "../_libs/react-redux+[...].mjs";
-import { n as createSlice, t as configureStore } from "../_libs/@reduxjs/toolkit+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-C8eJpNZm.js
+import { i as createSlice, n as fetchBaseQuery, o as Provider_default, r as configureStore, t as createApi } from "../_libs/@reduxjs/toolkit+[...].mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/router-B-y1O4jl.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var __defProp = Object.defineProperty;
@@ -910,12 +909,31 @@ var uiSlice = createSlice({
 });
 var { openCreatePost, closeCreatePost, openDetails, closeDetails, openMobileFilters, closeMobileFilters } = uiSlice.actions;
 var uiSlice_default = uiSlice.reducer;
+var baseQuery = fetchBaseQuery({
+	baseUrl: "http://localhost:5000/api/v1",
+	credentials: "include",
+	prepareHeaders: (headers) => {
+		const token = localStorage.getItem("accessToken");
+		if (token) headers.set("authorization", `${token}`);
+		return headers;
+	}
+});
+var baseApi = createApi({
+	reducerPath: "baseApi",
+	baseQuery,
+	tagTypes: ["post"],
+	endpoints: () => ({})
+});
 function makeStore() {
-	return configureStore({ reducer: {
-		filters: filterSlice_default,
-		posts: postSlice_default,
-		ui: uiSlice_default
-	} });
+	return configureStore({
+		reducer: {
+			filters: filterSlice_default,
+			posts: postSlice_default,
+			ui: uiSlice_default,
+			[baseApi.reducerPath]: baseApi.reducer
+		},
+		middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(baseApi.middleware)
+	});
 }
 var STORAGE_KEY = "thikana.user-posts.v1";
 function ReduxProvider({ children }) {
@@ -940,9 +958,9 @@ function ReduxProvider({ children }) {
 		children
 	});
 }
-var styles_default = "/assets/styles-ov03E0dw.css";
+var styles_default = "/assets/styles-qMVSj_h4.css";
 var APP_NAME = "Thikana";
-var Route$1 = createRootRoute({
+var Route$2 = createRootRoute({
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -997,13 +1015,29 @@ var Route$1 = createRootRoute({
 		})]
 	})
 });
-var $$splitComponentImporter = () => import("./routes-CYJuyEcy.mjs");
-var rootRouteChildren = { IndexRoute: createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter, "component") }).update({
-	id: "/",
-	path: "/",
-	getParentRoute: () => Route$1
-}) };
-var routeTree = Route$1._addFileChildren(rootRouteChildren)._addFileTypes();
+var $$splitComponentImporter$1 = () => import("./routes-DpTb0xND.mjs");
+var Route$1 = createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
+/**
+* A filter "has a value" only when it is a real selection.
+* null, undefined, "", "all", "null" and "undefined" are all treated as unset.
+*/
+/** Returns `value` after it has stopped changing for `delay` ms. */
+/** e.g. [1, "gap", 4, 5, 6, "gap", 20] — keeps the pager short on many pages. */
+var $$splitComponentImporter = () => import("./my-houses-BRtHMuks.mjs");
+var Route = createFileRoute("/my-houses")({ component: lazyRouteComponent($$splitComponentImporter, "component") });
+var rootRouteChildren = {
+	IndexRoute: Route$1.update({
+		id: "/",
+		path: "/",
+		getParentRoute: () => Route$2
+	}),
+	MyHousesRoute: Route.update({
+		id: "/my-houses",
+		path: "/my-houses",
+		getParentRoute: () => Route$2
+	})
+};
+var routeTree = Route$2._addFileChildren(rootRouteChildren)._addFileTypes();
 var router_exports = /* @__PURE__ */ __exportAll({ getRouter: () => getRouter });
 function getRouter() {
 	return createRouter({
@@ -1012,4 +1046,4 @@ function getRouter() {
 	});
 }
 //#endregion
-export { selectPost as C, removePost as S, setDivision as _, openCreatePost as a, setThana as b, COST_MAX as c, setAvailableDayRange as d, setCategory as f, setDistrict as g, setDateTo as h, closeMobileFilters as i, resetFilters as l, setDateFrom as m, closeCreatePost as n, openDetails as o, setCostRange as p, closeDetails as r, openMobileFilters as s, router_exports as t, setArea as u, setSearchTerm as v, addPost as x, setTenantType as y };
+export { selectPost as C, addPost as S, setDistrict as _, closeMobileFilters as a, setTenantType as b, openMobileFilters as c, setArea as d, setAvailableDayRange as f, setDateTo as g, setDateFrom as h, closeDetails as i, COST_MAX as l, setCostRange as m, baseApi as n, openCreatePost as o, setCategory as p, closeCreatePost as r, openDetails as s, router_exports as t, resetFilters as u, setDivision as v, setThana as x, setSearchTerm as y };

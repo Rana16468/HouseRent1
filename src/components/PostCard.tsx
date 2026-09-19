@@ -1,5 +1,5 @@
 // components/PostCard.tsx
-import { CalendarDays, MapPin, Phone } from "lucide-react";
+import { CalendarDays, MapPin } from "lucide-react";
 import { ChannelDots } from "@/components/ContactActions";
 import { CostBreakdown } from "@/components/CostBreakdown";
 import { Badge } from "@/components/ui/badge";

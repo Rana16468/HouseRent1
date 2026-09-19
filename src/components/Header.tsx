@@ -1,4 +1,4 @@
-import { Plus, Search, SlidersHorizontal } from "lucide-react";
+import {  Plus, Search, SlidersHorizontal } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,9 +6,9 @@ import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { setSearchTerm } from "@/lib/redux/filterSlice";
 import { selectActiveFilterCount } from "@/lib/redux/selectors";
 import { openCreatePost, openMobileFilters } from "@/lib/redux/uiSlice";
+import { Link } from "@tanstack/react-router";
 
 export function Header() {
-  
   const dispatch = useAppDispatch();
   const searchTerm = useAppSelector((s) => s.filters.searchTerm);
   const activeFilters = useAppSelector(selectActiveFilterCount);
@@ -44,10 +44,13 @@ export function Header() {
           />
         </div>
 
-        <Button
-          className="ml-auto shrink-0"
-          onClick={() => dispatch(openCreatePost())}
-        >
+     
+      <Button className="ml-auto shrink-0">
+         <Link to="/my-houses">My House List</Link>
+      </Button>
+    
+
+        <Button className="ml-auto shrink-0" onClick={() => dispatch(openCreatePost())}>
           <Plus />
           <span className="hidden sm:inline">Post listing</span>
           <span className="sm:hidden">Post</span>

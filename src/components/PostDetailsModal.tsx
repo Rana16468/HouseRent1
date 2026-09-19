@@ -1,16 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CalendarDays,
   Car,
   ChevronLeft,
   ChevronRight,
   Clock,
+  Eye,
+  EyeOff,
   ExternalLink,
   Home,
   MapPin,
   MessageCircle,
   Send,
-
   Video,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -95,12 +96,28 @@ function capitalize(value?: string) {
   return value.charAt(0).toUpperCase() + value.slice(1).replace(/_/g, " ");
 }
 
+/**
+ * Masks a phone number like a password field.
+ * Keeps the first 3 and last 2 characters visible so the user
+ * still gets a hint of which number it is.
+ * e.g. "01712345678" -> "017••••••78"
+ */
+function maskPhone(phone?: string) {
+  if (!phone) return "—";
+  const trimmed = phone.trim();
+  if (trimmed.length <= 5) return "•".repeat(trimmed.length);
+  const head = trimmed.slice(0, 3);
+  const tail = trimmed.slice(-2);
+  return `${head}${"•".repeat(trimmed.length - 5)}${tail}`;
+}
+
 export function PostDetailsModal() {
   const dispatch = useAppDispatch();
   const open = useAppSelector((s) => s.ui.detailsOpen);
   const [index, setIndex] = useState(0);
   const [pin, setPin] = useState("");
   const [pinError, setPinError] = useState<string | null>(null);
+  const [phoneVisible, setPhoneVisible] = useState(false);
   const selectedPostId = useAppSelector((state) => state.posts.selectedPostId);
 
   const { data, isLoading, isError, error } = useGetSpecificHouseListQuery(
@@ -110,12 +127,18 @@ export function PostDetailsModal() {
 
   const listing = data?.data as HouseListing | undefined;
 
+  // Always re-hide the phone number whenever a different listing is opened.
+  useEffect(() => {
+    setPhoneVisible(false);
+  }, [selectedPostId, open]);
+
   function close() {
     dispatch(closeDetails());
     dispatch(selectPost(null));
     setIndex(0);
     setPin("");
     setPinError(null);
+    setPhoneVisible(false);
   }
 
   const images = listing?.images ?? [];
@@ -327,23 +350,64 @@ export function PostDetailsModal() {
 
                 <section className="flex flex-col gap-3">
                   <h3 className="font-display text-base font-medium">Contact landlord</h3>
-                  <p className="font-medium tabular-nums text-fg">{listing.contact.phone}</p>
-                  <ContactActions
-                    contact={
-                      {
-                        ...listing.contact,
-                        telegramHandle: listing.contact.telegramHandle ?? undefined,
-                        teamsLink: listing.contact.teamsLink ?? undefined,
-                      } satisfies ContactChannels
-                    }
-                  />
+
+                  {/* Phone number is hidden by default, like a password field. */}
+                  <div className="flex items-center justify-between gap-3 rounded-lg border border-border bg-bg-elevated px-3 py-2">
+                    <p
+                      className={cn(
+                        "font-medium tabular-nums text-fg",
+                        !phoneVisible && "tracking-[0.18em] select-none",
+                      )}
+                      aria-label={phoneVisible ? "Phone number" : "Phone number hidden"}
+                    >
+                      {phoneVisible ? listing.contact.phone : maskPhone(listing.contact.phone)}
+                    </p>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="gap-1.5 shrink-0"
+                      onClick={() => setPhoneVisible((v) => !v)}
+                      aria-pressed={phoneVisible}
+                      aria-label={phoneVisible ? "Hide phone number" : "Show phone number"}
+                    >
+                      {phoneVisible ? (
+                        <>
+                          <EyeOff className="size-4" />
+                          Hide
+                        </>
+                      ) : (
+                        <>
+                          <Eye className="size-4" />
+                          Show number
+                        </>
+                      )}
+                    </Button>
+                  </div>
+
+                  {phoneVisible ? (
+                    <ContactActions
+                      contact={
+                        {
+                          ...listing.contact,
+                          telegramHandle: listing.contact.telegramHandle ?? undefined,
+                          teamsLink: listing.contact.teamsLink ?? undefined,
+                        } satisfies ContactChannels
+                      }
+                    />
+                  ) : (
+                    <p className="text-xs text-muted">
+                      Tap “Show number” to reveal the contact details.
+                    </p>
+                  )}
+
                   <div className="flex flex-wrap gap-1.5">
                     {listing.contact.whatsapp ? <Badge variant="muted">WhatsApp</Badge> : null}
                     {listing.contact.telegram ? (
                       <Badge variant="muted" className="inline-flex items-center gap-1">
                         <Send className="size-3" />
                         Telegram
-                        {listing.contact.telegramHandle
+                        {phoneVisible && listing.contact.telegramHandle
                           ? ` · ${listing.contact.telegramHandle}`
                           : ""}
                       </Badge>
@@ -361,7 +425,8 @@ export function PostDetailsModal() {
                       </Badge>
                     ) : null}
                   </div>
-                  {listing.contact.teams && listing.contact.teamsLink ? (
+
+                  {phoneVisible && listing.contact.teams && listing.contact.teamsLink ? (
                     <a
                       href={listing.contact.teamsLink}
                       target="_blank"
@@ -373,17 +438,14 @@ export function PostDetailsModal() {
                     </a>
                   ) : null}
                 </section>
-                <div className="rounded-lg border border-border/50 bg-primary/5 p-4 mb-4">
-                  <p className="text-xs italic text-muted-foreground text-center">
-                    "বাসা তো কেবল চারটে দেয়াল নয়, বাসা হলো দিনের শেষে ফিরে আসার এক নিরাপদ আশ্রয়।"
+
+                <div className="mb-4 rounded-lg border border-border/50 bg-primary/5 p-4">
+                  <p className="text-center text-xs italic text-muted-foreground">
+                    "বাসা তো কেবল চারটে দেয়াল নয়, বাসা হলো দিনের শেষে ফিরে আসার এক নিরাপদ আশ্রয়।"
                   </p>
                 </div>
 
-                <section className="rounded-lg border border-border bg-bg-elevated p-4">
-                
-
-                  {pinError ? <p className="mt-2 text-xs text-destructive">{pinError}</p> : null}
-                </section>
+                {pinError ? <p className="mt-2 text-xs text-destructive">{pinError}</p> : null}
               </div>
             </ScrollArea>
           </div>
