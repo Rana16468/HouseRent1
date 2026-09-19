@@ -52,6 +52,39 @@
 
 @layer base {
   html {
+    color-scheme: light;
+    transition: background-color 200ms ease, color 200ms ease;
+  }
+
+  html.dark {
+    color-scheme: dark;
+    --color-bg: #101817;
+    --color-background: #101817;
+    --color-bg-elevated: #17211f;
+    --color-surface: #1c2926;
+    --color-card: #1c2926;
+    --color-fg: #edf4ef;
+    --color-foreground: #edf4ef;
+    --color-muted: #a7b7ae;
+    --color-muted-foreground: #a7b7ae;
+    --color-subtle: #82958b;
+    --color-primary: #73c6a2;
+    --color-primary-foreground: #102019;
+    --color-accent: #8bd8b5;
+    --color-secondary: #243530;
+    --color-secondary-foreground: #edf4ef;
+    --color-border: #344a42;
+    --color-input: #3b534a;
+    --color-ring: #73c6a2;
+    --color-destructive: #f08b8b;
+    --color-destructive-foreground: #241414;
+    --color-chip: #243530;
+    --color-overlay: rgb(0 0 0 / 0.62);
+    --shadow-border: 0 0 0 1px rgb(255 255 255 / 0.07), 0 2px 10px rgb(0 0 0 / 0.18);
+    --shadow-border-hover: 0 0 0 1px rgb(115 198 162 / 0.22), 0 16px 36px -22px rgb(0 0 0 / 0.5);
+  }
+
+  html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
