@@ -7,6 +7,7 @@ import {
 import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { ReduxProvider } from "@/lib/redux/ReduxProvider";
+import { PreferencesProvider } from "@/lib/preferences";
 import appCss from "../styles.css?url";
 
 const APP_NAME = "Thikana";
@@ -43,9 +44,11 @@ export const Route = createRootRoute({
       <body className="antialiased">
         <PreviewHostBridge />
         <AuthProvider>
-          <ReduxProvider>
-            <Outlet />
-          </ReduxProvider>
+          <PreferencesProvider>
+            <ReduxProvider>
+              <Outlet />
+            </ReduxProvider>
+          </PreferencesProvider>
         </AuthProvider>
         <Scripts />
       </body>
