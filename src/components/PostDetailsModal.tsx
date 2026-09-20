@@ -35,6 +35,7 @@ import { closeDetails } from "@/lib/redux/uiSlice";
 import {
   CATEGORY_LABEL,
   TENANT_LABEL,
+  digitsPhone,
   totalMonthlyCost,
   type ContactChannels,
   type UtilityBreakdown,
@@ -111,6 +112,20 @@ function maskPhone(phone?: string) {
   return `${head}${"•".repeat(trimmed.length - 5)}${tail}`;
 }
 
+function getContactLinks(contact: HouseContact) {
+  const digits = digitsPhone(contact.phone || "");
+  const whatsappNumber = digits.startsWith("880") ? digits : digits.replace(/^0/, "880");
+
+  return {
+    whatsapp: `https://wa.me/${whatsappNumber}`,
+    telegram: contact.telegramHandle
+      ? `https://t.me/${contact.telegramHandle.replace(/^@/, "")}`
+      : `https://t.me/+${whatsappNumber}`,
+    imo: "https://imo.im/",
+    teams: contact.teamsLink || "https://teams.microsoft.com/",
+  };
+}
+
 export function PostDetailsModal() {
   const dispatch = useAppDispatch();
   const open = useAppSelector((s) => s.ui.detailsOpen);
@@ -144,6 +159,7 @@ export function PostDetailsModal() {
   const images = listing?.images ?? [];
   const current = images[index] ?? images[0];
   const total = listing ? totalMonthlyCost(listing.utilities) : 0;
+  const contactLinks = listing ? getContactLinks(listing.contact) : null;
 
   function step(delta: number) {
     if (images.length === 0) return;
@@ -402,27 +418,84 @@ export function PostDetailsModal() {
                   )}
 
                   <div className="flex flex-wrap gap-1.5">
-                    {listing.contact.whatsapp ? <Badge variant="muted">WhatsApp</Badge> : null}
+                    {listing.contact.whatsapp ? (
+                      phoneVisible && contactLinks ? (
+                        <Button asChild size="sm" variant="outline">
+                          <a
+                            href={contactLinks.whatsapp}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Open WhatsApp"
+                          >
+                            WhatsApp
+                          </a>
+                        </Button>
+                      ) : (
+                        <Badge variant="muted">WhatsApp</Badge>
+                      )
+                    ) : null}
                     {listing.contact.telegram ? (
-                      <Badge variant="muted" className="inline-flex items-center gap-1">
-                        <Send className="size-3" />
-                        Telegram
-                        {phoneVisible && listing.contact.telegramHandle
-                          ? ` · ${listing.contact.telegramHandle}`
-                          : ""}
-                      </Badge>
+                      phoneVisible && contactLinks ? (
+                        <Button asChild size="sm" variant="outline">
+                          <a
+                            href={contactLinks.telegram}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Open Telegram"
+                          >
+                            <Send className="size-3" />
+                            Telegram
+                            {listing.contact.telegramHandle
+                              ? ` · ${listing.contact.telegramHandle}`
+                              : ""}
+                          </a>
+                        </Button>
+                      ) : (
+                        <Badge variant="muted" className="inline-flex items-center gap-1">
+                          <Send className="size-3" />
+                          Telegram
+                        </Badge>
+                      )
                     ) : null}
                     {listing.contact.imo ? (
-                      <Badge variant="muted" className="inline-flex items-center gap-1">
-                        <MessageCircle className="size-3" />
-                        imo
-                      </Badge>
+                      phoneVisible && contactLinks ? (
+                        <Button asChild size="sm" variant="outline">
+                          <a
+                            href={contactLinks.imo}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Open IMO"
+                          >
+                            <MessageCircle className="size-3" />
+                            imo
+                          </a>
+                        </Button>
+                      ) : (
+                        <Badge variant="muted" className="inline-flex items-center gap-1">
+                          <MessageCircle className="size-3" />
+                          imo
+                        </Badge>
+                      )
                     ) : null}
                     {listing.contact.teams ? (
-                      <Badge variant="muted" className="inline-flex items-center gap-1">
-                        <Video className="size-3" />
-                        Teams
-                      </Badge>
+                      phoneVisible && contactLinks ? (
+                        <Button asChild size="sm" variant="outline">
+                          <a
+                            href={contactLinks.teams}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Open Teams"
+                          >
+                            <Video className="size-3" />
+                            Teams
+                          </a>
+                        </Button>
+                      ) : (
+                        <Badge variant="muted" className="inline-flex items-center gap-1">
+                          <Video className="size-3" />
+                          Teams
+                        </Badge>
+                      )
                     ) : null}
                   </div>
 
