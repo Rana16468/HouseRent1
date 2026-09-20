@@ -18,7 +18,6 @@ export function ContactActions({
   const wa = digits.startsWith("880") ? digits : digits.replace(/^0/, "880");
   const tel = digits.startsWith("880") ? `+${digits}` : contact.phone;
 
-  // টেলিগ্রাম লিঙ্ক হ্যান্ডলিং
   const telegramHref = contact.telegramHandle
     ? `https://t.me/${contact.telegramHandle.replace(/^@/, "")}`
     : `https://t.me/+${wa}`;
@@ -52,10 +51,10 @@ export function ContactActions({
     {
       key: "imo",
       label: "IMO",
-      href: `tel:${tel}`,
+      href: "https://imo.im/",
       icon: Video,
       show: Boolean(contact.imo),
-      external: false,
+      external: true,
     },
     {
       key: "teams",
@@ -89,12 +88,22 @@ export function ContactActions({
 }
 
 export function ChannelDots({ contact }: { contact: ContactChannels }) {
+  const digits = digitsPhone(contact.phone || "");
+  const wa = digits.startsWith("880") ? digits : digits.replace(/^0/, "880");
   const channels = [
-    contact.whatsapp && "WhatsApp",
-    contact.telegram && "Telegram",
-    contact.imo && "IMO",
-    contact.teams && "Teams",
-  ].filter(Boolean) as string[];
+    contact.whatsapp && { name: "WhatsApp", href: `https://wa.me/${wa}` },
+    contact.telegram && {
+      name: "Telegram",
+      href: contact.telegramHandle
+        ? `https://t.me/${contact.telegramHandle.replace(/^@/, "")}`
+        : `https://t.me/+${wa}`,
+    },
+    contact.imo && { name: "IMO", href: "https://imo.im/" },
+    contact.teams && {
+      name: "Teams",
+      href: contact.teamsLink || "https://teams.microsoft.com/",
+    },
+  ].filter(Boolean) as { name: string; href: string }[];
 
   if (channels.length === 0) {
     return <span className="text-xs text-muted-foreground">Call only</span>;
@@ -102,13 +111,17 @@ export function ChannelDots({ contact }: { contact: ContactChannels }) {
 
   return (
     <div className="flex flex-wrap items-center gap-1">
-      {channels.map((name) => (
-        <span
+      {channels.map(({ name, href }) => (
+        <a
           key={name}
-          className="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium tracking-wide text-secondary-foreground uppercase"
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Open ${name}`}
+          className="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium tracking-wide text-secondary-foreground uppercase transition-colors hover:bg-primary hover:text-primary-foreground"
         >
           {name}
-        </span>
+        </a>
       ))}
     </div>
   );
