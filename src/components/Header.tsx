@@ -20,7 +20,7 @@ export function Header() {
       {/* সূক্ষ্ম অ্যাকসেন্ট লাইন — হেডারকে পেজ থেকে আলাদা করে */}
       <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
 
-      <div className="mx-auto flex h-16 max-w-[1440px] items-center gap-3 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex min-h-16 max-w-[1440px] flex-wrap items-center gap-2 px-3 py-2 sm:h-16 sm:flex-nowrap sm:gap-3 sm:px-6 sm:py-0 lg:px-8">
         <Button
           variant="ghost"
           size="icon"
@@ -40,7 +40,7 @@ export function Header() {
         <a
           href="/"
           aria-label="Thikana home"
-          className="shrink-0 rounded-lg transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:outline-none"
+          className="min-w-0 shrink rounded-lg transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:outline-none"
         >
           <Logo />
         </a>
@@ -58,7 +58,7 @@ export function Header() {
         </div>
 
         {/* নেভিগেশন + প্রাইমারি অ্যাকশন */}
-        <nav className="ml-auto flex shrink-0 items-center gap-1.5">
+        <nav className="order-3 flex w-full shrink-0 items-center justify-end gap-1 sm:order-none sm:ml-auto sm:w-auto sm:gap-1.5">
           <div className="hidden items-center gap-1 rounded-full border border-border/70 bg-bg-elevated/50 p-1 md:flex">
             <Button
               asChild
@@ -81,10 +81,7 @@ export function Header() {
               size="sm"
               className="rounded-full px-3 text-subtle hover:text-foreground"
             >
-              <Link
-                to="/my-houses"
-                activeProps={{ className: "bg-primary/10 text-primary" }}
-              >
+              <Link to="/my-houses" activeProps={{ className: "bg-primary/10 text-primary" }}>
                 <Home className="size-4" />
                 {t("myHouses")}
               </Link>
@@ -93,12 +90,24 @@ export function Header() {
 
           {/* মোবাইলে শুধু আইকন */}
           <div className="flex items-center gap-1 md:hidden">
-            <Button asChild variant="ghost" size="icon" className="rounded-xl" aria-label={t("map")}>
+            <Button
+              asChild
+              variant="ghost"
+              size="icon"
+              className="rounded-xl"
+              aria-label={t("map")}
+            >
               <Link to="/live-house-listing">
                 <Map />
               </Link>
             </Button>
-            <Button asChild variant="ghost" size="icon" className="rounded-xl" aria-label={t("myHouses")}>
+            <Button
+              asChild
+              variant="ghost"
+              size="icon"
+              className="rounded-xl"
+              aria-label={t("myHouses")}
+            >
               <Link to="/my-houses">
                 <Home />
               </Link>
@@ -114,7 +123,9 @@ export function Header() {
             onClick={toggleLocale}
           >
             <Languages />
-            <span className="hidden sm:inline">{locale === "en" ? t("switchToBangla") : t("switchToEnglish")}</span>
+            <span className="hidden sm:inline">
+              {locale === "en" ? t("switchToBangla") : t("switchToEnglish")}
+            </span>
           </Button>
 
           <Button
@@ -129,12 +140,13 @@ export function Header() {
           </Button>
 
           <Button
-            className="rounded-full shadow-sm transition-shadow hover:shadow-md"
+            size="sm"
+            className="h-8 px-3 gap-1.5 rounded-full bg-gradient-to-r from-accent to-indigo-900 hover:from-blue-900 hover:to-indigo-700 text-white shadow-sm hover:shadow-md transition-all duration-200 active:scale-95"
             onClick={() => dispatch(openCreatePost())}
           >
-            <Plus />
-            <span className="hidden sm:inline">{t("postListing")}</span>
-            <span className="sm:hidden">{t("post")}</span>
+            <Plus className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline text-xs font-medium">{t("postListing")}</span>
+            <span className="sm:hidden text-xs font-medium">{t("post")}</span>
           </Button>
         </nav>
       </div>

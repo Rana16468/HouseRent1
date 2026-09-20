@@ -58,7 +58,89 @@ type TranslationKey =
   | "office"
   | "family"
   | "bachelorMale"
-  | "bachelorFemale";
+  | "bachelorFemale"
+  | "postListingTitle"
+  | "stepOf"
+  | "selectDivision"
+  | "selectDistrict"
+  | "selectThana"
+  | "selectArea"
+  | "shareLiveLocation"
+  | "liveLocationUrl"
+  | "fullAddress"
+  | "addressPlaceholder"
+  | "title"
+  | "titlePlaceholder"
+  | "description"
+  | "parkingSpace"
+  | "availableFromLabel"
+  | "baseRentRequired"
+  | "gasTypeRequired"
+  | "gasBillOptional"
+  | "electricityTypeRequired"
+  | "electricityBillOptional"
+  | "waterBillOptional"
+  | "serviceChargeOptional"
+  | "lineGas"
+  | "cylinderLpg"
+  | "included"
+  | "prepaid"
+  | "postpaid"
+  | "totalMonthlyCost"
+  | "maximumPhotos"
+  | "addPhotos"
+  | "optionalPhotos"
+  | "removePhoto"
+  | "phone"
+  | "telegramHandleOptional"
+  | "teamsLinkOptional"
+  | "secretPin"
+  | "secretPinPlaceholder"
+  | "secretPinHelp"
+  | "cancel"
+  | "back"
+  | "next"
+  | "posting"
+  | "publishListing"
+  | "editDescription"
+  | "exitEditor"
+  | "noDescription"
+  | "enterUrl"
+  | "bold"
+  | "italic"
+  | "underline"
+  | "strikethrough"
+  | "headingOne"
+  | "headingTwo"
+  | "quote"
+  | "bulletedList"
+  | "numberedList"
+  | "link"
+  | "undo"
+  | "redo"
+  | "clearFormatting"
+  | "locationRequired"
+  | "liveLocationRequired"
+  | "addressRequired"
+  | "titleRequired"
+  | "dateRequired"
+  | "rentRequired"
+  | "gasRequired"
+  | "electricityRequired"
+  | "phoneRequired"
+  | "pinRequired"
+  | "postFailed"
+  | "postTryAgain"
+  | "postSuccess"
+  | "noParking"
+  | "carParking"
+  | "bikeParking"
+  | "carBikeParking"
+  | "privateGarage"
+  | "streetParking"
+  | "notAvailable"
+  | "descriptionPlaceholder";
+  
 
 const translations: Record<Locale, Record<TranslationKey, string>> = {
   en: {
@@ -117,6 +199,87 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     family: "Family",
     bachelorMale: "Bachelor (Male)",
     bachelorFemale: "Bachelor (Female)",
+    postListingTitle: "Post a listing",
+    stepOf: "Step {current} of {total}",
+    selectDivision: "Select division",
+    selectDistrict: "Select district",
+    selectThana: "Select thana",
+    selectArea: "Select area",
+    shareLiveLocation: "Share a live location link instead of typing an address",
+    liveLocationUrl: "Live location URL",
+    fullAddress: "Full address",
+    addressPlaceholder: "House/road/block, landmark, city",
+    title: "Title",
+    titlePlaceholder: "e.g. 2-bed family flat near Medical College",
+    description: "Description",
+    parkingSpace: "Parking space",
+    availableFromLabel: "Available from",
+    baseRentRequired: "Base rent (required)",
+    gasTypeRequired: "Gas type (required)",
+    gasBillOptional: "Gas bill (optional)",
+    electricityTypeRequired: "Electricity type (required)",
+    electricityBillOptional: "Electricity bill (optional)",
+    waterBillOptional: "Water bill (optional)",
+    serviceChargeOptional: "Service charge (optional)",
+    lineGas: "Line gas",
+    cylinderLpg: "Cylinder (LPG)",
+    included: "Included",
+    prepaid: "Prepaid",
+    postpaid: "Postpaid",
+    totalMonthlyCost: "Total monthly cost",
+    maximumPhotos: "Maximum {count} photos",
+    addPhotos: "Add photos",
+    optionalPhotos: "Optional — you can skip this step. Up to {count} photos.",
+    removePhoto: "Remove photo",
+    phone: "Phone",
+    telegramHandleOptional: "Telegram handle (optional)",
+    teamsLinkOptional: "Teams link (optional)",
+    secretPin: "Secret PIN (min {count} characters)",
+    secretPinPlaceholder: "Letters, numbers, symbols — anything works",
+    secretPinHelp: "You'll need this PIN later to edit or remove this listing. Use at least {count} characters — any mix of letters, numbers, or symbols is fine.",
+    cancel: "Cancel",
+    back: "Back",
+    next: "Next",
+    posting: "Posting...",
+    publishListing: "Publish listing",
+    editDescription: "Edit description",
+    exitEditor: "Exit editor",
+    noDescription: "No description yet.",
+    enterUrl: "Enter URL",
+    bold: "Bold",
+    italic: "Italic",
+    underline: "Underline",
+    strikethrough: "Strikethrough",
+    headingOne: "Heading 1",
+    headingTwo: "Heading 2",
+    quote: "Quote",
+    bulletedList: "Bulleted list",
+    numberedList: "Numbered list",
+    link: "Link",
+    undo: "Undo",
+    redo: "Redo",
+    clearFormatting: "Clear formatting",
+    locationRequired: "Select division, district, and thana.",
+    liveLocationRequired: "Add a live location link.",
+    addressRequired: "Add the full address.",
+    titleRequired: "Add a title.",
+    dateRequired: "Set an available-from date.",
+    rentRequired: "Base rent is required.",
+    gasRequired: "Select a gas type.",
+    electricityRequired: "Select an electricity type.",
+    phoneRequired: "Add a phone number.",
+    pinRequired: "PIN must be at least {count} characters.",
+    postFailed: "Something went wrong while posting.",
+    postTryAgain: "Something went wrong while posting. Please try again.",
+    postSuccess: "Listing posted. It is live on the board.",
+    noParking: "No parking",
+    carParking: "Car parking",
+    bikeParking: "Bike / motorcycle parking",
+    carBikeParking: "Car & bike parking",
+    privateGarage: "Private garage",
+    streetParking: "Street parking",
+    notAvailable: "Not available",
+    descriptionPlaceholder: "Access, nearby landmarks, house rules.",
   },
   bn: {
     searchPlaceholder: "এলাকা, থানা বা শিরোনাম খুঁজুন",
@@ -174,6 +337,87 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     family: "পরিবার",
     bachelorMale: "ব্যাচেলর (পুরুষ)",
     bachelorFemale: "ব্যাচেলর (নারী)",
+    postListingTitle: "লিস্টিং পোস্ট করুন",
+    stepOf: "ধাপ {current} / {total}",
+    selectDivision: "বিভাগ নির্বাচন করুন",
+    selectDistrict: "জেলা নির্বাচন করুন",
+    selectThana: "থানা নির্বাচন করুন",
+    selectArea: "এলাকা নির্বাচন করুন",
+    shareLiveLocation: "ঠিকানা লেখার পরিবর্তে লাইভ লোকেশন লিংক দিন",
+    liveLocationUrl: "লাইভ লোকেশন URL",
+    fullAddress: "সম্পূর্ণ ঠিকানা",
+    addressPlaceholder: "বাড়ি/সড়ক/ব্লক, ল্যান্ডমার্ক, শহর",
+    title: "শিরোনাম",
+    titlePlaceholder: "যেমন: মেডিকেল কলেজের কাছে ২ বেডের পারিবারিক ফ্ল্যাট",
+    description: "বিবরণ",
+    parkingSpace: "পার্কিং ব্যবস্থা",
+    availableFromLabel: "পাওয়া যাবে",
+    baseRentRequired: "মূল ভাড়া (আবশ্যিক)",
+    gasTypeRequired: "গ্যাসের ধরন (আবশ্যিক)",
+    gasBillOptional: "গ্যাস বিল (ঐচ্ছিক)",
+    electricityTypeRequired: "বিদ্যুতের ধরন (আবশ্যিক)",
+    electricityBillOptional: "বিদ্যুৎ বিল (ঐচ্ছিক)",
+    waterBillOptional: "পানি বিল (ঐচ্ছিক)",
+    serviceChargeOptional: "সার্ভিস চার্জ (ঐচ্ছিক)",
+    lineGas: "লাইন গ্যাস",
+    cylinderLpg: "সিলিন্ডার (LPG)",
+    included: "অন্তর্ভুক্ত",
+    prepaid: "প্রিপেইড",
+    postpaid: "পোস্টপেইড",
+    totalMonthlyCost: "মাসিক মোট খরচ",
+    maximumPhotos: "সর্বোচ্চ {count}টি ছবি",
+    addPhotos: "ছবি যোগ করুন",
+    optionalPhotos: "ঐচ্ছিক — এই ধাপটি এড়িয়ে যেতে পারেন। সর্বোচ্চ {count}টি ছবি।",
+    removePhoto: "ছবি সরান",
+    phone: "ফোন",
+    telegramHandleOptional: "টেলিগ্রাম হ্যান্ডেল (ঐচ্ছিক)",
+    teamsLinkOptional: "Teams লিংক (ঐচ্ছিক)",
+    secretPin: "গোপন PIN ({count} অক্ষর ন্যূনতম)",
+    secretPinPlaceholder: "অক্ষর, সংখ্যা, প্রতীক — যেকোনো কিছু ব্যবহার করুন",
+    secretPinHelp: "লিস্টিং সম্পাদনা বা মুছতে পরে এই PIN লাগবে। কমপক্ষে {count}টি অক্ষর ব্যবহার করুন — অক্ষর, সংখ্যা বা প্রতীকের যেকোনো সমন্বয় চলবে।",
+    cancel: "বাতিল",
+    back: "পেছনে",
+    next: "পরবর্তী",
+    posting: "পোস্ট হচ্ছে...",
+    publishListing: "লিস্টিং প্রকাশ করুন",
+    editDescription: "বিবরণ সম্পাদনা করুন",
+    exitEditor: "এডিটর বন্ধ করুন",
+    noDescription: "এখনও কোনো বিবরণ নেই।",
+    enterUrl: "URL লিখুন",
+    bold: "বোল্ড",
+    italic: "ইটালিক",
+    underline: "আন্ডারলাইন",
+    strikethrough: "স্ট্রাইকথ্রু",
+    headingOne: "শিরোনাম ১",
+    headingTwo: "শিরোনাম ২",
+    quote: "উদ্ধৃতি",
+    bulletedList: "বুলেট তালিকা",
+    numberedList: "নম্বর তালিকা",
+    link: "লিংক",
+    undo: "পূর্বাবস্থা",
+    redo: "পুনরায়",
+    clearFormatting: "ফরম্যাট মুছুন",
+    locationRequired: "বিভাগ, জেলা ও থানা নির্বাচন করুন।",
+    liveLocationRequired: "লাইভ লোকেশন লিংক দিন।",
+    addressRequired: "সম্পূর্ণ ঠিকানা দিন।",
+    titleRequired: "একটি শিরোনাম দিন।",
+    dateRequired: "পাওয়ার তারিখ নির্ধারণ করুন।",
+    rentRequired: "মূল ভাড়া আবশ্যিক।",
+    gasRequired: "গ্যাসের ধরন নির্বাচন করুন।",
+    electricityRequired: "বিদ্যুতের ধরন নির্বাচন করুন।",
+    phoneRequired: "ফোন নম্বর দিন।",
+    pinRequired: "PIN কমপক্ষে {count} অক্ষরের হতে হবে।",
+    postFailed: "লিস্টিং পোস্ট করতে সমস্যা হয়েছে।",
+    postTryAgain: "লিস্টিং পোস্ট করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।",
+    postSuccess: "লিস্টিং পোস্ট হয়েছে। এটি এখন বোর্ডে লাইভ।",
+    noParking: "পার্কিং নেই",
+    carParking: "গাড়ি পার্কিং",
+    bikeParking: "বাইক / মোটরসাইকেল পার্কিং",
+    carBikeParking: "গাড়ি ও বাইক পার্কিং",
+    privateGarage: "ব্যক্তিগত গ্যারেজ",
+    streetParking: "সড়কে পার্কিং",
+    notAvailable: "পাওয়া যায় না",
+    descriptionPlaceholder: "প্রবেশপথ, কাছাকাছি স্থান, বাড়ির নিয়ম লিখুন।",
   },
 };
 
@@ -197,26 +441,34 @@ function readStored<T extends string>(key: string, fallback: T): T {
 }
 
 export function PreferencesProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(() => readStored("thikana.locale", "en"));
-  const [theme, setTheme] = useState<Theme>(() => {
-    const stored = readStored<Theme>("thikana.theme", "light");
-    if (typeof window !== "undefined" && !window.localStorage.getItem("thikana.theme")) {
-      return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    }
-    return stored;
-  });
+  const [locale, setLocaleState] = useState<Locale>("en");
+  const [theme, setTheme] = useState<Theme>("light");
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    const storedLocale = readStored<Locale>("thikana.locale", "en");
+    const storedTheme = window.localStorage.getItem("thikana.theme")
+      ? readStored<Theme>("thikana.theme", "light")
+      : window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+
+    setLocaleState(storedLocale);
+    setTheme(storedTheme);
+    setHydrated(true);
+  }, []);
 
   useEffect(() => {
     document.documentElement.lang = locale;
     document.documentElement.dataset.locale = locale;
-    window.localStorage.setItem("thikana.locale", locale);
-  }, [locale]);
+    if (hydrated) window.localStorage.setItem("thikana.locale", locale);
+  }, [hydrated, locale]);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
     document.documentElement.style.colorScheme = theme;
-    window.localStorage.setItem("thikana.theme", theme);
-  }, [theme]);
+    if (hydrated) window.localStorage.setItem("thikana.theme", theme);
+  }, [hydrated, theme]);
 
   const setLocale = (nextLocale: Locale) => setLocaleState(nextLocale);
   const toggleLocale = () => setLocaleState((current) => (current === "en" ? "bn" : "en"));

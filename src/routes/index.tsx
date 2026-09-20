@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Toaster } from "sonner";
-import { CreatePostModal } from "@/components/CreatePostModal";
 import { FilterSidebar } from "@/components/FilterSidebar";
 import { Header } from "@/components/Header";
 import { MobileFilters } from "@/components/MobileFilters";
@@ -244,7 +243,6 @@ function Home() {
       </footer>
 
       <MobileFilters />
-      <CreatePostModal />
       <PostDetailsModal />
       <Toaster
         position="bottom-right"

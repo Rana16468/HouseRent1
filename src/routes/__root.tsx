@@ -8,6 +8,7 @@ import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { ReduxProvider } from "@/lib/redux/ReduxProvider";
 import { PreferencesProvider } from "@/lib/i18n/preferences";
+import { CreatePostModal } from "@/components/CreatePostModal";
 import appCss from "../styles.css?url";
 
 const APP_NAME = "Thikana";
@@ -47,6 +48,7 @@ export const Route = createRootRoute({
           <AuthProvider>
             <ReduxProvider>
               <Outlet />
+              <CreatePostModal />
             </ReduxProvider>
           </AuthProvider>
         </PreferencesProvider>

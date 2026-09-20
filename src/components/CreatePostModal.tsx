@@ -40,14 +40,12 @@ import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { addPost } from "@/lib/redux/postSlice";
 import { closeCreatePost } from "@/lib/redux/uiSlice";
 import {
-  CATEGORY_LABEL,
   TENANT_LABEL,
   totalMonthlyCost,
   type ContactChannels,
   type ElectricityType,
   type GasType,
   type Post,
-  type RentalCategory,
   type TenantType,
   type UtilityBreakdown,
 } from "@/types/rental";
@@ -55,6 +53,7 @@ import { formatBdt } from "@/lib/utils";
 import DeviceDetector from "device-detector-js";
 import { getDeviceVisitorId } from "@/utility/getDeviceVisitorId";
 import { useHouseListingMutation } from "@/lib/redux/features/postApi";
+import { usePreferences } from "@/lib/i18n/preferences";
 
 /**
  * NOTE: `address`, `liveLocationUrl` and `parking` are not part of the
@@ -105,6 +104,8 @@ const EMPTY_UTILITIES: UtilityBreakdown = {
 };
 
 const MAX_IMAGES = 5;
+const CREATE_CATEGORIES = ["house_flat", "sublet_room"] as const;
+type CreateCategory = (typeof CREATE_CATEGORIES)[number];
 
 type FormState = {
   division: string;
@@ -116,7 +117,7 @@ type FormState = {
   liveLocationUrl: string;
   title: string;
   description: string; // stores HTML from the rich text editor
-  category: RentalCategory;
+  category: CreateCategory;
   tenantType: TenantType;
   parking: ParkingType;
   utilities: UtilityBreakdown;
@@ -197,6 +198,12 @@ type HouseListingResponse = {
 };
 
 export function CreatePostModal() {
+  const { t } = usePreferences();
+  const text = (key: Parameters<typeof t>[0], values: Record<string, string | number> = {}) =>
+    Object.entries(values).reduce(
+      (result, [name, value]) => result.replace(`{${name}}`, String(value)),
+      t(key),
+    );
   const dispatch = useAppDispatch();
   const open = useAppSelector((s) => s.ui.createPostOpen);
   const [form, setForm] = useState<FormState>(INITIAL);
@@ -204,6 +211,10 @@ export function CreatePostModal() {
   const [formVersion, setFormVersion] = useState(0); // bump to force-remount the editor on reset
   const [stepIndex, setStepIndex] = useState(0);
   const [submitting, setSubmitting] = useState(false);
+  const localizedSteps = STEPS.map((stepItem) => ({
+    ...stepItem,
+    label: t(stepItem.key === "location" ? "location" : stepItem.key === "listing" ? "title" : stepItem.key === "costs" ? "monthlyTotal" : stepItem.key === "photos" ? "addPhotos" : "phone"),
+  }));
 
   const step = STEPS[stepIndex].key;
   const isFirstStep = stepIndex === 0;
@@ -340,27 +351,27 @@ export function CreatePostModal() {
   function validateStep(key: StepKey): string | null {
     if (key === "location") {
       if (!form.division || !form.district || !form.thana) {
-        return "Select division, district, and thana.";
+        return t("locationRequired");
       }
       if (form.useLiveLocation) {
-        if (!form.liveLocationUrl.trim()) return "Add a live location link.";
+        if (!form.liveLocationUrl.trim()) return t("liveLocationRequired");
       } else if (!form.address.trim()) {
-        return "Add the full address.";
+        return t("addressRequired");
       }
       return null;
     }
     if (key === "listing") {
-      if (!form.title.trim()) return "Add a title.";
-      if (!form.availableFrom) return "Set an available-from date.";
+      if (!form.title.trim()) return t("titleRequired");
+      if (!form.availableFrom) return t("dateRequired");
       return null;
     }
     if (key === "costs") {
       if (!form.utilities.baseRent || form.utilities.baseRent <= 0) {
-        return "Base rent is required.";
+        return t("rentRequired");
       }
-      if (!form.utilities.gasType) return "Select a gas type.";
+      if (!form.utilities.gasType) return t("gasRequired");
       if (!form.utilities.electricityType) {
-        return "Select an electricity type.";
+        return t("electricityRequired");
       }
       return null;
     }
@@ -368,9 +379,9 @@ export function CreatePostModal() {
       return null; // optional
     }
     if (key === "contact") {
-      if (!form.phone.trim()) return "Add a phone number.";
+      if (!form.phone.trim()) return t("phoneRequired");
       if (form.pin.length < MIN_PIN_LENGTH) {
-        return `PIN must be at least ${MIN_PIN_LENGTH} characters.`;
+        return text("pinRequired", { count: MIN_PIN_LENGTH });
       }
       return null;
     }
@@ -454,7 +465,9 @@ export function CreatePostModal() {
       const postPayload: Omit<ExtendedPost, "images"> & SubmissionMeta = {
         title: form.title.trim(),
         description: form.description.trim(),
-        category: form.category,
+        category: CREATE_CATEGORIES.includes(form.category)
+          ? form.category
+          : CREATE_CATEGORIES[0],
         tenantType: form.tenantType,
         location: {
           division: form.division,
@@ -487,14 +500,14 @@ export function CreatePostModal() {
 
       // Full payload, dumped right before submit (files aren't stringified
       // by console.log, but their names/sizes will show up on the entries).
-      console.log("New listing submitted:", postPayload, form.images);
+      // console.log("New listing submitted:", postPayload, form.images);
 
       const response = (await houseListing(
         formData,
       ).unwrap()) as HouseListingResponse;
 
       if (!response?.status) {
-        setError(response?.message || "Something went wrong while posting.");
+        setError(response?.message || t("postFailed"));
         return;
       }
 
@@ -508,15 +521,19 @@ export function CreatePostModal() {
           createdAt: response.data?.createdAt,
           images: imagePreviews,
         } as unknown as Post,
-        response.message || "Listing posted. It is live on the board.",
+        response.message || t("postSuccess"),
       );
     } catch (err: any) {
       console.error("Failed to submit listing:", err);
-      const message =
-        err?.data?.message ||
-        err?.error ||
-        err?.message ||
-        "Something went wrong while posting. Please try again.";
+      const apiData = err?.data;
+      const validationMessage =
+        apiData?.message ||
+        apiData?.error ||
+        (typeof apiData === "string" ? apiData : null) ||
+        (apiData && typeof apiData === "object"
+          ? Object.values(apiData).flat().filter(Boolean).join(", ")
+          : null);
+      const message = validationMessage || err?.error || err?.message || t("postTryAgain");
       setError(message);
     } finally {
       setSubmitting(false);
@@ -532,15 +549,15 @@ export function CreatePostModal() {
     >
       <DialogContent className="flex max-w-lg flex-col gap-0 p-0">
         <DialogHeader className="border-b border-border px-4 py-3 sm:px-5">
-          <DialogTitle className="text-base">Post a listing</DialogTitle>
+          <DialogTitle className="text-base">{t("postListingTitle")}</DialogTitle>
           <DialogDescription className="text-xs">
-            Step {stepIndex + 1} of {STEPS.length}
+            {text("stepOf", { current: stepIndex + 1, total: STEPS.length })}
           </DialogDescription>
         </DialogHeader>
 
         {/* Step indicator */}
         <div className="flex items-center gap-1 border-b border-border bg-bg-elevated px-4 py-2 sm:px-5">
-          {STEPS.map((s, i) => {
+          {localizedSteps.map((s, i) => {
             const isDone = i < stepIndex;
             const isActive = i === stepIndex;
             return (
@@ -584,7 +601,7 @@ export function CreatePostModal() {
         >
           {step === "location" ? (
             <section className="grid gap-2.5 sm:grid-cols-2">
-              <Field label="Division">
+              <Field label={t("division")}>
                 <NativeSelect
                   required
                   value={form.division}
@@ -597,7 +614,7 @@ export function CreatePostModal() {
                     })
                   }
                 >
-                  <option value="">Select division</option>
+                  <option value="">{t("selectDivision")}</option>
                   {DIVISIONS.map((d) => (
                     <option key={d.name} value={d.name}>
                       {d.name}
@@ -605,7 +622,7 @@ export function CreatePostModal() {
                   ))}
                 </NativeSelect>
               </Field>
-              <Field label="District">
+              <Field label={t("district")}>
                 <NativeSelect
                   required
                   disabled={!division}
@@ -618,7 +635,7 @@ export function CreatePostModal() {
                     })
                   }
                 >
-                  <option value="">Select district</option>
+                  <option value="">{t("selectDistrict")}</option>
                   {division?.districts.map((d) => (
                     <option key={d.name} value={d.name}>
                       {d.name}
@@ -626,14 +643,14 @@ export function CreatePostModal() {
                   ))}
                 </NativeSelect>
               </Field>
-              <Field label="Thana / Upazila">
+              <Field label={t("thana")}>
                 <NativeSelect
                   required
                   disabled={!district}
                   value={form.thana}
                   onChange={(e) => patch({ thana: e.target.value, area: "" })}
                 >
-                  <option value="">Select thana</option>
+                  <option value="">{t("selectThana")}</option>
                   {district?.thanas.map((t) => (
                     <option key={t.name} value={t.name}>
                       {t.name}
@@ -641,13 +658,13 @@ export function CreatePostModal() {
                   ))}
                 </NativeSelect>
               </Field>
-              <Field label="Area">
+              <Field label={t("area")}>
                 <NativeSelect
                   disabled={!thana}
                   value={form.area}
                   onChange={(e) => patch({ area: e.target.value })}
                 >
-                  <option value="">Select area</option>
+                  <option value="">{t("selectArea")}</option>
                   {thana?.areas.map((a) => (
                     <option key={a} value={a}>
                       {a}
@@ -665,13 +682,13 @@ export function CreatePostModal() {
                   }
                 />
                 <Label htmlFor="use-live-location" className="text-xs">
-                  Share a live location link instead of typing an address
+                  {t("shareLiveLocation")}
                 </Label>
               </div>
 
               {form.useLiveLocation ? (
                 <div className="col-span-full">
-                  <Field label="Live location URL">
+                  <Field label={t("liveLocationUrl")}>
                     <div className="relative">
                       <Navigation className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted" />
                       <Input
@@ -689,13 +706,13 @@ export function CreatePostModal() {
                 </div>
               ) : (
                 <div className="col-span-full">
-                  <Field label="Full address">
+                  <Field label={t("fullAddress")}>
                     <div className="relative">
                       <MapPin className="pointer-events-none absolute top-3 left-3 size-4 text-muted" />
                       <Textarea
                         required
                         className="min-h-16 pl-9"
-                        placeholder="House/road/block, landmark, city"
+                        placeholder={t("addressPlaceholder")}
                         value={form.address}
                         onChange={(e) => patch({ address: e.target.value })}
                       />
@@ -708,17 +725,17 @@ export function CreatePostModal() {
 
           {step === "listing" ? (
             <section className="flex flex-col gap-2.5">
-              <Field label="Title">
+              <Field label={t("title")}>
                 <Input
                   required
                   maxLength={90}
                   value={form.title}
                   onChange={(e) => patch({ title: e.target.value })}
-                  placeholder="e.g. 2-bed family flat near Medical College"
+                  placeholder={t("titlePlaceholder")}
                 />
               </Field>
 
-              <Field label="Description">
+              <Field label={t("description")}>
                 <DescriptionEditor
                   key={formVersion}
                   value={form.description}
@@ -727,23 +744,23 @@ export function CreatePostModal() {
               </Field>
 
               <div className="grid gap-2.5 sm:grid-cols-2">
-                <Field label="Category">
+                <Field label={t("category")}>
                   <NativeSelect
                     value={form.category}
                     onChange={(e) =>
-                      patch({ category: e.target.value as RentalCategory })
+                      patch({ category: e.target.value as CreateCategory })
                     }
                   >
-                    {(Object.keys(CATEGORY_LABEL) as RentalCategory[]).map(
+                    {CREATE_CATEGORIES.map(
                       (key) => (
                         <option key={key} value={key}>
-                          {CATEGORY_LABEL[key]}
+                          {t(({ house_flat: "houseFlat", sublet_room: "subletRoom", mess: "mess", office: "office" } as const)[key])}
                         </option>
                       ),
                     )}
                   </NativeSelect>
                 </Field>
-                <Field label="Tenant type">
+                <Field label={t("tenant")}>
                   <NativeSelect
                     value={form.tenantType}
                     onChange={(e) =>
@@ -752,12 +769,12 @@ export function CreatePostModal() {
                   >
                     {(Object.keys(TENANT_LABEL) as TenantType[]).map((key) => (
                       <option key={key} value={key}>
-                        {TENANT_LABEL[key]}
+                        {t(({ family: "family", bachelor_male: "bachelorMale", bachelor_female: "bachelorFemale", office: "office" } as const)[key])}
                       </option>
                     ))}
                   </NativeSelect>
                 </Field>
-                <Field label="Parking space">
+                <Field label={t("parkingSpace")}>
                   <NativeSelect
                     value={form.parking}
                     onChange={(e) =>
@@ -767,13 +784,13 @@ export function CreatePostModal() {
                     {(Object.keys(PARKING_LABEL) as ParkingType[]).map(
                       (key) => (
                         <option key={key} value={key}>
-                          {PARKING_LABEL[key]}
+                          {t(({ none: "noParking", car: "carParking", bike: "bikeParking", car_and_bike: "carBikeParking", garage: "privateGarage", street: "streetParking", not_available: "notAvailable" } as const)[key])}
                         </option>
                       ),
                     )}
                   </NativeSelect>
                 </Field>
-                <Field label="Available from">
+                <Field label={t("availableFromLabel")}>
                   <input
                     type="date"
                     required
@@ -789,7 +806,7 @@ export function CreatePostModal() {
           {step === "costs" ? (
             <section className="flex flex-col gap-2.5">
               <div className="grid gap-2.5 sm:grid-cols-2">
-                <Field label="Base rent (required)">
+                <Field label={t("baseRentRequired")}>
                   <Input
                     required
                     type="number"
@@ -801,7 +818,7 @@ export function CreatePostModal() {
                     }
                   />
                 </Field>
-                <Field label="Gas type (required)">
+                <Field label={t("gasTypeRequired")}>
                   <NativeSelect
                     required
                     value={form.utilities.gasType}
@@ -809,12 +826,12 @@ export function CreatePostModal() {
                       patchUtilities({ gasType: e.target.value as GasType })
                     }
                   >
-                    <option value="line">Line gas</option>
-                    <option value="lpg">Cylinder (LPG)</option>
-                    <option value="included">Included</option>
+                    <option value="line">{t("lineGas")}</option>
+                    <option value="lpg">{t("cylinderLpg")}</option>
+                    <option value="included">{t("included")}</option>
                   </NativeSelect>
                 </Field>
-                <Field label="Gas bill (optional)">
+                <Field label={t("gasBillOptional")}>
                   <Input
                     type="number"
                     min={0}
@@ -825,7 +842,7 @@ export function CreatePostModal() {
                     }
                   />
                 </Field>
-                <Field label="Electricity type (required)">
+                <Field label={t("electricityTypeRequired")}>
                   <NativeSelect
                     required
                     value={form.utilities.electricityType}
@@ -835,12 +852,12 @@ export function CreatePostModal() {
                       })
                     }
                   >
-                    <option value="prepaid">Prepaid</option>
-                    <option value="postpaid">Postpaid</option>
-                    <option value="included">Included</option>
+                    <option value="prepaid">{t("prepaid")}</option>
+                    <option value="postpaid">{t("postpaid")}</option>
+                    <option value="included">{t("included")}</option>
                   </NativeSelect>
                 </Field>
-                <Field label="Electricity bill (optional)">
+                <Field label={t("electricityBillOptional")}>
                   <Input
                     type="number"
                     min={0}
@@ -853,7 +870,7 @@ export function CreatePostModal() {
                     }
                   />
                 </Field>
-                <Field label="Water bill (optional)">
+                <Field label={t("waterBillOptional")}>
                   <Input
                     type="number"
                     min={0}
@@ -863,7 +880,7 @@ export function CreatePostModal() {
                     }
                   />
                 </Field>
-                <Field label="Service charge (optional)">
+                <Field label={t("serviceChargeOptional")}>
                   <Input
                     type="number"
                     min={0}
@@ -879,7 +896,7 @@ export function CreatePostModal() {
               <div className="rounded-lg border border-border bg-bg-elevated p-3">
                 <CostBreakdown utilities={liveUtilities} />
                 <p className="mt-2 flex items-center justify-between border-t border-border pt-2 text-xs text-muted">
-                  <span>Total monthly cost</span>
+                  <span>{t("totalMonthlyCost")}</span>
                   <span className="font-display text-sm font-medium tabular-nums text-primary">
                     {formatBdt(totalMonthlyCost(liveUtilities))}
                   </span>
@@ -900,8 +917,8 @@ export function CreatePostModal() {
               >
                 <ImagePlus className="size-4" />
                 {form.images.length >= MAX_IMAGES
-                  ? `Maximum ${MAX_IMAGES} photos`
-                  : "Add photos"}
+                  ? text("maximumPhotos", { count: MAX_IMAGES })
+                  : t("addPhotos")}
                 <input
                   type="file"
                   accept="image/*"
@@ -934,7 +951,7 @@ export function CreatePostModal() {
                             images: form.images.filter((_, i) => i !== index),
                           })
                         }
-                        aria-label="Remove photo"
+                        aria-label={t("removePhoto")}
                       >
                         <X className="size-3" />
                       </button>
@@ -943,7 +960,7 @@ export function CreatePostModal() {
                 </div>
               ) : (
                 <p className="text-xs text-muted">
-                  Optional — you can skip this step. Up to {MAX_IMAGES} photos.
+                  {text("optionalPhotos", { count: MAX_IMAGES })}
                 </p>
               )}
             </section>
@@ -951,7 +968,7 @@ export function CreatePostModal() {
 
           {step === "contact" ? (
             <section className="flex flex-col gap-2.5">
-              <Field label="Phone">
+              <Field label={t("phone")}>
                 <Input
                   required
                   inputMode="tel"
@@ -987,7 +1004,7 @@ export function CreatePostModal() {
                 />
               </div>
               {form.telegram ? (
-                <Field label="Telegram handle (optional)">
+                <Field label={t("telegramHandleOptional")}>
                   <Input
                     placeholder="@username"
                     value={form.telegramHandle}
@@ -996,7 +1013,7 @@ export function CreatePostModal() {
                 </Field>
               ) : null}
               {form.teams ? (
-                <Field label="Teams link (optional)">
+                <Field label={t("teamsLinkOptional")}>
                   <Input
                     placeholder="https://teams.microsoft.com/..."
                     value={form.teamsLink}
@@ -1004,20 +1021,18 @@ export function CreatePostModal() {
                   />
                 </Field>
               ) : null}
-              <Field label={`Secret PIN (min ${MIN_PIN_LENGTH} characters)`}>
+              <Field label={text("secretPin", { count: MIN_PIN_LENGTH })}>
                 <Input
                   required
                   type="password"
                   minLength={MIN_PIN_LENGTH}
                   autoComplete="new-password"
-                  placeholder="Letters, numbers, symbols — anything works"
+                  placeholder={t("secretPinPlaceholder")}
                   value={form.pin}
                   onChange={(e) => patch({ pin: e.target.value })}
                 />
                 <p className="mt-1 text-[11px] text-muted">
-                  You'll need this PIN later to edit or remove this listing.
-                  Use at least {MIN_PIN_LENGTH} characters — any mix of
-                  letters, numbers, or symbols is fine.
+                  {text("secretPinHelp", { count: MIN_PIN_LENGTH })}
                 </p>
               </Field>
             </section>
@@ -1039,10 +1054,10 @@ export function CreatePostModal() {
             disabled={submitting}
           >
             {isFirstStep ? (
-              "Cancel"
+              t("cancel")
             ) : (
               <>
-                <ArrowLeft className="size-4" /> Back
+                <ArrowLeft className="size-4" /> {t("back")}
               </>
             )}
           </Button>
@@ -1054,11 +1069,11 @@ export function CreatePostModal() {
               size="sm"
               disabled={submitting}
             >
-              {submitting ? "Posting..." : "Publish listing"}
+              {submitting ? t("posting") : t("publishListing")}
             </Button>
           ) : (
             <Button type="button" size="sm" onClick={goNext}>
-              Next <ArrowRight className="size-4" />
+              {t("next")} <ArrowRight className="size-4" />
             </Button>
           )}
         </div>
@@ -1119,6 +1134,7 @@ function DescriptionEditor({
   value: string;
   onChange: (html: string) => void;
 }) {
+  const { t } = usePreferences();
   const editorRef = useRef<HTMLDivElement | null>(null);
   const [mode, setMode] = useState<"editing" | "collapsed">("editing");
 
@@ -1140,7 +1156,7 @@ function DescriptionEditor({
   }
 
   function insertLink() {
-    const url = window.prompt("Enter URL");
+    const url = window.prompt(t("enterUrl"));
     if (url) exec("createLink", url);
   }
 
@@ -1150,7 +1166,7 @@ function DescriptionEditor({
         <div
           className="prose prose-sm max-w-none text-xs [&_blockquote]:border-l-2 [&_blockquote]:border-border [&_blockquote]:pl-3 [&_blockquote]:italic [&_ol]:list-decimal [&_ol]:pl-5 [&_ul]:list-disc [&_ul]:pl-5"
           dangerouslySetInnerHTML={{
-            __html: value || "<p class='text-muted'>No description yet.</p>",
+            __html: value || `<p class='text-muted'>${t("noDescription")}</p>`,
           }}
         />
         <Button
@@ -1160,7 +1176,7 @@ function DescriptionEditor({
           className="w-fit"
           onClick={() => setMode("editing")}
         >
-          <PenLine className="size-3.5" /> Edit description
+          <PenLine className="size-3.5" /> {t("editDescription")}
         </Button>
       </div>
     );
@@ -1169,52 +1185,52 @@ function DescriptionEditor({
   return (
     <div className="flex flex-col overflow-hidden rounded-lg border border-border">
       <div className="flex flex-wrap items-center gap-0.5 border-b border-border bg-bg-elevated px-1.5 py-1">
-        <ToolbarBtn icon={Bold} label="Bold" onClick={() => exec("bold")} />
-        <ToolbarBtn icon={Italic} label="Italic" onClick={() => exec("italic")} />
+        <ToolbarBtn icon={Bold} label={t("bold")} onClick={() => exec("bold")} />
+        <ToolbarBtn icon={Italic} label={t("italic")} onClick={() => exec("italic")} />
         <ToolbarBtn
           icon={Underline}
-          label="Underline"
+          label={t("underline")}
           onClick={() => exec("underline")}
         />
         <ToolbarBtn
           icon={Strikethrough}
-          label="Strikethrough"
+          label={t("strikethrough")}
           onClick={() => exec("strikeThrough")}
         />
         <Divider />
         <ToolbarBtn
           icon={Heading1}
-          label="Heading 1"
+          label={t("headingOne")}
           onClick={() => exec("formatBlock", "H1")}
         />
         <ToolbarBtn
           icon={Heading2}
-          label="Heading 2"
+          label={t("headingTwo")}
           onClick={() => exec("formatBlock", "H2")}
         />
         <ToolbarBtn
           icon={Quote}
-          label="Quote"
+          label={t("quote")}
           onClick={() => exec("formatBlock", "BLOCKQUOTE")}
         />
         <Divider />
         <ToolbarBtn
           icon={List}
-          label="Bulleted list"
+          label={t("bulletedList")}
           onClick={() => exec("insertUnorderedList")}
         />
         <ToolbarBtn
           icon={ListOrdered}
-          label="Numbered list"
+          label={t("numberedList")}
           onClick={() => exec("insertOrderedList")}
         />
-        <ToolbarBtn icon={Link2} label="Link" onClick={insertLink} />
+        <ToolbarBtn icon={Link2} label={t("link")} onClick={insertLink} />
         <Divider />
-        <ToolbarBtn icon={Undo2} label="Undo" onClick={() => exec("undo")} />
-        <ToolbarBtn icon={Redo2} label="Redo" onClick={() => exec("redo")} />
+        <ToolbarBtn icon={Undo2} label={t("undo")} onClick={() => exec("undo")} />
+        <ToolbarBtn icon={Redo2} label={t("redo")} onClick={() => exec("redo")} />
         <ToolbarBtn
           icon={Eraser}
-          label="Clear formatting"
+          label={t("clearFormatting")}
           onClick={() => exec("removeFormat")}
         />
         <div className="ml-auto">
@@ -1227,7 +1243,7 @@ function DescriptionEditor({
               setMode("collapsed");
             }}
           >
-            <X className="size-3.5" /> Exit editor
+            <X className="size-3.5" /> {t("exitEditor")}
           </Button>
         </div>
       </div>
@@ -1238,7 +1254,7 @@ function DescriptionEditor({
         onInput={syncValue}
         onBlur={syncValue}
         className="min-h-24 max-h-48 overflow-y-auto px-3 py-2 text-sm outline-none [&_blockquote]:border-l-2 [&_blockquote]:border-border [&_blockquote]:pl-3 [&_blockquote]:italic [&_h1]:text-lg [&_h1]:font-semibold [&_h2]:text-base [&_h2]:font-semibold [&_ol]:list-decimal [&_ol]:pl-5 [&_ul]:list-disc [&_ul]:pl-5"
-        data-placeholder="Access, nearby landmarks, house rules."
+        data-placeholder={t("descriptionPlaceholder")}
       />
     </div>
   );

@@ -1,180 +1,10 @@
-import { d as Slot, m as require_jsx_runtime } from "../_libs/@radix-ui/react-checkbox+[...].mjs";
+import { m as require_jsx_runtime } from "../_libs/@radix-ui/react-checkbox+[...].mjs";
+import { a as createSelector } from "../_libs/@reduxjs/toolkit+[...].mjs";
+import { C as openMobileFilters, I as totalMonthlyCost, K as usePreferences, N as setSearchTerm, R as useAppDispatch, h as cn, o as Input, t as Button, x as openCreatePost, z as useAppSelector } from "./postApi-DBq9pe7E.mjs";
 import { _ as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { E as Map, I as House, N as Languages, b as Plus, d as Sun, h as Search, p as SlidersHorizontal, w as Moon } from "../_libs/lucide-react.mjs";
-import { a as createSelector, c as useSelector, s as useDispatch } from "../_libs/@reduxjs/toolkit+[...].mjs";
-import { b as setSearchTerm, l as openMobileFilters, n as usePreferences, r as baseApi, s as openCreatePost } from "./router-C6kdH8BV.mjs";
-import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
-import { t as twMerge } from "../_libs/tailwind-merge.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/Header-D6vzvvj0.js
+//#region node_modules/.nitro/vite/services/ssr/assets/Header-Ca_PrxeN.js
 var import_jsx_runtime = require_jsx_runtime();
-var CATEGORY_LABEL = {
-	house_flat: "House / Flat",
-	sublet_room: "Sublet / Single room",
-	mess: "Mess",
-	office: "Office / Commercial"
-};
-var TENANT_LABEL = {
-	family: "Family",
-	bachelor_male: "Bachelor (Male)",
-	bachelor_female: "Bachelor (Female)",
-	office: "office"
-};
-var GAS_LABEL = {
-	line: "Line gas",
-	lpg: "LPG cylinder",
-	included: "Included"
-};
-var ELECTRICITY_LABEL = {
-	prepaid: "Prepaid",
-	postpaid: "Postpaid",
-	included: "Included"
-};
-function totalMonthlyCost(utilities) {
-	const gas = utilities.gasType === "included" ? 0 : utilities.gas;
-	const electricity = utilities.electricityType === "included" ? 0 : utilities.electricity;
-	return utilities.baseRent + gas + electricity + utilities.water + utilities.serviceCharge;
-}
-function digitsPhone(phone) {
-	return phone.replace(/\D/g, "");
-}
-function cn(...inputs) {
-	return twMerge(clsx(inputs));
-}
-function formatBdt(amount) {
-	return `৳${Math.round(amount).toLocaleString("en-IN")}`;
-}
-function formatDayOrdinal(day) {
-	const n = Math.max(1, Math.min(31, day));
-	const j = n % 10;
-	const k = n % 100;
-	if (k >= 11 && k <= 13) return `${n}th`;
-	if (j === 1) return `${n}st`;
-	if (j === 2) return `${n}nd`;
-	if (j === 3) return `${n}rd`;
-	return `${n}th`;
-}
-function formatLongDate(iso) {
-	const date = /* @__PURE__ */ new Date(`${iso}T00:00:00`);
-	if (Number.isNaN(date.getTime())) return iso;
-	return date.toLocaleDateString("en-GB", {
-		day: "numeric",
-		month: "short",
-		year: "numeric"
-	});
-}
-var buttonVariants = cva("inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[background-color,color,box-shadow,transform,opacity] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 active:not-disabled:scale-[0.96]", {
-	variants: {
-		variant: {
-			default: "bg-primary text-primary-foreground hover:bg-accent",
-			secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-			outline: "border border-border bg-surface text-fg hover:bg-secondary",
-			ghost: "text-fg hover:bg-secondary",
-			destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-			link: "text-primary underline-offset-4 hover:underline"
-		},
-		size: {
-			default: "h-11 px-4",
-			sm: "h-9 rounded-sm px-3 text-xs",
-			lg: "h-12 rounded-lg px-5 text-base",
-			icon: "size-11"
-		}
-	},
-	defaultVariants: {
-		variant: "default",
-		size: "default"
-	}
-});
-function Button({ className, variant, size, asChild = false, ...props }) {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(asChild ? Slot : "button", {
-		className: cn(buttonVariants({
-			variant,
-			size
-		}), className),
-		...props
-	});
-}
-function Input({ className, type = "text", ...props }) {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-		type,
-		className: cn("field", className),
-		...props
-	});
-}
-function Textarea({ className, ...props }) {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
-		className: cn("field min-h-28 resize-y py-2.5 leading-relaxed", className),
-		...props
-	});
-}
-function NativeSelect({ className, children, ...props }) {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("select", {
-		className: cn("field appearance-none pr-8", className),
-		...props,
-		children
-	});
-}
-var useAppDispatch = useDispatch.withTypes();
-var useAppSelector = useSelector.withTypes();
-var { useHouseListingMutation, useGetFindByAllHouseListQuery, useGetSpecificHouseListQuery, useDeleteHouseListingMutation, useGetMyHouseListingQuery, useGetLiveHouseListringTrackingQuery } = baseApi.injectEndpoints({ endpoints: (builder) => ({
-	houseListing: builder.mutation({
-		query: (userInfo) => ({
-			url: "/house_list/",
-			method: "POST",
-			body: userInfo
-		}),
-		invalidatesTags: ["post"]
-	}),
-	getFindByAllHouseList: builder.query({
-		query: (data) => {
-			return {
-				url: "/house_list/find_by_house_list",
-				method: "GET",
-				params: data
-			};
-		},
-		providesTags: ["post"]
-	}),
-	getSpecificHouseList: builder.query({
-		query: (id) => {
-			return {
-				url: `/house_list/${id}`,
-				method: "GET"
-			};
-		},
-		providesTags: ["post"]
-	}),
-	getMyHouseListing: builder.query({
-		query: ({ deviceId, page, limit }) => {
-			return {
-				url: `/house_list/my_house_listing/${deviceId}`,
-				method: "GET",
-				params: {
-					page,
-					limit
-				}
-			};
-		},
-		providesTags: ["post"]
-	}),
-	deleteHouseListing: builder.mutation({
-		query: ({ id, deviceId }) => {
-			return {
-				url: `/house_list/delete_my_house_listing/${id}/${deviceId}`,
-				method: "DELETE"
-			};
-		},
-		invalidatesTags: ["post"]
-	}),
-	getLiveHouseListringTracking: builder.query({
-		query: () => {
-			return {
-				url: "/house_list/live_reasigon_requiring_attention",
-				method: "GET"
-			};
-		},
-		providesTags: ["post"]
-	})
-}) });
 function Logo({ className }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 		className: cn("inline-flex items-center gap-2.5", className),
@@ -269,7 +99,7 @@ function Header() {
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "h-px w-full bg-gradient-to-r from-transparent via-primary/50 to-transparent" }),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "mx-auto flex h-16 max-w-[1440px] items-center gap-3 px-4 sm:px-6 lg:px-8",
+				className: "mx-auto flex min-h-16 max-w-[1440px] flex-wrap items-center gap-2 px-3 py-2 sm:h-16 sm:flex-nowrap sm:gap-3 sm:px-6 sm:py-0 lg:px-8",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
 						variant: "ghost",
@@ -285,7 +115,7 @@ function Header() {
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
 						href: "/",
 						"aria-label": "Thikana home",
-						className: "shrink-0 rounded-lg transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:outline-none",
+						className: "min-w-0 shrink rounded-lg transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:outline-none",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Logo, {})
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -299,7 +129,7 @@ function Header() {
 						})]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
-						className: "ml-auto flex shrink-0 items-center gap-1.5",
+						className: "order-3 flex w-full shrink-0 items-center justify-end gap-1 sm:order-none sm:ml-auto sm:w-auto sm:gap-1.5",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "hidden items-center gap-1 rounded-full border border-border/70 bg-bg-elevated/50 p-1 md:flex",
@@ -371,16 +201,17 @@ function Header() {
 								children: theme === "light" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Moon, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sun, {})
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-								className: "rounded-full shadow-sm transition-shadow hover:shadow-md",
+								size: "sm",
+								className: "h-8 px-3 gap-1.5 rounded-full bg-gradient-to-r from-accent to-indigo-900 hover:from-blue-900 hover:to-indigo-700 text-white shadow-sm hover:shadow-md transition-all duration-200 active:scale-95",
 								onClick: () => dispatch(openCreatePost()),
 								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, {}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "w-3.5 h-3.5" }),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "hidden sm:inline",
+										className: "hidden sm:inline text-xs font-medium",
 										children: t("postListing")
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "sm:hidden",
+										className: "sm:hidden text-xs font-medium",
 										children: t("post")
 									})
 								]
@@ -406,4 +237,4 @@ function Header() {
 	});
 }
 //#endregion
-export { useGetSpecificHouseListQuery as C, useGetMyHouseListingQuery as S, useAppDispatch as _, Header as a, useGetFindByAllHouseListQuery as b, TENANT_LABEL as c, digitsPhone as d, formatBdt as f, totalMonthlyCost as g, selectActiveFilterCount as h, GAS_LABEL as i, Textarea as l, formatLongDate as m, CATEGORY_LABEL as n, Input as o, formatDayOrdinal as p, ELECTRICITY_LABEL as r, NativeSelect as s, Button as t, cn as u, useAppSelector as v, useHouseListingMutation as w, useGetLiveHouseListringTrackingQuery as x, useDeleteHouseListingMutation as y };
+export { selectActiveFilterCount as n, Header as t };

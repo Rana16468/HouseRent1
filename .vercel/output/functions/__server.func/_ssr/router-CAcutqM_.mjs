@@ -1,10 +1,856 @@
-import { m as require_jsx_runtime } from "../_libs/@radix-ui/react-checkbox+[...].mjs";
-import { T as MessageCircle, a as Users, i as Video, m as Send, x as Phone } from "../_libs/lucide-react.mjs";
-import { t as cva } from "../_libs/class-variance-authority+clsx.mjs";
-import { d as digitsPhone, f as formatBdt, g as totalMonthlyCost, i as GAS_LABEL, r as ELECTRICITY_LABEL, t as Button, u as cn } from "./Header-D6vzvvj0.mjs";
+import { o as __toESM } from "../_runtime.mjs";
+import { h as require_react, m as require_jsx_runtime, n as CheckboxIndicator, t as Checkbox$1 } from "../_libs/@radix-ui/react-checkbox+[...].mjs";
+import { i as createSlice, o as Provider_default, r as configureStore } from "../_libs/@reduxjs/toolkit+[...].mjs";
+import { G as useHouseListingMutation, I as totalMonthlyCost, K as usePreferences, L as uiSlice_default, R as useAppDispatch, _ as filterSlice_default, a as GAS_LABEL, c as PreferencesProvider, d as baseApi, f as closeCreatePost, h as cn, i as ELECTRICITY_LABEL, l as TENANT_LABEL, o as Input, s as NativeSelect, t as Button, u as Textarea, v as formatBdt, z as useAppSelector } from "./postApi-DBq9pe7E.mjs";
+import { f as createRouter, g as createRootRoute, h as createFileRoute, l as Scripts, m as lazyRouteComponent, p as Outlet, u as HeadContent, v as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
+import { A as ListOrdered, C as Navigation, D as MapPin, F as ImagePlus, H as Eraser, L as Heading2, P as Italic, Q as Check, R as Heading1, S as PenLine, c as TriangleAlert, f as Strikethrough, it as ArrowLeft, j as Link2, k as List, nt as Bold, o as Undo2, r as X, rt as ArrowRight, s as Underline, v as Redo2, y as Quote } from "../_libs/lucide-react.mjs";
+import { a as union, i as string, n as number, r as object, t as literal } from "../_libs/zod.mjs";
+import { n as toast } from "../_libs/sonner.mjs";
+import { a as DialogOverlay$1, i as DialogDescription$1, n as DialogClose, o as DialogPortal$1, r as DialogContent$1, s as DialogTitle$1, t as Dialog$1 } from "../_libs/@radix-ui/react-dialog+[...].mjs";
+import { t as Root } from "../_libs/radix-ui__react-label.mjs";
+import { t as require_dist } from "../_libs/device-detector-js.mjs";
 import { t as index } from "../_libs/fingerprintjs__fingerprintjs.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/badge-BdiAyqMW.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-CAcutqM_.js
+var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
+var import_dist = /* @__PURE__ */ __toESM(require_dist());
+var __defProp = Object.defineProperty;
+var __exportAll = (all, no_symbols) => {
+	let target = {};
+	for (var name in all) __defProp(target, name, {
+		get: all[name],
+		enumerable: true
+	});
+	if (!no_symbols) __defProp(target, Symbol.toStringTag, { value: "Module" });
+	return target;
+};
+var FALLBACK_MESSAGE = "An unexpected error occurred. Try reloading the page.";
+function errorMessage(error) {
+	if (error instanceof Error && error.message) return error.message;
+	if (typeof error === "string" && error) return error;
+	return FALLBACK_MESSAGE;
+}
+function AppErrorComponent({ error }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", {
+		className: "flex min-h-screen flex-col items-center justify-center gap-3 px-6 text-center bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "text-red-500",
+				"aria-hidden": "true",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TriangleAlert, {
+					className: "size-10",
+					strokeWidth: 2
+				})
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+				className: "text-lg font-semibold",
+				children: "Something went wrong"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "max-w-md text-sm break-words text-zinc-500 dark:text-zinc-400",
+				children: errorMessage(error)
+			})
+		]
+	});
+}
+/**
+* App-wide client provider mounted once near the root (in `src/routes/__root.tsx`):
+*
+*   <AuthProvider><Outlet /></AuthProvider>
+*
+* Better Auth's React client (`@/lib/auth/client`) needs NO context provider —
+* its `useSession()` works standalone — so this is a passthrough today. It's
+* kept as the single, stable mount point for any future client-side providers
+* (e.g. a toast or theme provider) without churning the root shell.
+*/
+function AuthProvider({ children }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children });
+}
+var CONNECTOR_TOKEN_READY_EVENT = "grok:connector-token-ready";
+function isGrokEmbedderOrigin(origin) {
+	try {
+		const url = new URL(origin);
+		if (url.protocol !== "https:" && url.protocol !== "http:") return false;
+		const host = url.hostname.toLowerCase();
+		if (host === "grok.com" || host.endsWith(".grok.com")) return true;
+		if (host === "localhost" || host === "127.0.0.1" || host === "[::1]") return true;
+		return false;
+	} catch {
+		return false;
+	}
+}
+function isSandboxPreviewGuestHost(hostname) {
+	const host = hostname.toLowerCase();
+	return host === "grok-sandbox.com" || host.endsWith(".grok-sandbox.com");
+}
+function isRemintPreviewPair(guestHost, parentHost) {
+	const guest = guestHost.toLowerCase();
+	const parent = parentHost.toLowerCase();
+	const i = guest.indexOf(".preview.");
+	if (i <= 0) return false;
+	const label = guest.slice(0, i);
+	const rest = guest.slice(i + 9);
+	if (label.includes(".") || !rest.includes(".")) return false;
+	return parent === rest || parent === `grok.${rest}`;
+}
+function resolveParentEmbedderOrigin(parentIsSelf, referrer, ancestorOrigin, guestHostname = "") {
+	if (parentIsSelf) return null;
+	for (const candidate of [referrer, ancestorOrigin ?? ""].filter(Boolean)) try {
+		const url = new URL(candidate.includes("://") ? candidate : `https://${candidate}`);
+		if (url.protocol !== "https:" && url.protocol !== "http:") continue;
+		if (isGrokEmbedderOrigin(url.origin)) return url.origin;
+		if (isSandboxPreviewGuestHost(guestHostname) || isRemintPreviewPair(guestHostname, url.hostname)) return url.origin;
+	} catch {}
+	return null;
+}
+/**
+* Guest side of the grok-web ↔ sandbox preview postMessage bridge.
+*
+* Activates only when this page is framed by an allowlisted Grok embedder.
+* Top-level runs (download/export, local `npm run dev`, deployed sites) noop.
+*/
+var PREVIEW_BRIDGE_CHANNEL = "grok-preview-bridge";
+var EnvelopeSchema = object({
+	channel: literal(PREVIEW_BRIDGE_CHANNEL),
+	version: number().int().positive(),
+	type: string().min(1)
+});
+var HelloSchema = EnvelopeSchema.extend({ type: literal("hello") });
+var NavigateSchema = EnvelopeSchema.extend({
+	type: literal("navigate"),
+	path: string().min(1)
+});
+var HistorySchema = EnvelopeSchema.extend({
+	type: literal("history"),
+	delta: union([literal(-1), literal(1)])
+});
+var ConnectorTokenReadySchema = EnvelopeSchema.extend({ type: literal("connector-token-ready") });
+function isSafeBridgePath(path) {
+	if (!path.startsWith("/") || path.startsWith("//") || path.includes("\\")) return false;
+	try {
+		return new URL(path, "https://preview.invalid").origin === "https://preview.invalid";
+	} catch {
+		return false;
+	}
+}
+/**
+* Origin of the Grok embedder framing this page, or null when the page runs
+* top-level (download/export, local `npm run dev`, deployed sites) or under a
+* non-Grok parent. Client-only; null during SSR.
+*/
+function resolveCurrentEmbedderOrigin() {
+	if (typeof window === "undefined") return null;
+	const ancestorOrigin = typeof location.ancestorOrigins !== "undefined" && location.ancestorOrigins.length > 0 ? location.ancestorOrigins[0] : null;
+	return resolveParentEmbedderOrigin(window.parent === window, document.referrer, ancestorOrigin, window.location.hostname);
+}
+/**
+* Install host↔guest messaging. Returns a dispose function.
+* Noops (returns a no-op dispose) when not embedded under a Grok parent.
+*/
+function installPreviewHostBridge(options = {}) {
+	const parentOrigin = resolveCurrentEmbedderOrigin();
+	if (parentOrigin === null) return () => {};
+	const ROOT_STATE_KEY = "__grokPreviewBridgeRoot";
+	const originalPushState = window.history.pushState.bind(window.history);
+	const originalReplaceState = window.history.replaceState.bind(window.history);
+	const isAtHistoryRoot = () => {
+		const state = window.history.state;
+		return Boolean(state && typeof state === "object" && state[ROOT_STATE_KEY] === true);
+	};
+	try {
+		const current = window.history.state;
+		if (!(current !== null && typeof current === "object" && Object.prototype.hasOwnProperty.call(current, ROOT_STATE_KEY))) {
+			const isRoot = window.history.length <= 1;
+			originalReplaceState(current && typeof current === "object" ? {
+				...current,
+				[ROOT_STATE_KEY]: isRoot
+			} : { [ROOT_STATE_KEY]: isRoot }, "", window.location.href);
+		}
+	} catch {}
+	const post = (message) => {
+		window.parent.postMessage(message, parentOrigin);
+	};
+	const reportLocation = () => {
+		post({
+			channel: PREVIEW_BRIDGE_CHANNEL,
+			version: 1,
+			type: "location",
+			path: window.location.pathname || "/",
+			search: window.location.search,
+			hash: window.location.hash
+		});
+	};
+	const reportRoutes = () => {
+		const paths = options.getRoutePaths?.() ?? [];
+		post({
+			channel: PREVIEW_BRIDGE_CHANNEL,
+			version: 1,
+			type: "routes",
+			paths
+		});
+	};
+	const defaultNavigate = (path) => {
+		if (!isSafeBridgePath(path)) return;
+		try {
+			const url = new URL(path, window.location.origin);
+			if (url.origin !== window.location.origin) return;
+			const next = `${url.pathname}${url.search}${url.hash}`;
+			window.history.pushState(window.history.state, "", next);
+			window.dispatchEvent(new PopStateEvent("popstate", { state: window.history.state }));
+		} catch {}
+	};
+	const navigate = (path) => {
+		if (!isSafeBridgePath(path)) return;
+		if (options.navigate) {
+			options.navigate(path);
+			return;
+		}
+		defaultNavigate(path);
+	};
+	const announce = () => {
+		reportLocation();
+		reportRoutes();
+		post({
+			channel: PREVIEW_BRIDGE_CHANNEL,
+			version: 1,
+			type: "ready"
+		});
+	};
+	const onHello = (data) => {
+		if (!HelloSchema.safeParse(data).success) return;
+		announce();
+	};
+	const onNavigate = (data) => {
+		const parsed = NavigateSchema.safeParse(data);
+		if (!parsed.success) return;
+		navigate(parsed.data.path);
+		queueMicrotask(reportLocation);
+	};
+	const onHistory = (data) => {
+		const parsed = HistorySchema.safeParse(data);
+		if (!parsed.success) return;
+		if (parsed.data.delta === -1 && isAtHistoryRoot()) return;
+		window.history.go(parsed.data.delta);
+	};
+	const onConnectorTokenReady = (data) => {
+		if (!ConnectorTokenReadySchema.safeParse(data).success) return;
+		window.dispatchEvent(new Event(CONNECTOR_TOKEN_READY_EVENT));
+	};
+	const hostMessageHandlers = /* @__PURE__ */ new Map([
+		["hello", onHello],
+		["navigate", onNavigate],
+		["history", onHistory],
+		["connector-token-ready", onConnectorTokenReady]
+	]);
+	const onMessage = (event) => {
+		if (event.source !== window.parent) return;
+		if (event.origin !== parentOrigin) return;
+		const envelope = EnvelopeSchema.safeParse(event.data);
+		if (!envelope.success || envelope.data.version !== 1) return;
+		hostMessageHandlers.get(envelope.data.type)?.(event.data);
+	};
+	const onPopState = () => {
+		reportLocation();
+	};
+	const onHashChange = () => {
+		reportLocation();
+	};
+	window.history.pushState = (data, unused, url) => {
+		const next = data && typeof data === "object" ? {
+			...data,
+			[ROOT_STATE_KEY]: false
+		} : data;
+		originalPushState(next, unused, url);
+		reportLocation();
+	};
+	window.history.replaceState = (data, unused, url) => {
+		const next = isAtHistoryRoot() ? {
+			...data && typeof data === "object" ? data : {},
+			[ROOT_STATE_KEY]: true
+		} : data;
+		originalReplaceState(next, unused, url);
+		reportLocation();
+	};
+	window.addEventListener("message", onMessage);
+	window.addEventListener("popstate", onPopState);
+	window.addEventListener("hashchange", onHashChange);
+	announce();
+	return () => {
+		window.removeEventListener("message", onMessage);
+		window.removeEventListener("popstate", onPopState);
+		window.removeEventListener("hashchange", onHashChange);
+		window.history.pushState = originalPushState;
+		window.history.replaceState = originalReplaceState;
+	};
+}
+/** Collect static path patterns from a TanStack route tree (best-effort). */
+function collectRoutePathsFromTree(routeTree) {
+	const paths = /* @__PURE__ */ new Set();
+	const walk = (node) => {
+		if (!node || typeof node !== "object") return;
+		const record = node;
+		const full = typeof record.fullPath === "string" ? record.fullPath : typeof record.path === "string" ? record.path : null;
+		if (full !== null && full !== "") paths.add(full.startsWith("/") ? full : `/${full}`);
+		else if (full === "") paths.add("/");
+		const children = record.children;
+		if (Array.isArray(children)) for (const child of children) walk(child);
+		else if (children && typeof children === "object") for (const child of Object.values(children)) walk(child);
+	};
+	walk(routeTree);
+	return [...paths];
+}
+/**
+* Mount once in `__root.tsx` so the Grok preview chrome can drive navigation
+* (and later receive registered routes). Noops when the app is not embedded.
+*/
+function PreviewHostBridge() {
+	const router = useRouter();
+	(0, import_react.useEffect)(() => {
+		return installPreviewHostBridge({
+			navigate: (path) => {
+				router.history.push(path);
+			},
+			getRoutePaths: () => collectRoutePathsFromTree(router.routeTree)
+		});
+	}, [router]);
+	return null;
+}
+var postSlice = createSlice({
+	name: "posts",
+	initialState: {
+		posts: [
+			{
+				id: "post-dhanmondi-lake",
+				title: "Sunny 3-bed family flat beside Dhanmondi Lake",
+				description: "Corner unit on Road 7 with lake-facing balcony, two baths, and a live-in kitchen. Generator and lift in the building. Walking distance to Rabindra Sarobar and the 27 number bus stand. Family tenants preferred; school-age children welcome.",
+				category: "house_flat",
+				tenantType: "family",
+				location: {
+					division: "Dhaka",
+					district: "Dhaka",
+					thana: "Dhanmondi",
+					area: "Road 7"
+				},
+				utilities: {
+					baseRent: 42e3,
+					gas: 900,
+					gasType: "line",
+					electricity: 3500,
+					electricityType: "prepaid",
+					water: 600,
+					serviceCharge: 2500
+				},
+				images: [
+					"/listings/dhanmondi-living.jpg",
+					"/listings/gulshan-apt.jpg",
+					"/listings/rangpur-flat.jpg",
+					"/listings/uttara-building.jpg"
+				],
+				contact: {
+					phone: "+8801712345601",
+					whatsapp: true,
+					telegram: false,
+					teams: false,
+					imo: true
+				},
+				availableFrom: "2026-10-01",
+				createdAt: "2026-09-02T08:00:00.000Z",
+				pin: "4821",
+				source: "mock",
+				featured: true
+			},
+			{
+				id: "post-gulshan-exec",
+				title: "Gulshan 2 executive 2BHK with generator backup",
+				description: "Quiet 1,150 sft flat on Gulshan Avenue, two bedrooms, maid's bath, and covered parking. Full-time security and backup generator. Suitable for a small family or a couple relocating for embassy or NGO work.",
+				category: "house_flat",
+				tenantType: "family",
+				location: {
+					division: "Dhaka",
+					district: "Dhaka",
+					thana: "Gulshan",
+					area: "Gulshan 2"
+				},
+				utilities: {
+					baseRent: 65e3,
+					gas: 0,
+					gasType: "included",
+					electricity: 4500,
+					electricityType: "postpaid",
+					water: 800,
+					serviceCharge: 4e3
+				},
+				images: [
+					"/listings/gulshan-apt.jpg",
+					"/listings/dhanmondi-living.jpg",
+					"/listings/uttara-building.jpg",
+					"/listings/rangpur-flat.jpg",
+					"/listings/motijheel-office.jpg"
+				],
+				contact: {
+					phone: "+8801812345602",
+					whatsapp: true,
+					telegram: true,
+					teams: true,
+					imo: false,
+					telegramHandle: "gulshan_lets",
+					teamsLink: "https://teams.microsoft.com/"
+				},
+				availableFrom: "2026-09-15",
+				createdAt: "2026-08-28T11:20:00.000Z",
+				pin: "1904",
+				source: "mock",
+				featured: true
+			},
+			{
+				id: "post-mirpur-mess",
+				title: "Mirpur-10 bachelor mess, 4-seat, near metro",
+				description: "Four-seat mess on the 5th floor, attached bath, and a shared kitchen. Two minutes from Mirpur 10 metro. Wi-Fi included in service charge. Seats available from the 1st. Male bachelors only.",
+				category: "mess",
+				tenantType: "bachelor_male",
+				location: {
+					division: "Dhaka",
+					district: "Dhaka",
+					thana: "Mirpur",
+					area: "Mirpur 10"
+				},
+				utilities: {
+					baseRent: 5500,
+					gas: 400,
+					gasType: "lpg",
+					electricity: 800,
+					electricityType: "prepaid",
+					water: 150,
+					serviceCharge: 300
+				},
+				images: [
+					"/listings/mirpur-mess.jpg",
+					"/listings/sylhet-room.jpg",
+					"/listings/mohammadpur-room.jpg"
+				],
+				contact: {
+					phone: "+8801912345603",
+					whatsapp: true,
+					telegram: false,
+					teams: false,
+					imo: true
+				},
+				availableFrom: "2026-10-01",
+				createdAt: "2026-09-05T06:40:00.000Z",
+				pin: "7730",
+				source: "mock"
+			},
+			{
+				id: "post-thakurgaon-bari",
+				title: "Thakurgaon Sadar paka bari with courtyard",
+				description: "Two-storey paka house in Boropalash with a brick courtyard, three bedrooms, and a tube-well. Mango tree in the yard. Ten minutes from Thakurgaon courthouse. Ideal for a family posted to the district.",
+				category: "house_flat",
+				tenantType: "family",
+				location: {
+					division: "Rangpur",
+					district: "Thakurgaon",
+					thana: "Thakurgaon Sadar",
+					area: "Boropalash"
+				},
+				utilities: {
+					baseRent: 12e3,
+					gas: 1100,
+					gasType: "lpg",
+					electricity: 1800,
+					electricityType: "postpaid",
+					water: 0,
+					serviceCharge: 0
+				},
+				images: [
+					"/listings/thakurgaon-house.jpg",
+					"/listings/rangpur-flat.jpg",
+					"/listings/uttara-building.jpg",
+					"/listings/dhanmondi-living.jpg"
+				],
+				contact: {
+					phone: "+8801718456120",
+					whatsapp: true,
+					telegram: false,
+					teams: false,
+					imo: true
+				},
+				availableFrom: "2026-10-01",
+				createdAt: "2026-09-01T04:10:00.000Z",
+				pin: "3344",
+				source: "mock"
+			},
+			{
+				id: "post-agrabad-office",
+				title: "Agrabad commercial floor, 1,200 sft, lift and AC",
+				description: "Entire 3rd-floor commercial unit on CDA Avenue. Four cabins plus an open hall, two washrooms, and passenger lift. Suitable for a trading office or logistics desk near the port. Rent quoted exclusive of electricity.",
+				category: "office",
+				tenantType: "family",
+				location: {
+					division: "Chattogram",
+					district: "Chattogram",
+					thana: "Double Mooring",
+					area: "Agrabad"
+				},
+				utilities: {
+					baseRent: 55e3,
+					gas: 0,
+					gasType: "included",
+					electricity: 8e3,
+					electricityType: "postpaid",
+					water: 700,
+					serviceCharge: 3500
+				},
+				images: [
+					"/listings/agrabad-office.jpg",
+					"/listings/motijheel-office.jpg",
+					"/listings/gulshan-apt.jpg"
+				],
+				contact: {
+					phone: "+8801819002211",
+					whatsapp: true,
+					telegram: true,
+					teams: true,
+					imo: false,
+					telegramHandle: "ctg_commercial",
+					teamsLink: "https://teams.microsoft.com/"
+				},
+				availableFrom: "2026-09-20",
+				createdAt: "2026-08-22T09:00:00.000Z",
+				pin: "8821",
+				source: "mock"
+			},
+			{
+				id: "post-sylhet-sublet",
+				title: "Sylhet sublet room for female students, Zindabazar",
+				description: "Attached-bath single room in a family flat, five minutes from Zindabazar. Study table, almirah, and independent entry after 8pm with the landlady. Female students only. Wi-Fi shared.",
+				category: "sublet_room",
+				tenantType: "bachelor_female",
+				location: {
+					division: "Sylhet",
+					district: "Sylhet",
+					thana: "Sylhet Sadar",
+					area: "Zindabazar"
+				},
+				utilities: {
+					baseRent: 8500,
+					gas: 0,
+					gasType: "included",
+					electricity: 900,
+					electricityType: "prepaid",
+					water: 200,
+					serviceCharge: 400
+				},
+				images: [
+					"/listings/sylhet-room.jpg",
+					"/listings/mohammadpur-room.jpg",
+					"/listings/mirpur-mess.jpg",
+					"/listings/rangpur-flat.jpg"
+				],
+				contact: {
+					phone: "+8801715567890",
+					whatsapp: true,
+					telegram: false,
+					teams: false,
+					imo: true
+				},
+				availableFrom: "2026-10-05",
+				createdAt: "2026-09-07T13:15:00.000Z",
+				pin: "2509",
+				source: "mock"
+			},
+			{
+				id: "post-uttara-duplex",
+				title: "Uttara Sector 7 duplex, playground downstairs",
+				description: "Ground-plus-one duplex in a quiet Sector 7 lane. Four bedrooms, rooftop access, and a small community playground. Walking distance to Azampur and Rajlakshmi. Family with children preferred.",
+				category: "house_flat",
+				tenantType: "family",
+				location: {
+					division: "Dhaka",
+					district: "Dhaka",
+					thana: "Uttara",
+					area: "Sector 7"
+				},
+				utilities: {
+					baseRent: 48e3,
+					gas: 1e3,
+					gasType: "line",
+					electricity: 4e3,
+					electricityType: "prepaid",
+					water: 700,
+					serviceCharge: 2e3
+				},
+				images: [
+					"/listings/uttara-building.jpg",
+					"/listings/dhanmondi-living.jpg",
+					"/listings/gulshan-apt.jpg",
+					"/listings/rangpur-flat.jpg",
+					"/listings/thakurgaon-house.jpg"
+				],
+				contact: {
+					phone: "+8801612345678",
+					whatsapp: true,
+					telegram: false,
+					teams: false,
+					imo: false
+				},
+				availableFrom: "2026-11-01",
+				createdAt: "2026-09-04T10:00:00.000Z",
+				pin: "6677",
+				source: "mock"
+			},
+			{
+				id: "post-mohammadpur-room",
+				title: "Mohammadpur female-only single room, Shyamoli bus",
+				description: "Single room with attached bath in a family-run building near Shyamoli bus stand. Independent lock, filtered water, and CCTV on the stair. Female working professionals or students. No overnight guests.",
+				category: "sublet_room",
+				tenantType: "bachelor_female",
+				location: {
+					division: "Dhaka",
+					district: "Dhaka",
+					thana: "Mohammadpur",
+					area: "Shyamoli"
+				},
+				utilities: {
+					baseRent: 9500,
+					gas: 350,
+					gasType: "lpg",
+					electricity: 700,
+					electricityType: "prepaid",
+					water: 200,
+					serviceCharge: 250
+				},
+				images: [
+					"/listings/mohammadpur-room.jpg",
+					"/listings/sylhet-room.jpg",
+					"/listings/dhanmondi-living.jpg"
+				],
+				contact: {
+					phone: "+8801918003344",
+					whatsapp: true,
+					telegram: true,
+					teams: false,
+					imo: true,
+					telegramHandle: "shyamoli_room"
+				},
+				availableFrom: "2026-09-10",
+				createdAt: "2026-08-30T07:45:00.000Z",
+				pin: "0912",
+				source: "mock"
+			},
+			{
+				id: "post-motijheel-cabin",
+				title: "Motijheel office cabin opposite Shapla Chattar",
+				description: "350 sft glass cabin on the 6th floor, two workstations, and shared reception. Opposite Shapla Chattar with easy rickshaw access from GPO. Suitable for a consultancy or trading desk.",
+				category: "office",
+				tenantType: "family",
+				location: {
+					division: "Dhaka",
+					district: "Dhaka",
+					thana: "Motijheel",
+					area: "Shapla Chattar"
+				},
+				utilities: {
+					baseRent: 28e3,
+					gas: 0,
+					gasType: "included",
+					electricity: 3500,
+					electricityType: "postpaid",
+					water: 400,
+					serviceCharge: 1800
+				},
+				images: [
+					"/listings/motijheel-office.jpg",
+					"/listings/agrabad-office.jpg",
+					"/listings/gulshan-apt.jpg"
+				],
+				contact: {
+					phone: "+8801711002299",
+					whatsapp: true,
+					telegram: false,
+					teams: true,
+					imo: false,
+					teamsLink: "https://teams.microsoft.com/"
+				},
+				availableFrom: "2026-09-01",
+				createdAt: "2026-08-18T05:00:00.000Z",
+				pin: "4401",
+				source: "mock"
+			},
+			{
+				id: "post-rangpur-medical",
+				title: "Rangpur Sadar 2-bed near medical college",
+				description: "Second-floor 2-bed flat, ten minutes' walk from Rangpur Medical College. Dedicated parking for one motorcycle. Family or doctor couple. Line gas in the kitchen.",
+				category: "house_flat",
+				tenantType: "family",
+				location: {
+					division: "Rangpur",
+					district: "Rangpur",
+					thana: "Rangpur Sadar",
+					area: "Medical College"
+				},
+				utilities: {
+					baseRent: 16e3,
+					gas: 800,
+					gasType: "line",
+					electricity: 1600,
+					electricityType: "prepaid",
+					water: 300,
+					serviceCharge: 500
+				},
+				images: [
+					"/listings/rangpur-flat.jpg",
+					"/listings/dhanmondi-living.jpg",
+					"/listings/thakurgaon-house.jpg",
+					"/listings/uttara-building.jpg"
+				],
+				contact: {
+					phone: "+8801713334455",
+					whatsapp: true,
+					telegram: false,
+					teams: false,
+					imo: true
+				},
+				availableFrom: "2026-10-01",
+				createdAt: "2026-09-03T12:00:00.000Z",
+				pin: "1288",
+				source: "mock"
+			},
+			{
+				id: "post-pirganj-room",
+				title: "Pirganj thana single room, attached bath",
+				description: "Newly plastered single room behind Pirganj Bazar, attached bath, and a shared courtyard. Suitable for a bachelor posted to the thana or a college student. Rent is negotiable for a 12-month stay.",
+				category: "sublet_room",
+				tenantType: "bachelor_male",
+				location: {
+					division: "Rangpur",
+					district: "Thakurgaon",
+					thana: "Pirganj",
+					area: "Pirganj Bazar"
+				},
+				utilities: {
+					baseRent: 4500,
+					gas: 500,
+					gasType: "lpg",
+					electricity: 600,
+					electricityType: "prepaid",
+					water: 0,
+					serviceCharge: 0
+				},
+				images: [
+					"/listings/thakurgaon-house.jpg",
+					"/listings/mirpur-mess.jpg",
+					"/listings/sylhet-room.jpg"
+				],
+				contact: {
+					phone: "+8801716677889",
+					whatsapp: true,
+					telegram: false,
+					teams: false,
+					imo: true
+				},
+				availableFrom: "2026-09-05",
+				createdAt: "2026-08-29T03:20:00.000Z",
+				pin: "5151",
+				source: "mock"
+			},
+			{
+				id: "post-khulshi-hills",
+				title: "Khulshi hillside 3-bed with sea-breeze evenings",
+				description: "Top-floor 3-bed in Khulshi Hills. Cross-ventilation, mosaic floors, and a west balcony that catches the evening breeze. Family tenants. Fifteen minutes down to GEC Circle.",
+				category: "house_flat",
+				tenantType: "family",
+				location: {
+					division: "Chattogram",
+					district: "Chattogram",
+					thana: "Khulshi",
+					area: "Khulshi Hills"
+				},
+				utilities: {
+					baseRent: 32e3,
+					gas: 900,
+					gasType: "line",
+					electricity: 2800,
+					electricityType: "postpaid",
+					water: 500,
+					serviceCharge: 1500
+				},
+				images: [
+					"/listings/gulshan-apt.jpg",
+					"/listings/dhanmondi-living.jpg",
+					"/listings/uttara-building.jpg",
+					"/listings/rangpur-flat.jpg"
+				],
+				contact: {
+					phone: "+8801812233445",
+					whatsapp: true,
+					telegram: false,
+					teams: false,
+					imo: false
+				},
+				availableFrom: "2026-10-10",
+				createdAt: "2026-09-06T14:30:00.000Z",
+				pin: "9090",
+				source: "mock"
+			}
+		],
+		selectedPostId: null
+	},
+	reducers: {
+		addPost(state, action) {
+			state.posts.unshift(action.payload);
+		},
+		hydrateUserPosts(state, action) {
+			const existing = new Set(state.posts.map((p) => p.id));
+			const incoming = action.payload.filter((p) => p.source === "user" && !existing.has(p.id));
+			if (incoming.length > 0) state.posts = [...incoming, ...state.posts];
+		},
+		selectPost(state, action) {
+			state.selectedPostId = action.payload;
+		},
+		removePost(state, action) {
+			const post = state.posts.find((p) => p.id === action.payload.id);
+			if (!post || post.pin !== action.payload.pin) return;
+			state.posts = state.posts.filter((p) => p.id !== action.payload.id);
+			if (state.selectedPostId === action.payload.id) state.selectedPostId = null;
+		}
+	}
+});
+var { addPost, hydrateUserPosts, selectPost, removePost } = postSlice.actions;
+var postSlice_default = postSlice.reducer;
+function makeStore() {
+	return configureStore({
+		reducer: {
+			filters: filterSlice_default,
+			posts: postSlice_default,
+			ui: uiSlice_default,
+			[baseApi.reducerPath]: baseApi.reducer
+		},
+		middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(baseApi.middleware)
+	});
+}
+var STORAGE_KEY = "thikana.user-posts.v1";
+function ReduxProvider({ children }) {
+	const [store] = (0, import_react.useState)(() => makeStore());
+	(0, import_react.useEffect)(() => {
+		try {
+			const raw = window.localStorage.getItem(STORAGE_KEY);
+			if (raw) {
+				const parsed = JSON.parse(raw);
+				if (Array.isArray(parsed)) store.dispatch(hydrateUserPosts(parsed));
+			}
+		} catch {}
+		return store.subscribe(() => {
+			const userPosts = store.getState().posts.posts.filter((post) => post.source === "user");
+			try {
+				window.localStorage.setItem(STORAGE_KEY, JSON.stringify(userPosts));
+			} catch {}
+		});
+	}, [store]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Provider_default, {
+		store,
+		children
+	});
+}
 function CostBreakdown({ utilities, compact = false }) {
 	const total = totalMonthlyCost(utilities);
 	const rows = [
@@ -59,6 +905,61 @@ function CostBreakdown({ utilities, compact = false }) {
 				children: formatBdt(total)
 			})]
 		})]
+	});
+}
+function Checkbox({ className, ...props }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Checkbox$1, {
+		className: cn("peer size-5 shrink-0 rounded-xs border border-border bg-surface shadow-[var(--shadow-border)] focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground", className),
+		...props,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckboxIndicator, {
+			className: "flex items-center justify-center text-current",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-3.5" })
+		})
+	});
+}
+var Dialog = Dialog$1;
+var DialogPortal = DialogPortal$1;
+function DialogOverlay({ className, ...props }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogOverlay$1, {
+		className: cn("fixed inset-0 z-50 bg-overlay data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0", className),
+		...props
+	});
+}
+function DialogContent({ className, children, ...props }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogPortal, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogOverlay, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogContent$1, {
+		className: cn("fixed top-1/2 left-1/2 z-50 grid w-[calc(100%-1.5rem)] max-w-2xl -translate-x-1/2 -translate-y-1/2 gap-4 overflow-hidden rounded-xl border border-border bg-surface p-5 shadow-[var(--shadow-lift)] outline-none sm:p-6", "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95", className),
+		...props,
+		children: [children, /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogClose, {
+			className: "absolute top-3 right-3 inline-flex size-11 items-center justify-center rounded-md text-muted transition-colors hover:bg-secondary hover:text-fg focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "size-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "sr-only",
+				children: "Close"
+			})]
+		})]
+	})] });
+}
+function DialogHeader({ className, ...props }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: cn("flex flex-col gap-1.5 pr-10", className),
+		...props
+	});
+}
+function DialogTitle({ className, ...props }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle$1, {
+		className: cn("font-display text-xl font-medium tracking-tight text-fg", className),
+		...props
+	});
+}
+function DialogDescription({ className, ...props }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogDescription$1, {
+		className: cn("text-sm leading-relaxed text-muted", className),
+		...props
+	});
+}
+function Label({ className, ...props }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root, {
+		className: cn("text-xs font-medium tracking-wide text-muted", className),
+		...props
 	});
 }
 var DIVISIONS = [
@@ -5434,104 +6335,1135 @@ function locationLabel(parts) {
 var getDeviceVisitorId = async () => {
 	return (await (await index.load()).get()).visitorId;
 };
-function ContactActions({ contact, size = "default", className }) {
-	const digits = digitsPhone(contact.phone || "");
-	const wa = digits.startsWith("880") ? digits : digits.replace(/^0/, "880");
-	const tel = digits.startsWith("880") ? `+${digits}` : contact.phone;
-	const telegramHref = contact.telegramHandle ? `https://t.me/${contact.telegramHandle.replace(/^@/, "")}` : `https://t.me/+${wa}`;
-	const actions = [
-		{
-			key: "call",
-			label: "Call",
-			href: `tel:${tel}`,
-			icon: Phone,
-			show: Boolean(contact.phone),
-			external: false
-		},
-		{
-			key: "whatsapp",
-			label: "WhatsApp",
-			href: `https://wa.me/${wa}`,
-			icon: MessageCircle,
-			show: Boolean(contact.whatsapp),
-			external: true
-		},
-		{
-			key: "telegram",
-			label: "Telegram",
-			href: telegramHref,
-			icon: Send,
-			show: Boolean(contact.telegram),
-			external: true
-		},
-		{
-			key: "imo",
-			label: "IMO",
-			href: `tel:${tel}`,
-			icon: Video,
-			show: Boolean(contact.imo),
-			external: false
-		},
-		{
-			key: "teams",
-			label: "Teams",
-			href: contact.teamsLink || "https://teams.microsoft.com/",
-			icon: Users,
-			show: Boolean(contact.teams),
-			external: true
+var PARKING_LABEL = {
+	none: "No parking",
+	car: "Car parking",
+	bike: "Bike / motorcycle parking",
+	car_and_bike: "Car & bike parking",
+	garage: "Private garage",
+	street: "Street parking",
+	not_available: "Not available"
+};
+var EMPTY_UTILITIES = {
+	baseRent: 15e3,
+	gas: 800,
+	gasType: "line",
+	electricity: 1500,
+	electricityType: "prepaid",
+	water: 400,
+	serviceCharge: 500
+};
+var MAX_IMAGES = 5;
+var CREATE_CATEGORIES = ["house_flat", "sublet_room"];
+var INITIAL = {
+	division: "",
+	district: "",
+	thana: "",
+	area: "",
+	useLiveLocation: false,
+	address: "",
+	liveLocationUrl: "",
+	title: "",
+	description: "",
+	category: "house_flat",
+	tenantType: "family",
+	parking: "none",
+	utilities: EMPTY_UTILITIES,
+	images: [],
+	phone: "",
+	whatsapp: true,
+	telegram: false,
+	teams: false,
+	imo: true,
+	telegramHandle: "",
+	teamsLink: "",
+	availableFrom: "",
+	pin: ""
+};
+var STEPS = [
+	{
+		key: "location",
+		label: "Location"
+	},
+	{
+		key: "listing",
+		label: "Listing"
+	},
+	{
+		key: "costs",
+		label: "Costs"
+	},
+	{
+		key: "photos",
+		label: "Photos"
+	},
+	{
+		key: "contact",
+		label: "Contact"
+	}
+];
+/** Minimum length required for the secret PIN. Any character type is allowed. */
+var MIN_PIN_LENGTH = 6;
+var UNKNOWN_META = {
+	os: "Unknown",
+	browser: "Unknown",
+	device: "Unknown",
+	ipAddress: "0.0.0.0"
+};
+function CreatePostModal() {
+	const { t } = usePreferences();
+	const text = (key, values = {}) => Object.entries(values).reduce((result, [name, value]) => result.replace(`{${name}}`, String(value)), t(key));
+	const dispatch = useAppDispatch();
+	const open = useAppSelector((s) => s.ui.createPostOpen);
+	const [form, setForm] = (0, import_react.useState)(INITIAL);
+	const [error, setError] = (0, import_react.useState)(null);
+	const [formVersion, setFormVersion] = (0, import_react.useState)(0);
+	const [stepIndex, setStepIndex] = (0, import_react.useState)(0);
+	const [submitting, setSubmitting] = (0, import_react.useState)(false);
+	const localizedSteps = STEPS.map((stepItem) => ({
+		...stepItem,
+		label: t(stepItem.key === "location" ? "location" : stepItem.key === "listing" ? "title" : stepItem.key === "costs" ? "monthlyTotal" : stepItem.key === "photos" ? "addPhotos" : "phone")
+	}));
+	const step = STEPS[stepIndex].key;
+	const isFirstStep = stepIndex === 0;
+	const isLastStep = stepIndex === STEPS.length - 1;
+	const division = findDivision(form.division || null);
+	const district = findDistrict(form.division || null, form.district || null);
+	const thana = findThana(form.division || null, form.district || null, form.thana || null);
+	const [houseListing] = useHouseListingMutation();
+	const liveUtilities = (0, import_react.useMemo)(() => {
+		const next = { ...form.utilities };
+		if (next.gasType === "included") next.gas = 0;
+		if (next.electricityType === "included") next.electricity = 0;
+		return next;
+	}, [form.utilities]);
+	const imagePreviews = (0, import_react.useMemo)(() => form.images.map((file) => URL.createObjectURL(file)), [form.images]);
+	(0, import_react.useEffect)(() => {
+		return () => {
+			imagePreviews.forEach((url) => URL.revokeObjectURL(url));
+		};
+	}, [imagePreviews]);
+	function patch(partial) {
+		setForm((prev) => ({
+			...prev,
+			...partial
+		}));
+	}
+	function patchUtilities(partial) {
+		setForm((prev) => ({
+			...prev,
+			utilities: {
+				...prev.utilities,
+				...partial
+			}
+		}));
+	}
+	function resetWizard() {
+		setForm(INITIAL);
+		setFormVersion((v) => v + 1);
+		setError(null);
+		setStepIndex(0);
+	}
+	function close() {
+		dispatch(closeCreatePost());
+	}
+	/**
+	* Synchronous, never-throwing. Any failure inside DeviceDetector (e.g. an
+	* unusual/unparseable user agent string) falls back to "Unknown" fields
+	* instead of aborting the caller.
+	*/
+	function getDeviceInfo() {
+		try {
+			const detector = new import_dist.default();
+			const userAgent = navigator.userAgent;
+			const result = detector.parse(userAgent);
+			const os = result.os?.name ?? "Unknown";
+			const browser = result.client?.name ?? "Unknown";
+			const rawType = result.device?.type ?? "desktop";
+			return {
+				os,
+				browser,
+				device: rawType.charAt(0).toUpperCase() + rawType.slice(1)
+			};
+		} catch (err) {
+			console.error("Device detection failed, using fallback values:", err);
+			return {
+				os: UNKNOWN_META.os,
+				browser: UNKNOWN_META.browser,
+				device: UNKNOWN_META.device
+			};
 		}
-	].filter((a) => a.show);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: `flex flex-wrap gap-2 ${className ?? ""}`,
-		children: actions.map((action) => {
-			const Icon = action.icon;
-			return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-				size,
-				variant: "outline",
-				asChild: true,
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-					href: action.href,
-					target: action.external ? "_blank" : void 0,
-					rel: action.external ? "noopener noreferrer" : void 0,
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, { className: "h-4 w-4 shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: action.label })]
+	}
+	/**
+	* Never-throwing. Applies a timeout so a slow/blocked network call can't
+	* hang form submission indefinitely, and always resolves with a usable
+	* fallback string on any failure.
+	*/
+	async function getPublicIP() {
+		const controller = new AbortController();
+		const timeout = setTimeout(() => controller.abort(), 4e3);
+		try {
+			const res = await fetch("https://api.ipify.org?format=json", { signal: controller.signal });
+			if (!res.ok) throw new Error(`ipify responded with ${res.status}`);
+			const ipData = await res.json();
+			return typeof ipData?.ip === "string" ? ipData.ip : UNKNOWN_META.ipAddress;
+		} catch (err) {
+			console.error("Public IP lookup failed, using fallback value:", err);
+			return UNKNOWN_META.ipAddress;
+		} finally {
+			clearTimeout(timeout);
+		}
+	}
+	/** Combines both lookups with a shared safety net. */
+	async function collectSubmissionMeta() {
+		try {
+			const deviceInfo = getDeviceInfo();
+			const ipAddress = await getPublicIP();
+			return {
+				...deviceInfo,
+				ipAddress
+			};
+		} catch (err) {
+			console.error("Unexpected error collecting submission metadata:", err);
+			return UNKNOWN_META;
+		}
+	}
+	async function onFiles(files) {
+		if (!files) return;
+		const remaining = MAX_IMAGES - form.images.length;
+		if (remaining <= 0) return;
+		const picked = Array.from(files).filter((f) => f.type.startsWith("image/")).slice(0, remaining);
+		patch({ images: [...form.images, ...picked] });
+	}
+	function validateStep(key) {
+		if (key === "location") {
+			if (!form.division || !form.district || !form.thana) return t("locationRequired");
+			if (form.useLiveLocation) {
+				if (!form.liveLocationUrl.trim()) return t("liveLocationRequired");
+			} else if (!form.address.trim()) return t("addressRequired");
+			return null;
+		}
+		if (key === "listing") {
+			if (!form.title.trim()) return t("titleRequired");
+			if (!form.availableFrom) return t("dateRequired");
+			return null;
+		}
+		if (key === "costs") {
+			if (!form.utilities.baseRent || form.utilities.baseRent <= 0) return t("rentRequired");
+			if (!form.utilities.gasType) return t("gasRequired");
+			if (!form.utilities.electricityType) return t("electricityRequired");
+			return null;
+		}
+		if (key === "photos") return null;
+		if (key === "contact") {
+			if (!form.phone.trim()) return t("phoneRequired");
+			if (form.pin.length < MIN_PIN_LENGTH) return text("pinRequired", { count: MIN_PIN_LENGTH });
+			return null;
+		}
+		return null;
+	}
+	function goNext() {
+		const message = validateStep(step);
+		if (message) {
+			setError(message);
+			return;
+		}
+		setError(null);
+		setStepIndex((i) => Math.min(i + 1, STEPS.length - 1));
+	}
+	function goBack() {
+		setError(null);
+		setStepIndex((i) => Math.max(i - 1, 0));
+	}
+	function jumpToStep(index) {
+		if (index <= stepIndex) {
+			setError(null);
+			setStepIndex(index);
+		}
+	}
+	/**
+	* Runs only after a confirmed successful create response. Committing the
+	* new post, wiping the wizard's form state, and closing the dialog happen
+	* together here as one unit — there's no path where the form is cleared
+	* without the modal closing, or vice versa, and this is never reached on
+	* a failed/soft-failed submit.
+	*/
+	function finalizeSuccessfulSubmit(newPost, message) {
+		dispatch(addPost(newPost));
+		resetWizard();
+		close();
+		toast.success(message);
+	}
+	async function onSubmit(event) {
+		event.preventDefault();
+		for (const s of STEPS) {
+			const message = validateStep(s.key);
+			if (message) {
+				const idx = STEPS.findIndex((x) => x.key === s.key);
+				setStepIndex(idx);
+				setError(message);
+				return;
+			}
+		}
+		setSubmitting(true);
+		setError(null);
+		try {
+			const contact = {
+				phone: form.phone.trim(),
+				whatsapp: form.whatsapp,
+				telegram: form.telegram,
+				teams: form.teams,
+				imo: form.imo,
+				telegramHandle: form.telegramHandle.trim() || void 0,
+				teamsLink: form.teamsLink.trim() || void 0
+			};
+			const { os, browser, device, ipAddress } = await collectSubmissionMeta();
+			const deviceId = await getDeviceVisitorId();
+			const postPayload = {
+				title: form.title.trim(),
+				description: form.description.trim(),
+				category: CREATE_CATEGORIES.includes(form.category) ? form.category : CREATE_CATEGORIES[0],
+				tenantType: form.tenantType,
+				location: {
+					division: form.division,
+					district: form.district,
+					thana: form.thana,
+					area: form.area || form.thana
+				},
+				address: form.useLiveLocation ? void 0 : form.address.trim(),
+				liveLocationUrl: form.useLiveLocation ? form.liveLocationUrl.trim() : void 0,
+				parking: form.parking,
+				utilities: liveUtilities,
+				contact,
+				availableFrom: form.availableFrom,
+				pin: form.pin,
+				source: "user",
+				os,
+				browser,
+				device,
+				ipAddress,
+				deviceId
+			};
+			const formData = new FormData();
+			formData.append("data", JSON.stringify(postPayload));
+			form.images.forEach((file) => {
+				formData.append("photo", file, file.name);
+			});
+			const response = await houseListing(formData).unwrap();
+			if (!response?.status) {
+				setError(response?.message || t("postFailed"));
+				return;
+			}
+			finalizeSuccessfulSubmit({
+				...postPayload,
+				id: response.data?.id,
+				createdAt: response.data?.createdAt,
+				images: imagePreviews
+			}, response.message || t("postSuccess"));
+		} catch (err) {
+			console.error("Failed to submit listing:", err);
+			const apiData = err?.data;
+			const message = apiData?.message || apiData?.error || (typeof apiData === "string" ? apiData : null) || (apiData && typeof apiData === "object" ? Object.values(apiData).flat().filter(Boolean).join(", ") : null) || err?.error || err?.message || t("postTryAgain");
+			setError(message);
+		} finally {
+			setSubmitting(false);
+		}
+	}
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dialog, {
+		open,
+		onOpenChange: (next) => {
+			if (!next) close();
+		},
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogContent, {
+			className: "flex max-w-lg flex-col gap-0 p-0",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogHeader, {
+					className: "border-b border-border px-4 py-3 sm:px-5",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, {
+						className: "text-base",
+						children: t("postListingTitle")
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogDescription, {
+						className: "text-xs",
+						children: text("stepOf", {
+							current: stepIndex + 1,
+							total: STEPS.length
+						})
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "flex items-center gap-1 border-b border-border bg-bg-elevated px-4 py-2 sm:px-5",
+					children: localizedSteps.map((s, i) => {
+						const isDone = i < stepIndex;
+						const isActive = i === stepIndex;
+						return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							type: "button",
+							onClick: () => jumpToStep(i),
+							disabled: i > stepIndex,
+							title: s.label,
+							className: "flex flex-1 flex-col items-center gap-1 disabled:cursor-not-allowed",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "flex size-6 items-center justify-center rounded-full text-[11px] font-medium transition-colors " + (isActive ? "bg-primary text-primary-foreground" : isDone ? "bg-primary/20 text-primary" : "bg-secondary text-muted"),
+								children: isDone ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-3" }) : i + 1
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "hidden text-[10px] sm:block " + (isActive ? "font-medium text-fg" : "text-muted"),
+								children: s.label
+							})]
+						}, s.key);
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+					id: "create-post-form",
+					onSubmit,
+					className: "flex max-h-[65vh] flex-col gap-4 overflow-y-auto px-4 py-4 sm:px-5",
+					children: [
+						step === "location" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+							className: "grid gap-2.5 sm:grid-cols-2",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, {
+									label: t("division"),
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(NativeSelect, {
+										required: true,
+										value: form.division,
+										onChange: (e) => patch({
+											division: e.target.value,
+											district: "",
+											thana: "",
+											area: ""
+										}),
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+											value: "",
+											children: t("selectDivision")
+										}), DIVISIONS.map((d) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+											value: d.name,
+											children: d.name
+										}, d.name))]
+									})
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, {
+									label: t("district"),
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(NativeSelect, {
+										required: true,
+										disabled: !division,
+										value: form.district,
+										onChange: (e) => patch({
+											district: e.target.value,
+											thana: "",
+											area: ""
+										}),
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+											value: "",
+											children: t("selectDistrict")
+										}), division?.districts.map((d) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+											value: d.name,
+											children: d.name
+										}, d.name))]
+									})
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, {
+									label: t("thana"),
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(NativeSelect, {
+										required: true,
+										disabled: !district,
+										value: form.thana,
+										onChange: (e) => patch({
+											thana: e.target.value,
+											area: ""
+										}),
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+											value: "",
+											children: t("selectThana")
+										}), district?.thanas.map((t) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+											value: t.name,
+											children: t.name
+										}, t.name))]
+									})
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, {
+									label: t("area"),
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(NativeSelect, {
+										disabled: !thana,
+										value: form.area,
+										onChange: (e) => patch({ area: e.target.value }),
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+											value: "",
+											children: t("selectArea")
+										}), thana?.areas.map((a) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+											value: a,
+											children: a
+										}, a))]
+									})
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "col-span-full flex items-center gap-2 pt-1",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Checkbox, {
+										id: "use-live-location",
+										checked: form.useLiveLocation,
+										onCheckedChange: (v) => patch({ useLiveLocation: v === true })
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+										htmlFor: "use-live-location",
+										className: "text-xs",
+										children: t("shareLiveLocation")
+									})]
+								}),
+								form.useLiveLocation ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "col-span-full",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, {
+										label: t("liveLocationUrl"),
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "relative",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+												required: true,
+												type: "url",
+												className: "pl-9",
+												placeholder: "https://maps.google.com/...",
+												value: form.liveLocationUrl,
+												onChange: (e) => patch({ liveLocationUrl: e.target.value })
+											})]
+										})
+									})
+								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "col-span-full",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, {
+										label: t("fullAddress"),
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "relative",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, { className: "pointer-events-none absolute top-3 left-3 size-4 text-muted" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
+												required: true,
+												className: "min-h-16 pl-9",
+												placeholder: t("addressPlaceholder"),
+												value: form.address,
+												onChange: (e) => patch({ address: e.target.value })
+											})]
+										})
+									})
+								})
+							]
+						}) : null,
+						step === "listing" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+							className: "flex flex-col gap-2.5",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, {
+									label: t("title"),
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+										required: true,
+										maxLength: 90,
+										value: form.title,
+										onChange: (e) => patch({ title: e.target.value }),
+										placeholder: t("titlePlaceholder")
+									})
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, {
+									label: t("description"),
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DescriptionEditor, {
+										value: form.description,
+										onChange: (html) => patch({ description: html })
+									}, formVersion)
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "grid gap-2.5 sm:grid-cols-2",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, {
+											label: t("category"),
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(NativeSelect, {
+												value: form.category,
+												onChange: (e) => patch({ category: e.target.value }),
+												children: CREATE_CATEGORIES.map((key) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+													value: key,
+													children: t({
+														house_flat: "houseFlat",
+														sublet_room: "subletRoom",
+														mess: "mess",
+														office: "office"
+													}[key])
+												}, key))
+											})
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, {
+											label: t("tenant"),
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(NativeSelect, {
+												value: form.tenantType,
+												onChange: (e) => patch({ tenantType: e.target.value }),
+												children: Object.keys(TENANT_LABEL).map((key) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+													value: key,
+													children: t({
+														family: "family",
+														bachelor_male: "bachelorMale",
+														bachelor_female: "bachelorFemale",
+														office: "office"
+													}[key])
+												}, key))
+											})
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, {
+											label: t("parkingSpace"),
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(NativeSelect, {
+												value: form.parking,
+												onChange: (e) => patch({ parking: e.target.value }),
+												children: Object.keys(PARKING_LABEL).map((key) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+													value: key,
+													children: t({
+														none: "noParking",
+														car: "carParking",
+														bike: "bikeParking",
+														car_and_bike: "carBikeParking",
+														garage: "privateGarage",
+														street: "streetParking",
+														not_available: "notAvailable"
+													}[key])
+												}, key))
+											})
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, {
+											label: t("availableFromLabel"),
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+												type: "date",
+												required: true,
+												className: "field",
+												value: form.availableFrom,
+												onChange: (e) => patch({ availableFrom: e.target.value })
+											})
+										})
+									]
+								})
+							]
+						}) : null,
+						step === "costs" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+							className: "flex flex-col gap-2.5",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "grid gap-2.5 sm:grid-cols-2",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, {
+										label: t("baseRentRequired"),
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+											required: true,
+											type: "number",
+											min: 1,
+											step: 100,
+											value: form.utilities.baseRent,
+											onChange: (e) => patchUtilities({ baseRent: Number(e.target.value) || 0 })
+										})
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, {
+										label: t("gasTypeRequired"),
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(NativeSelect, {
+											required: true,
+											value: form.utilities.gasType,
+											onChange: (e) => patchUtilities({ gasType: e.target.value }),
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+													value: "line",
+													children: t("lineGas")
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+													value: "lpg",
+													children: t("cylinderLpg")
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+													value: "included",
+													children: t("included")
+												})
+											]
+										})
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, {
+										label: t("gasBillOptional"),
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+											type: "number",
+											min: 0,
+											disabled: form.utilities.gasType === "included",
+											value: form.utilities.gas,
+											onChange: (e) => patchUtilities({ gas: Number(e.target.value) || 0 })
+										})
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, {
+										label: t("electricityTypeRequired"),
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(NativeSelect, {
+											required: true,
+											value: form.utilities.electricityType,
+											onChange: (e) => patchUtilities({ electricityType: e.target.value }),
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+													value: "prepaid",
+													children: t("prepaid")
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+													value: "postpaid",
+													children: t("postpaid")
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+													value: "included",
+													children: t("included")
+												})
+											]
+										})
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, {
+										label: t("electricityBillOptional"),
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+											type: "number",
+											min: 0,
+											disabled: form.utilities.electricityType === "included",
+											value: form.utilities.electricity,
+											onChange: (e) => patchUtilities({ electricity: Number(e.target.value) || 0 })
+										})
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, {
+										label: t("waterBillOptional"),
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+											type: "number",
+											min: 0,
+											value: form.utilities.water,
+											onChange: (e) => patchUtilities({ water: Number(e.target.value) || 0 })
+										})
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, {
+										label: t("serviceChargeOptional"),
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+											type: "number",
+											min: 0,
+											value: form.utilities.serviceCharge,
+											onChange: (e) => patchUtilities({ serviceCharge: Number(e.target.value) || 0 })
+										})
+									})
+								]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "rounded-lg border border-border bg-bg-elevated p-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CostBreakdown, { utilities: liveUtilities }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+									className: "mt-2 flex items-center justify-between border-t border-border pt-2 text-xs text-muted",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: t("totalMonthlyCost") }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "font-display text-sm font-medium tabular-nums text-primary",
+										children: formatBdt(totalMonthlyCost(liveUtilities))
+									})]
+								})]
+							})]
+						}) : null,
+						step === "photos" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+							className: "flex flex-col gap-2.5",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+								className: "flex h-20 items-center justify-center gap-2 rounded-lg border border-dashed border-border bg-bg-elevated text-sm text-muted transition-colors " + (form.images.length >= MAX_IMAGES ? "cursor-not-allowed opacity-60" : "cursor-pointer hover:bg-secondary"),
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ImagePlus, { className: "size-4" }),
+									form.images.length >= MAX_IMAGES ? text("maximumPhotos", { count: MAX_IMAGES }) : t("addPhotos"),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										type: "file",
+										accept: "image/*",
+										multiple: true,
+										disabled: form.images.length >= MAX_IMAGES,
+										className: "sr-only",
+										onChange: (e) => {
+											onFiles(e.target.files);
+											e.target.value = "";
+										}
+									})
+								]
+							}), form.images.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "grid grid-cols-5 gap-2",
+								children: form.images.map((file, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "relative aspect-square overflow-hidden rounded-md bg-secondary",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+										src: imagePreviews[index],
+										alt: "",
+										className: "size-full object-cover"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										type: "button",
+										className: "absolute top-1 right-1 inline-flex size-6 items-center justify-center rounded-full bg-fg/70 text-primary-foreground",
+										onClick: () => patch({ images: form.images.filter((_, i) => i !== index) }),
+										"aria-label": t("removePhoto"),
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "size-3" })
+									})]
+								}, `${file.name}-${file.lastModified}-${index}`))
+							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-xs text-muted",
+								children: text("optionalPhotos", { count: MAX_IMAGES })
+							})]
+						}) : null,
+						step === "contact" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+							className: "flex flex-col gap-2.5",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, {
+									label: t("phone"),
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+										required: true,
+										inputMode: "tel",
+										placeholder: "+88017XXXXXXXX",
+										value: form.phone,
+										onChange: (e) => patch({ phone: e.target.value })
+									})
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "grid gap-2 sm:grid-cols-2",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckRow, {
+											id: "ch-wa",
+											label: "WhatsApp",
+											checked: form.whatsapp,
+											onCheckedChange: (v) => patch({ whatsapp: v })
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckRow, {
+											id: "ch-tg",
+											label: "Telegram",
+											checked: form.telegram,
+											onCheckedChange: (v) => patch({ telegram: v })
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckRow, {
+											id: "ch-imo",
+											label: "IMO",
+											checked: form.imo,
+											onCheckedChange: (v) => patch({ imo: v })
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckRow, {
+											id: "ch-teams",
+											label: "Microsoft Teams",
+											checked: form.teams,
+											onCheckedChange: (v) => patch({ teams: v })
+										})
+									]
+								}),
+								form.telegram ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, {
+									label: t("telegramHandleOptional"),
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+										placeholder: "@username",
+										value: form.telegramHandle,
+										onChange: (e) => patch({ telegramHandle: e.target.value })
+									})
+								}) : null,
+								form.teams ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, {
+									label: t("teamsLinkOptional"),
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+										placeholder: "https://teams.microsoft.com/...",
+										value: form.teamsLink,
+										onChange: (e) => patch({ teamsLink: e.target.value })
+									})
+								}) : null,
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Field, {
+									label: text("secretPin", { count: MIN_PIN_LENGTH }),
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+										required: true,
+										type: "password",
+										minLength: MIN_PIN_LENGTH,
+										autoComplete: "new-password",
+										placeholder: t("secretPinPlaceholder"),
+										value: form.pin,
+										onChange: (e) => patch({ pin: e.target.value })
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "mt-1 text-[11px] text-muted",
+										children: text("secretPinHelp", { count: MIN_PIN_LENGTH })
+									})]
+								})
+							]
+						}) : null,
+						error ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-xs text-destructive",
+							role: "alert",
+							children: error
+						}) : null
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center justify-between gap-3 border-t border-border bg-bg-elevated px-4 py-2.5 sm:px-5",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+						type: "button",
+						variant: "ghost",
+						size: "sm",
+						onClick: isFirstStep ? close : goBack,
+						disabled: submitting,
+						children: isFirstStep ? t("cancel") : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowLeft, { className: "size-4" }),
+							" ",
+							t("back")
+						] })
+					}), isLastStep ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+						type: "submit",
+						form: "create-post-form",
+						size: "sm",
+						disabled: submitting,
+						children: submitting ? t("posting") : t("publishListing")
+					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+						type: "button",
+						size: "sm",
+						onClick: goNext,
+						children: [
+							t("next"),
+							" ",
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "size-4" })
+						]
+					})]
 				})
-			}, action.key);
+			]
 		})
 	});
 }
-function ChannelDots({ contact }) {
-	const channels = [
-		contact.whatsapp && "WhatsApp",
-		contact.telegram && "Telegram",
-		contact.imo && "IMO",
-		contact.teams && "Teams"
-	].filter(Boolean);
-	if (channels.length === 0) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-		className: "text-xs text-muted-foreground",
-		children: "Call only"
-	});
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: "flex flex-wrap items-center gap-1",
-		children: channels.map((name) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-			className: "rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium tracking-wide text-secondary-foreground uppercase",
-			children: name
-		}, name))
+function Field({ label, children }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+		className: "flex flex-col gap-1",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+			asChild: true,
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "text-xs",
+				children: label
+			})
+		}), children]
 	});
 }
-var badgeVariants = cva("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium tracking-wide", {
-	variants: { variant: {
-		default: "border-transparent bg-primary text-primary-foreground",
-		outline: "border-border bg-surface text-fg",
-		muted: "border-transparent bg-secondary text-secondary-foreground",
-		accent: "border-transparent bg-accent/15 text-primary"
-	} },
-	defaultVariants: { variant: "muted" }
+function CheckRow({ id, label, checked, onCheckedChange }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+		htmlFor: id,
+		className: "flex min-h-10 items-center gap-2.5 rounded-md border border-border bg-surface px-3",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Checkbox, {
+			id,
+			checked,
+			onCheckedChange: (v) => onCheckedChange(v === true)
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+			className: "text-xs",
+			children: label
+		})]
+	});
+}
+function DescriptionEditor({ value, onChange }) {
+	const { t } = usePreferences();
+	const editorRef = (0, import_react.useRef)(null);
+	const [mode, setMode] = (0, import_react.useState)("editing");
+	(0, import_react.useEffect)(() => {
+		if (editorRef.current) editorRef.current.innerHTML = value;
+	}, []);
+	function syncValue() {
+		if (editorRef.current) onChange(editorRef.current.innerHTML);
+	}
+	function exec(command, arg) {
+		editorRef.current?.focus();
+		document.execCommand(command, false, arg);
+		syncValue();
+	}
+	function insertLink() {
+		const url = window.prompt(t("enterUrl"));
+		if (url) exec("createLink", url);
+	}
+	if (mode === "collapsed") return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "flex flex-col gap-2 rounded-lg border border-border bg-surface p-2.5",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "prose prose-sm max-w-none text-xs [&_blockquote]:border-l-2 [&_blockquote]:border-border [&_blockquote]:pl-3 [&_blockquote]:italic [&_ol]:list-decimal [&_ol]:pl-5 [&_ul]:list-disc [&_ul]:pl-5",
+			dangerouslySetInnerHTML: { __html: value || `<p class='text-muted'>${t("noDescription")}</p>` }
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+			type: "button",
+			variant: "ghost",
+			size: "sm",
+			className: "w-fit",
+			onClick: () => setMode("editing"),
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PenLine, { className: "size-3.5" }),
+				" ",
+				t("editDescription")
+			]
+		})]
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "flex flex-col overflow-hidden rounded-lg border border-border",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "flex flex-wrap items-center gap-0.5 border-b border-border bg-bg-elevated px-1.5 py-1",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ToolbarBtn, {
+					icon: Bold,
+					label: t("bold"),
+					onClick: () => exec("bold")
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ToolbarBtn, {
+					icon: Italic,
+					label: t("italic"),
+					onClick: () => exec("italic")
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ToolbarBtn, {
+					icon: Underline,
+					label: t("underline"),
+					onClick: () => exec("underline")
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ToolbarBtn, {
+					icon: Strikethrough,
+					label: t("strikethrough"),
+					onClick: () => exec("strikeThrough")
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Divider, {}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ToolbarBtn, {
+					icon: Heading1,
+					label: t("headingOne"),
+					onClick: () => exec("formatBlock", "H1")
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ToolbarBtn, {
+					icon: Heading2,
+					label: t("headingTwo"),
+					onClick: () => exec("formatBlock", "H2")
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ToolbarBtn, {
+					icon: Quote,
+					label: t("quote"),
+					onClick: () => exec("formatBlock", "BLOCKQUOTE")
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Divider, {}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ToolbarBtn, {
+					icon: List,
+					label: t("bulletedList"),
+					onClick: () => exec("insertUnorderedList")
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ToolbarBtn, {
+					icon: ListOrdered,
+					label: t("numberedList"),
+					onClick: () => exec("insertOrderedList")
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ToolbarBtn, {
+					icon: Link2,
+					label: t("link"),
+					onClick: insertLink
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Divider, {}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ToolbarBtn, {
+					icon: Undo2,
+					label: t("undo"),
+					onClick: () => exec("undo")
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ToolbarBtn, {
+					icon: Redo2,
+					label: t("redo"),
+					onClick: () => exec("redo")
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ToolbarBtn, {
+					icon: Eraser,
+					label: t("clearFormatting"),
+					onClick: () => exec("removeFormat")
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "ml-auto",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+						type: "button",
+						variant: "ghost",
+						size: "sm",
+						onClick: () => {
+							syncValue();
+							setMode("collapsed");
+						},
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "size-3.5" }),
+							" ",
+							t("exitEditor")
+						]
+					})
+				})
+			]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			ref: editorRef,
+			contentEditable: true,
+			suppressContentEditableWarning: true,
+			onInput: syncValue,
+			onBlur: syncValue,
+			className: "min-h-24 max-h-48 overflow-y-auto px-3 py-2 text-sm outline-none [&_blockquote]:border-l-2 [&_blockquote]:border-border [&_blockquote]:pl-3 [&_blockquote]:italic [&_h1]:text-lg [&_h1]:font-semibold [&_h2]:text-base [&_h2]:font-semibold [&_ol]:list-decimal [&_ol]:pl-5 [&_ul]:list-disc [&_ul]:pl-5",
+			"data-placeholder": t("descriptionPlaceholder")
+		})]
+	});
+}
+function ToolbarBtn({ icon: Icon, label, onClick }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+		type: "button",
+		title: label,
+		"aria-label": label,
+		onClick,
+		className: "inline-flex size-7 items-center justify-center rounded-md text-muted transition-colors hover:bg-secondary hover:text-fg",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, { className: "size-3.5" })
+	});
+}
+function Divider() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "mx-1 h-5 w-px bg-border" });
+}
+var styles_default = "/assets/styles-fRPzfI8Y.css";
+var APP_NAME = "Thikana";
+var Route$3 = createRootRoute({
+	head: () => ({
+		meta: [
+			{ charSet: "utf-8" },
+			{
+				name: "viewport",
+				content: "width=device-width, initial-scale=1"
+			},
+			{ title: APP_NAME },
+			{
+				name: "description",
+				content: "Find a room, flat, mess, or office across Bangladesh. Filter by thana, tenant type, and monthly total."
+			},
+			{
+				name: "theme-color",
+				content: "#1e3d32"
+			}
+		],
+		links: [
+			{
+				rel: "icon",
+				type: "image/svg+xml",
+				href: "/favicon.svg"
+			},
+			{
+				rel: "stylesheet",
+				href: styles_default
+			},
+			{
+				rel: "stylesheet",
+				href: "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700&display=swap"
+			},
+			{
+				rel: "manifest",
+				href: "/__grok/manifest.webmanifest"
+			},
+			{
+				rel: "apple-touch-icon",
+				href: "/__grok/icon-180.png"
+			}
+		]
+	}),
+	component: () => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("html", {
+		lang: "en",
+		suppressHydrationWarning: true,
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("head", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(HeadContent, {}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("body", {
+			className: "antialiased",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PreviewHostBridge, {}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PreferencesProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AuthProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(ReduxProvider, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreatePostModal, {})] }) }) }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Scripts, {})
+			]
+		})]
+	})
 });
-function Badge({ className, variant, ...props }) {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: cn(badgeVariants({ variant }), className),
-		...props
+var $$splitComponentImporter$2 = () => import("./routes-CJNYwpr5.mjs");
+var Route$2 = createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter$2, "component") });
+/**
+* A filter "has a value" only when it is a real selection.
+* null, undefined, "", "all", "null" and "undefined" are all treated as unset.
+*/
+/** Returns `value` after it has stopped changing for `delay` ms. */
+/** e.g. [1, "gap", 4, 5, 6, "gap", 20] — keeps the pager short on many pages. */
+var $$splitComponentImporter$1 = () => import("./live-house-listing-Bd4Ibmzj.mjs");
+var Route$1 = createFileRoute("/live-house-listing")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
+var $$splitComponentImporter = () => import("./my-houses-BLvzvshv.mjs");
+var Route = createFileRoute("/my-houses")({ component: lazyRouteComponent($$splitComponentImporter, "component") });
+var rootRouteChildren = {
+	IndexRoute: Route$2.update({
+		id: "/",
+		path: "/",
+		getParentRoute: () => Route$3
+	}),
+	LiveHouseListingRoute: Route$1.update({
+		id: "/live-house-listing",
+		path: "/live-house-listing",
+		getParentRoute: () => Route$3
+	}),
+	MyHousesRoute: Route.update({
+		id: "/my-houses",
+		path: "/my-houses",
+		getParentRoute: () => Route$3
+	})
+};
+var routeTree = Route$3._addFileChildren(rootRouteChildren)._addFileTypes();
+var router_exports = /* @__PURE__ */ __exportAll({ getRouter: () => getRouter });
+function getRouter() {
+	return createRouter({
+		routeTree,
+		defaultErrorComponent: AppErrorComponent
 	});
 }
 //#endregion
-export { DIVISIONS as a, findThana as c, CostBreakdown as i, getDeviceVisitorId as l, ChannelDots as n, findDistrict as o, ContactActions as r, findDivision as s, Badge as t, locationLabel as u };
+export { findDivision as a, Label as c, DialogDescription as d, DialogHeader as f, selectPost as h, findDistrict as i, Dialog as l, CostBreakdown as m, getDeviceVisitorId as n, findThana as o, DialogTitle as p, DIVISIONS as r, locationLabel as s, router_exports as t, DialogContent as u };

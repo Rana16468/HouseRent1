@@ -128,8 +128,8 @@ export function PostCard({ post }: { post: Post }) {
           <ChannelDots contact={post.contact} />
         </div>
 
-        <div className="grid grid-cols-1 bg-green-500 gap-2 pt-1">
-          <Button variant="outline" onClick={open} className="w-full">
+        <div className="grid grid-cols-1 gap-2 pt-1">
+          <Button variant="outline" onClick={open} className="w-full bg-accent text-white">
             {t("details")}
           </Button>
          
