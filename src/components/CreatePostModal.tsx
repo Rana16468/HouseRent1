@@ -94,13 +94,13 @@ type ExtendedPost = Post & {
 };
 
 const EMPTY_UTILITIES: UtilityBreakdown = {
-  baseRent: 15000,
-  gas: 800,
+  baseRent: 0,
+  gas: 0,
   gasType: "line",
-  electricity: 1500,
+  electricity: 0,
   electricityType: "prepaid",
-  water: 400,
-  serviceCharge: 500,
+  water: 0,
+  serviceCharge: 0,
 };
 
 const MAX_IMAGES = 5;
